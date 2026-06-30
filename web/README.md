@@ -17,6 +17,21 @@ Works over **Web Bluetooth (BLE)** — connect to ESP32 **TB-1E**, hold **LÊN /
 
 **Hardware:** ESP32-S3 / C3 / C6 with BLE firmware (`esp32/bt_controller/bt_controller.ino`). Classic ESP32-WROOM SPP is **not** supported in the browser.
 
+## Deploy on GitHub Pages (run in phone browser)
+
+After pushing to GitHub:
+
+1. Repo → **Settings** → **Pages**
+2. **Build and deployment** → Source: **GitHub Actions**
+3. Push triggers `.github/workflows/deploy-web.yml` automatically
+4. When the Action finishes, open:
+
+   `https://liemlh2801-gif.github.io/TB-1E-Wireless-Controller-V1.1/`
+
+5. On **Chrome Android**, tap **KẾT NỐI** → select **TB-1E**
+
+Safari iPhone still cannot use Web Bluetooth on GitHub Pages — use the iOS app instead.
+
 ## HTTPS required
 
 Web Bluetooth only runs on **secure pages** (`https://` or `http://localhost`).
