@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.1";
+const APP_VERSION = "1.2";
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
   assetWidth: 590,
@@ -34,7 +34,9 @@ const keysHeld = new Set();
 const bt = new TB1EBluetooth({
   onStatus: (status) => {
     state.connection = status;
-    state.lastError = null;
+    if (status === "connected") {
+      state.lastError = null;
+    }
     updateUi();
   },
   onMessage: (message) => {
@@ -43,8 +45,11 @@ const bt = new TB1EBluetooth({
   },
   onError: (message) => {
     state.lastError = message;
-    state.connection = "error";
+    state.connection = "disconnected";
     updateUi();
+  },
+  onDisconnect: () => {
+    releaseAllKeys();
   },
 });
 
@@ -160,13 +165,16 @@ async function toggleConnect(browseAll = false) {
 }
 
 async function sendCommand(command) {
+  if (state.connection !== "connected") {
+    return;
+  }
+
   try {
     await bt.send(command);
     state.lastSent = command;
     updateMenuMeta();
   } catch (error) {
     state.lastError = `Send failed: ${error?.message || "unknown"}`;
-    state.connection = "error";
     updateUi();
   }
 }
@@ -365,12 +373,6 @@ function init() {
     if (document.visibilityState !== "visible" && state.connection === "connected") {
       releaseAllKeys();
       bt.send("RELEASE");
-    }
-  });
-
-  window.addEventListener("pagehide", () => {
-    if (state.connection === "connected") {
-      bt.disconnect(true);
     }
   });
 }

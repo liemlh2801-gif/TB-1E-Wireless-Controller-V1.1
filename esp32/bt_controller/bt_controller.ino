@@ -82,6 +82,12 @@ BLEServer* bleServer = nullptr;
 BLECharacteristic* bleTxChar = nullptr;
 bool bleClientConnected = false;
 
+void restartBleAdvertising() {
+  delay(500);
+  BLEDevice::startAdvertising();
+  logUsb("BLE advertising restarted");
+}
+
 void sendBtReply(const char* msg) {
   if (bleClientConnected && bleTxChar != nullptr) {
     bleTxChar->setValue(msg);
@@ -92,11 +98,15 @@ void sendBtReply(const char* msg) {
 class BleServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* server) override {
     bleClientConnected = true;
+    logUsb("BLE client connected");
+    BLEDevice::setMTU(517);
   }
 
   void onDisconnect(BLEServer* server) override {
     bleClientConnected = false;
-    server->getAdvertising()->start();
+    onAppDisconnected();
+    logUsb("BLE client disconnected");
+    restartBleAdvertising();
   }
 };
 
@@ -134,6 +144,8 @@ bool beginBluetooth() {
   BLEAdvertising* advertising = BLEDevice::getAdvertising();
   advertising->addServiceUUID(NUS_SERVICE_UUID);
   advertising->setScanResponse(true);
+  advertising->setMinPreferred(0x06);
+  advertising->setMaxPreferred(0x12);
   advertising->start();
   return true;
 }
