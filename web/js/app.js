@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.0";
+const APP_VERSION = "1.1";
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
   assetWidth: 590,
@@ -16,12 +16,20 @@ const PANEL_LAYOUT = {
   buttonHeight: 50,
 };
 
+const KEY_COMMANDS = {
+  ArrowUp: "UP",
+  ArrowDown: "DOWN",
+  " ": "STOP",
+};
+
 const state = {
   connection: "disconnected",
   lastSent: null,
   lastReceived: null,
   lastError: null,
 };
+
+const keysHeld = new Set();
 
 const bt = new TB1EBluetooth({
   onStatus: (status) => {
@@ -43,6 +51,7 @@ const bt = new TB1EBluetooth({
 const els = {
   version: document.getElementById("app-version"),
   unsupported: document.getElementById("unsupported-banner"),
+  desktopHint: document.getElementById("desktop-hint"),
   connectBtn: document.getElementById("connect-btn"),
   statusDot: document.getElementById("status-dot"),
   statusText: document.getElementById("status-text"),
@@ -55,6 +64,10 @@ const els = {
   panel: document.getElementById("panel"),
   controlButtons: Array.from(document.querySelectorAll(".control-btn")),
 };
+
+function isDesktopPointer() {
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
 
 function statusLabel(connection) {
   switch (connection) {
@@ -92,6 +105,10 @@ function updateUi() {
   els.controlButtons.forEach((btn) => {
     btn.disabled = !enabled;
   });
+
+  if (els.desktopHint) {
+    els.desktopHint.hidden = !isDesktopPointer();
+  }
 }
 
 function updateMenuMeta() {
@@ -121,9 +138,11 @@ async function toggleConnect() {
     await bt.connect();
   } catch (error) {
     if (error?.name === "NotFoundError") {
-      state.lastError = "Không chọn TB-1E.";
+      state.lastError = "Không chọn TB-1E trong danh sách Bluetooth.";
+    } else if (error?.name === "NotAllowedError") {
+      state.lastError = "Đã hủy chọn thiết bị hoặc trình duyệt chặn Bluetooth.";
     } else if (error?.name === "SecurityError") {
-      state.lastError = "Cần mở trang qua HTTPS (không phải http:// IP).";
+      state.lastError = "Cần mở trang qua HTTPS (GitHub Pages hoặc localhost).";
     } else {
       state.lastError = error?.message || "Không kết nối được TB-1E.";
     }
@@ -168,6 +187,45 @@ function bindMomentaryButton(button, pressCommand) {
   button.addEventListener("pointerup", onRelease);
   button.addEventListener("pointercancel", onRelease);
   button.addEventListener("lostpointercapture", onRelease);
+}
+
+function releaseAllKeys() {
+  if (keysHeld.size === 0) {
+    return;
+  }
+  keysHeld.clear();
+  if (state.connection === "connected") {
+    sendCommand("RELEASE");
+  }
+}
+
+function bindKeyboard() {
+  document.addEventListener("keydown", (event) => {
+    if (state.connection !== "connected") {
+      return;
+    }
+
+    const command = KEY_COMMANDS[event.key];
+    if (!command || keysHeld.has(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    keysHeld.add(event.key);
+    sendCommand(command);
+  });
+
+  document.addEventListener("keyup", (event) => {
+    if (!KEY_COMMANDS[event.key] || !keysHeld.has(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    keysHeld.delete(event.key);
+    sendCommand("RELEASE");
+  });
+
+  window.addEventListener("blur", releaseAllKeys);
 }
 
 function drawLeaderLines() {
@@ -242,18 +300,27 @@ function drawLeaderLines() {
 function showUnsupportedBanner() {
   const secure = window.isSecureContext;
   const supported = isWebBluetoothSupported();
+  const desktop = isDesktopPointer();
 
   if (!secure) {
     els.unsupported.classList.add("show");
     els.unsupported.textContent =
-      "Web Bluetooth cần HTTPS. Mở trang bằng https:// (xem web/README.md). Safari iPhone không hỗ trợ — dùng Chrome Android hoặc app iOS.";
+      "Web Bluetooth cần HTTPS. Mở GitHub Pages hoặc https://localhost (xem web/README.md).";
     return;
   }
 
   if (!supported) {
     els.unsupported.classList.add("show");
     els.unsupported.textContent =
-      "Safari iPhone không hỗ trợ Web Bluetooth. Dùng Chrome trên Android, hoặc app iOS/Android trong project.";
+      "Trình duyệt không hỗ trợ Web Bluetooth. Dùng Chrome hoặc Edge trên PC, hoặc app Android/iOS.";
+    return;
+  }
+
+  if (desktop) {
+    els.unsupported.classList.add("show");
+    els.unsupported.classList.add("info");
+    els.unsupported.textContent =
+      "PC: bật Bluetooth Windows, mở Chrome/Edge, bấm KẾT NỐI và chọn TB-1E. Phím ↑ ↓ Space = LÊN XUỐNG DỪNG.";
   }
 }
 
@@ -280,8 +347,11 @@ function init() {
     "DOWN",
   );
 
+  bindKeyboard();
+
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible" && state.connection === "connected") {
+      releaseAllKeys();
       bt.send("RELEASE");
     }
   });

@@ -81,13 +81,13 @@ Requires **ESP32-S3 / BLE** (iOS does not support Classic Bluetooth SPP).
 2. Set your **Signing Team** and run on your iPhone.
 3. See [ios/README.md](ios/README.md) for full steps.
 
-### 4. Web app (Chrome Android)
+### 4. Web app (Chrome PC + Chrome Android)
 
-Browser controller in `web/` — no install, uses **Web Bluetooth**.
+Browser controller in `web/` — no install, **Web Bluetooth** (same protocol as Android app).
 
-1. ESP32-S3 with BLE firmware, name **TB-1E**
-2. Serve over **HTTPS** (required) — see [web/README.md](web/README.md)
-3. Open in **Chrome on Android** → **KẾT NỐI** → hold **LÊN / DỪNG / XUỐNG**
+1. ESP32-S3 / C3 / C6 with BLE firmware, name **TB-1E**
+2. Open **GitHub Pages** URL in **Chrome or Edge on PC**, or Chrome on Android — see [web/README.md](web/README.md)
+3. **KẾT NỐI** → hold **LÊN / DỪNG / XUỐNG** (mouse/touch) or **↑ ↓ Space** on PC keyboard
 
 **Safari iPhone:** Web Bluetooth not supported — use the iOS app instead.
 

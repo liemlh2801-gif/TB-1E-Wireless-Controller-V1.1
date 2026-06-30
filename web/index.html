@@ -17,7 +17,7 @@
       <header>
         <div>
           <h1>Bluetooth Controller</h1>
-          <div class="version" id="app-version">v1.0</div>
+          <div class="version" id="app-version">v1.1</div>
         </div>
         <button id="menu-btn" class="icon-btn" type="button" aria-label="Menu">⋯</button>
       </header>
@@ -42,6 +42,10 @@
         <button class="control-btn" data-action="stop" type="button" disabled>DỪNG</button>
         <button class="control-btn" data-action="down" type="button" disabled>XUỐNG</button>
       </main>
+
+      <div id="desktop-hint" class="desktop-hint" hidden>
+        PC: giữ ↑ LÊN · ↓ XUỐNG · Space DỪNG
+      </div>
     </div>
 
     <div id="menu-backdrop"></div>
@@ -50,7 +54,7 @@
       <div class="menu-divider"></div>
       <div class="menu-meta">
         ESP32 BLE name: <strong>TB-1E</strong><br />
-        Chrome Android recommended
+        Chrome / Edge — PC, Android
       </div>
       <div class="menu-meta" id="menu-meta"></div>
     </nav>

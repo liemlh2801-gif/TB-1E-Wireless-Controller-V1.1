@@ -8,29 +8,30 @@ Works over **Web Bluetooth (BLE)** — connect to ESP32 **TB-1E**, hold **LÊN /
 
 | Browser | Works? | Notes |
 |---------|--------|-------|
-| **Chrome on Android** | **Yes** | Recommended |
-| Chrome / Edge on desktop | Yes | For testing |
-| **Safari on iPhone** | **No** | Apple does not support Web Bluetooth |
-| Firefox | No | Use Chrome or native app |
+| **Chrome on PC (Windows/macOS/Linux)** | **Yes** | Same as Android app — connect **TB-1E**, mouse or keyboard |
+| **Edge on PC** | **Yes** | Web Bluetooth supported |
+| **Chrome on Android** | **Yes** | Touch controls |
+| **Safari on iPhone** | **No** | Use iOS app or Bluefy |
+| Firefox | No | Use Chrome or Edge |
 
-**Safari iPhone:** use the native **iOS app** in `ios/`, or install a Web Bluetooth browser such as [Bluefy](https://apps.apple.com/app/bluefy/id1492821405).
+**PC (Chrome):** open the GitHub Pages URL → **KẾT NỐI** → pick **TB-1E**. Hold **LÊN / DỪNG / XUỐNG** with mouse, or keys **↑ ↓ Space** (release sends `RELEASE`).
 
-**Hardware:** ESP32-S3 / C3 / C6 with BLE firmware (`esp32/bt_controller/bt_controller.ino`). Classic ESP32-WROOM SPP is **not** supported in the browser.
+**Hardware:** ESP32-S3 / C3 / C6 with BLE firmware. Classic ESP32-WROOM (SPP only) does **not** work in the browser.
 
-## Deploy on GitHub Pages (run in phone browser)
+## Deploy on GitHub Pages (PC Chrome or phone)
 
-After pushing to GitHub:
+After pushing to `main`:
 
-1. Repo → **Settings** → **Pages**
-2. **Build and deployment** → Source: **GitHub Actions**
-3. Push triggers `.github/workflows/deploy-web.yml` automatically
-4. When the Action finishes, open:
+1. Repo → **Settings** → **Pages** → Source: **GitHub Actions**
+2. Push triggers `.github/workflows/deploy-web.yml`
+3. Open the Pages URL (HTTPS), e.g.:
 
    `https://liemlh2801-gif.github.io/TB-1E-Wireless-Controller-V1.1/`
 
-5. On **Chrome Android**, tap **KẾT NỐI** → select **TB-1E**
+4. **PC:** Chrome or Edge → **KẾT NỐI** → **TB-1E** → use buttons or **↑ ↓ Space**
+5. **Android:** Chrome → **KẾT NỐI** → hold touch buttons
 
-Safari iPhone still cannot use Web Bluetooth on GitHub Pages — use the iOS app instead.
+Safari on iPhone cannot use Web Bluetooth — use the iOS app.
 
 ## HTTPS required
 
@@ -38,16 +39,31 @@ Web Bluetooth only runs on **secure pages** (`https://` or `http://localhost`).
 
 Opening `http://192.168.x.x:8080` from your phone **will not work**.
 
-### Option A — Quick test on PC (Chrome)
+### Option A — PC Chrome (GitHub Pages or localhost)
+
+1. Deploy `web/` to GitHub Pages (HTTPS), or run locally:
+
+```powershell
+cd web
+npx --yes serve -l 3000
+```
+
+2. Open **`http://localhost:3000`** in **Chrome** or **Edge** on the same PC.
+3. Turn on **Bluetooth** (Windows Settings → Bluetooth).
+4. Power on ESP32 **TB-1E** (BLE firmware).
+5. Click **KẾT NỐI MÁY THỬ DÂY AN TOÀN** → select **TB-1E**.
+6. Control: click/hold **LÊN / DỪNG / XUỐNG**, or keyboard **↑ ↓ Space** (release = `RELEASE`).
+
+### Option B — Quick UI test on PC (no BLE over plain HTTP)
 
 ```bash
 cd web
 npx --yes serve -l 3000
 ```
 
-Open `http://localhost:3000` on the **same PC** with Chrome (for UI test only; phone needs HTTPS below).
+Open `http://localhost:3000` — UI only; Web Bluetooth needs **HTTPS** or **localhost** (localhost works in Chrome on PC).
 
-### Option B — Phone on same Wi‑Fi (HTTPS)
+### Option C — Phone on same Wi‑Fi (HTTPS)
 
 1. Install [mkcert](https://github.com/FiloSottile/mkcert) (once).
 2. From the `web` folder run:
@@ -60,7 +76,7 @@ Open `http://localhost:3000` on the **same PC** with Chrome (for UI test only; p
 4. Accept the certificate warning (self-signed).
 5. Tap **KẾT NỐI** → choose **TB-1E**.
 
-### Option C — Deploy to HTTPS hosting
+### Option D — Deploy to HTTPS hosting
 
 Upload the `web/` folder to any static host with HTTPS (GitHub Pages, Netlify, etc.) and open the URL on your phone.
 

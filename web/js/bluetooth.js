@@ -21,13 +21,15 @@ export class TB1EBluetooth {
 
   async connect() {
     if (!isWebBluetoothSupported()) {
-      throw new Error("Trình duyệt không hỗ trợ Web Bluetooth. Dùng Chrome trên Android.");
+      throw new Error(
+        "Trình duyệt không hỗ trợ Web Bluetooth. Dùng Chrome hoặc Edge trên PC/Android.",
+      );
     }
 
     this.onStatus("connecting");
 
     this.device = await navigator.bluetooth.requestDevice({
-      filters: [{ name: DEVICE_NAME }],
+      filters: [{ name: DEVICE_NAME }, { namePrefix: "TB-" }],
       optionalServices: [NUS_SERVICE],
     });
 

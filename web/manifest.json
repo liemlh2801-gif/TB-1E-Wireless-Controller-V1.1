@@ -1,7 +1,7 @@
 {
   "name": "TB-1E Controller",
   "short_name": "TB-1E",
-  "description": "Browser controller for MAY THU DAY AN TOAN (TB-1E) over Bluetooth LE",
+  "description": "Browser controller for TB-1E — Chrome/Edge on PC and Android",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
