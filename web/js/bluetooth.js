@@ -19,7 +19,9 @@ export class TB1EBluetooth {
     this.onError = handlers.onError || (() => {});
   }
 
-  async connect() {
+  async connect(options = {}) {
+    const browseAll = options.browseAll === true;
+
     if (!isWebBluetoothSupported()) {
       throw new Error(
         "Trình duyệt không hỗ trợ Web Bluetooth. Dùng Chrome hoặc Edge trên PC/Android.",
@@ -28,31 +30,52 @@ export class TB1EBluetooth {
 
     this.onStatus("connecting");
 
-    this.device = await navigator.bluetooth.requestDevice({
-      filters: [{ name: DEVICE_NAME }, { namePrefix: "TB-" }],
-      optionalServices: [NUS_SERVICE],
-    });
+    try {
+      this.device = await navigator.bluetooth.requestDevice(
+        browseAll
+          ? {
+              acceptAllDevices: true,
+              optionalServices: [NUS_SERVICE],
+            }
+          : {
+              filters: [
+                { name: DEVICE_NAME },
+                { namePrefix: "TB-" },
+                { services: [NUS_SERVICE] },
+              ],
+              optionalServices: [NUS_SERVICE],
+            },
+      );
+    } catch (error) {
+      this.onStatus("disconnected");
+      throw error;
+    }
 
     this.device.addEventListener("gattserverdisconnected", () => {
       this.handleDisconnect();
     });
 
-    this.server = await this.device.gatt.connect();
-    const service = await this.server.getPrimaryService(NUS_SERVICE);
-    this.rxChar = await service.getCharacteristic(NUS_RX);
-    this.txChar = await service.getCharacteristic(NUS_TX);
+    try {
+      this.server = await this.device.gatt.connect();
+      const service = await this.server.getPrimaryService(NUS_SERVICE);
+      this.rxChar = await service.getCharacteristic(NUS_RX);
+      this.txChar = await service.getCharacteristic(NUS_TX);
 
-    await this.txChar.startNotifications();
-    this.txChar.addEventListener("characteristicvaluechanged", (event) => {
-      const value = event.target.value;
-      const text = new TextDecoder().decode(value).trim();
-      if (text) {
-        this.onMessage(text);
-      }
-    });
+      await this.txChar.startNotifications();
+      this.txChar.addEventListener("characteristicvaluechanged", (event) => {
+        const value = event.target.value;
+        const text = new TextDecoder().decode(value).trim();
+        if (text) {
+          this.onMessage(text);
+        }
+      });
 
-    this.connected = true;
-    this.onStatus("connected");
+      this.connected = true;
+      this.onStatus("connected");
+    } catch (error) {
+      this.onStatus("disconnected");
+      throw error;
+    }
   }
 
   async disconnect(sendRelease = true) {

@@ -128,25 +128,33 @@ function closeMenu() {
   els.menuBackdrop.classList.remove("open");
 }
 
-async function toggleConnect() {
+async function toggleConnect(browseAll = false) {
   if (state.connection === "connected") {
     await bt.disconnect(true);
     return;
   }
 
   try {
-    await bt.connect();
+    await bt.connect({ browseAll });
+    state.lastError = null;
   } catch (error) {
     if (error?.name === "NotFoundError") {
-      state.lastError = "Không chọn TB-1E trong danh sách Bluetooth.";
+      state.lastError =
+        "Chưa kết nối. Bấm KẾT NỐI lại và chọn TB-1E (đừng bấm Cancel). Nếu danh sách trống: bật ESP32 + Bluetooth PC.";
+      state.connection = "disconnected";
     } else if (error?.name === "NotAllowedError") {
-      state.lastError = "Đã hủy chọn thiết bị hoặc trình duyệt chặn Bluetooth.";
+      state.lastError = "Chrome chưa được phép dùng Bluetooth. Cho phép trong cài đặt trình duyệt.";
+      state.connection = "disconnected";
     } else if (error?.name === "SecurityError") {
       state.lastError = "Cần mở trang qua HTTPS (GitHub Pages hoặc localhost).";
+      state.connection = "error";
+    } else if (error?.name === "NetworkError") {
+      state.lastError = "Kết nối GATT thất bại. Rút/cắm ESP32, tắt app Bluetooth khác, thử lại.";
+      state.connection = "disconnected";
     } else {
       state.lastError = error?.message || "Không kết nối được TB-1E.";
+      state.connection = "error";
     }
-    state.connection = "error";
     updateUi();
   }
 }
@@ -330,7 +338,11 @@ function init() {
   drawLeaderLines();
   window.addEventListener("resize", drawLeaderLines);
 
-  els.connectBtn.addEventListener("click", toggleConnect);
+  els.connectBtn.addEventListener("click", () => toggleConnect(false));
+  document.getElementById("connect-all-btn")?.addEventListener("click", () => {
+    closeMenu();
+    toggleConnect(true);
+  });
   els.menuBtn.addEventListener("click", openMenu);
   els.menuBackdrop.addEventListener("click", closeMenu);
 
