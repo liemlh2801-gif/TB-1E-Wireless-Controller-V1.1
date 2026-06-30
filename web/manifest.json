@@ -1,0 +1,11 @@
+{
+  "name": "TB-1E Controller",
+  "short_name": "TB-1E",
+  "description": "Browser controller for MAY THU DAY AN TOAN (TB-1E) over Bluetooth LE",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#d4af37",
+  "icons": []
+}

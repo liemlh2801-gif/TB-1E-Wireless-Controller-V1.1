@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bluetooth Controller</string>
+    <string name="app_title">Bluetooth Controller</string>
+    <string name="menu">Menu</string>
+    <string name="machine_panel">Safety belt tester machine panel</string>
+    <string name="connect">KẾT NỐI MÁY THỬ DÂY AN TOÀN</string>
+    <string name="disconnect">NGẮT KẾT NỐI</string>
+    <string name="connecting">ĐANG KẾT NỐI…</string>
+    <string name="btn_up">LÊN</string>
+    <string name="btn_stop">DỪNG</string>
+    <string name="btn_down">XUỐNG</string>
+    <string name="status_connected">Status: Connected</string>
+    <string name="status_disconnected">Status: Disconnected</string>
+    <string name="status_connecting">Status: Connecting…</string>
+    <string name="status_error">Status: Error</string>
+    <string name="refresh_devices">Refresh paired devices</string>
+    <string name="no_paired_devices">No paired devices</string>
+    <string name="last_sent">Last sent: %1$s</string>
+    <string name="last_received">Last received: %1$s</string>
+</resources>

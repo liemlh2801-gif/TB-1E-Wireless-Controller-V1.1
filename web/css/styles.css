@@ -1,0 +1,244 @@
+:root {
+  --gold: #d4af37;
+  --panel-btn: #e0e0e0;
+  --connect-btn: #b3e5fc;
+  --border: #000;
+  --error: #c62828;
+  --ok: #2e7d32;
+  --warn: #f9a825;
+  --aspect: calc(9 / 19.5);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app-frame {
+  width: min(100vw, calc(100vh * var(--aspect)));
+  height: min(100vh, calc(100vw / var(--aspect)));
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+header {
+  background: var(--gold);
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+header .version {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#panel {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+#machine-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 58%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#machine-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#leader-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#controls-top {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+#connect-btn {
+  width: 100%;
+  min-height: 48px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--connect-btn);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+#connect-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--error);
+}
+
+.status-dot.connecting { background: var(--warn); }
+.status-dot.connected { background: var(--ok); }
+
+#error-text {
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  max-width: 100%;
+}
+
+.control-btn {
+  position: absolute;
+  right: 3%;
+  width: clamp(120px, 20.5vw, 210px);
+  height: 50px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-btn);
+  font-size: 17px;
+  font-weight: 700;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.control-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.control-btn[data-action="up"] { top: 25.5%; }
+.control-btn[data-action="stop"] { top: 43.5%; }
+.control-btn[data-action="down"] { top: 61.5%; }
+
+#menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: none;
+  z-index: 20;
+}
+
+#menu-backdrop.open { display: block; }
+
+#menu {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  min-width: 240px;
+  max-width: calc(100vw - 24px);
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  padding: 8px 0;
+  display: none;
+  z-index: 30;
+}
+
+#menu.open { display: block; }
+
+.menu-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-item:hover { background: #f5f5f5; }
+
+.menu-meta {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #666;
+}
+
+.menu-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 4px 0;
+}
+
+#unsupported-banner {
+  display: none;
+  background: #fff3cd;
+  color: #664d03;
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid #ffecb5;
+}
+
+#unsupported-banner.show { display: block; }
+
+@media (max-width: 360px) {
+  #connect-btn { font-size: 9px; }
+}

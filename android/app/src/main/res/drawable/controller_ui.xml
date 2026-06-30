@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="200dp"
+    android:viewportWidth="360"
+    android:viewportHeight="200">
+    <!-- Panel -->
+    <path
+        android:fillColor="#F5F5F5"
+        android:pathData="M16,8h328c8.8,0 16,7.2 16,16v144c0,8.8 -7.2,16 -16,16H16c-8.8,0 -16,-7.2 -16,-16V24c0,-8.8 7.2,-16 16,-16z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M16,8h328c8.8,0 16,7.2 16,16v8H0v-8c0,-8.8 7.2,-16 16,-16z" />
+    <!-- UP -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M32,32h296c4.4,0 8,3.6 8,8v32c0,4.4 -3.6,8 -8,8H32c-4.4,0 -8,-3.6 -8,-8v-32c0,-4.4 3.6,-8 8,-8z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M180,42l-16,16h10v12h12v-12h10l-16,-16z" />
+    <!-- STOP -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M32,80h296c4.4,0 8,3.6 8,8v40c0,4.4 -3.6,8 -8,8H32c-4.4,0 -8,-3.6 -8,-8v-40c0,-4.4 3.6,-8 8,-8z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M152,98h64v20h-64z" />
+    <!-- DOWN -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M32,136h296c4.4,0 8,3.6 8,8v32c0,4.4 -3.6,8 -8,8H32c-4.4,0 -8,-3.6 -8,-8v-32c0,-4.4 3.6,-8 8,-8z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M180,146l16,16h-10v12h-12v-12h-10l16,-16z" />
+    <!-- Bluetooth dot -->
+    <path
+        android:fillColor="#757575"
+        android:pathData="M300,20c-6.6,0 -12,5.4 -12,12s5.4,12 12,12 12,-5.4 12,-12 -5.4,-12 -12,-12z" />
+</vector>

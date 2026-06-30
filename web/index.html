@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#d4af37" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="TB-1E" />
+    <title>TB-1E Controller</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="app-frame">
+      <div id="unsupported-banner"></div>
+
+      <header>
+        <div>
+          <h1>Bluetooth Controller</h1>
+          <div class="version" id="app-version">v1.0</div>
+        </div>
+        <button id="menu-btn" class="icon-btn" type="button" aria-label="Menu">⋯</button>
+      </header>
+
+      <main id="panel">
+        <div id="machine-wrap">
+          <img src="assets/asset1.jpg" alt="Safety belt tester machine panel" />
+        </div>
+
+        <div id="leader-lines" aria-hidden="true"></div>
+
+        <div id="controls-top">
+          <button id="connect-btn" type="button">KẾT NỐI MÁY THỬ DÂY AN TOÀN</button>
+          <div id="status-row">
+            <span id="status-dot" class="status-dot"></span>
+            <span id="status-text">Status: Disconnected</span>
+          </div>
+          <div id="error-text"></div>
+        </div>
+
+        <button class="control-btn" data-action="up" type="button" disabled>LÊN</button>
+        <button class="control-btn" data-action="stop" type="button" disabled>DỪNG</button>
+        <button class="control-btn" data-action="down" type="button" disabled>XUỐNG</button>
+      </main>
+    </div>
+
+    <div id="menu-backdrop"></div>
+    <nav id="menu" aria-label="Device menu">
+      <button class="menu-item" type="button" onclick="location.reload()">Refresh page</button>
+      <div class="menu-divider"></div>
+      <div class="menu-meta">
+        ESP32 BLE name: <strong>TB-1E</strong><br />
+        Chrome Android recommended
+      </div>
+      <div class="menu-meta" id="menu-meta"></div>
+    </nav>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
