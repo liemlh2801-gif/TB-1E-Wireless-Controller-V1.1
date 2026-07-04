@@ -144,16 +144,18 @@ struct MainView: View {
                 .padding(.top, geo.size.height * PanelLayout.connectTop)
                 .padding(.trailing, connectEnd)
 
-                panelButton(title: "LÊN", enabled: bluetooth.isConnected) {
+                panelButton(title: "LÊN", enabled: upEnabled) {
                     bluetooth.sendCommand("UP")
                 } onRelease: {
-                    bluetooth.sendCommand("RELEASE")
+                    if bluetooth.deviceMode != .auto {
+                        bluetooth.sendCommand("RELEASE")
+                    }
                 }
                 .frame(width: controlWidth)
                 .padding(.trailing, controlEnd)
                 .offset(y: geo.size.height * PanelLayout.btnUpY)
 
-                panelButton(title: "DỪNG", enabled: bluetooth.isConnected) {
+                panelButton(title: "DỪNG", enabled: stopEnabled) {
                     bluetooth.sendCommand("STOP")
                 } onRelease: {
                     bluetooth.sendCommand("RELEASE")
@@ -162,10 +164,12 @@ struct MainView: View {
                 .padding(.trailing, controlEnd)
                 .offset(y: geo.size.height * PanelLayout.btnStopY)
 
-                panelButton(title: "XUỐNG", enabled: bluetooth.isConnected) {
+                panelButton(title: "XUỐNG", enabled: downEnabled) {
                     bluetooth.sendCommand("DOWN")
                 } onRelease: {
-                    bluetooth.sendCommand("RELEASE")
+                    if bluetooth.deviceMode != .auto {
+                        bluetooth.sendCommand("RELEASE")
+                    }
                 }
                 .frame(width: controlWidth)
                 .padding(.trailing, controlEnd)
@@ -214,14 +218,44 @@ struct MainView: View {
         bluetooth.isConnected || bluetooth.selectedDevice != nil
     }
 
+    private var upEnabled: Bool {
+        bluetooth.isConnected && !bluetooth.topLimitActive
+    }
+
+    private var downEnabled: Bool {
+        bluetooth.isConnected && !bluetooth.botLimitActive
+    }
+
+    private var stopEnabled: Bool {
+        bluetooth.isConnected
+    }
+
+    private var statusHint: String? {
+        if bluetooth.deviceMode == .auto {
+            return "Auto — release keeps direction until STOP or limit"
+        }
+        return nil
+    }
+
     private var statusRow: some View {
         HStack(spacing: 8) {
             Circle()
                 .fill(statusColor)
                 .frame(width: 12, height: 12)
-            Text(statusLabel)
-                .font(.system(size: 14, weight: .bold))
-                .foregroundStyle(.black)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(statusLabel)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.black)
+                if let hint = statusHint {
+                    Text(hint)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color(red: 0.082, green: 0.396, blue: 0.753))
+                } else if let mode = bluetooth.deviceMode {
+                    Text(mode == .manual ? "Mode: Manual" : "Mode: Auto — latch UP/DOWN")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
+                }
+            }
         }
     }
 

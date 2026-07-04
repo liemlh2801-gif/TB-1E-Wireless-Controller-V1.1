@@ -26,13 +26,19 @@ import android.bluetooth.BluetoothSocket
 
 import android.bluetooth.le.ScanCallback
 
+import android.bluetooth.le.ScanFilter
+
 import android.bluetooth.le.ScanResult
+
+import android.bluetooth.le.ScanSettings
 
 import android.content.Context
 
 import android.content.pm.PackageManager
 
 import android.os.Build
+
+import android.os.ParcelUuid
 
 import androidx.core.content.ContextCompat
 
@@ -84,6 +90,16 @@ enum class ConnectionState {
 
 
 
+enum class DeviceMode {
+
+    Manual,
+
+    Auto,
+
+}
+
+
+
 class BluetoothController(private val context: Context) {
 
 
@@ -118,9 +134,11 @@ class BluetoothController(private val context: Context) {
 
         private const val POST_CONNECT_MS = 600L
 
-        private const val BLE_SCAN_MS = 4500L
+        private const val BLE_SCAN_MS = 6000L
 
         private const val DEVICE_BT_NAME = "TB-1E"
+
+        private const val DEVICE_BT_NAME_PREFIX = "TB-"
 
     }
 
@@ -173,6 +191,30 @@ class BluetoothController(private val context: Context) {
     private val _lastSent = MutableStateFlow<String?>(null)
 
     val lastSent: StateFlow<String?> = _lastSent.asStateFlow()
+
+
+
+    private val _deviceMode = MutableStateFlow<DeviceMode?>(null)
+
+    val deviceMode: StateFlow<DeviceMode?> = _deviceMode.asStateFlow()
+
+
+
+    private val _topLimitActive = MutableStateFlow(false)
+
+    val topLimitActive: StateFlow<Boolean> = _topLimitActive.asStateFlow()
+
+
+
+    private val _botLimitActive = MutableStateFlow(false)
+
+    val botLimitActive: StateFlow<Boolean> = _botLimitActive.asStateFlow()
+
+
+
+    private val _onHoldActive = MutableStateFlow(false)
+
+    val onHoldActive: StateFlow<Boolean> = _onHoldActive.asStateFlow()
 
 
 
@@ -276,9 +318,7 @@ class BluetoothController(private val context: Context) {
 
             override fun onScanResult(callbackType: Int, result: ScanResult) {
 
-                val name = deviceName(result) ?: return
-
-                if (name.equals(DEVICE_BT_NAME, ignoreCase = true)) {
+                if (isTb1eBleAdvertisement(result)) {
 
                     found[result.device.address] = result.device
 
@@ -290,7 +330,31 @@ class BluetoothController(private val context: Context) {
 
 
 
-        scanner.startScan(callback)
+        val filters = listOf(
+
+            ScanFilter.Builder()
+
+                .setDeviceName(DEVICE_BT_NAME)
+
+                .build(),
+
+            ScanFilter.Builder()
+
+                .setServiceUuid(ParcelUuid(NUS_SERVICE_UUID))
+
+                .build(),
+
+        )
+
+        val settings = ScanSettings.Builder()
+
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+
+            .build()
+
+
+
+        scanner.startScan(filters, settings, callback)
 
         try {
 
@@ -303,6 +367,30 @@ class BluetoothController(private val context: Context) {
         }
 
         return found.values.toList()
+
+    }
+
+
+
+    private fun isTb1eBleAdvertisement(result: ScanResult): Boolean {
+
+        val name = deviceName(result)
+
+        if (name?.equals(DEVICE_BT_NAME, ignoreCase = true) == true) {
+
+            return true
+
+        }
+
+        if (name?.startsWith(DEVICE_BT_NAME_PREFIX, ignoreCase = true) == true) {
+
+            return true
+
+        }
+
+        val serviceUuids = result.scanRecord?.serviceUuids ?: emptyList()
+
+        return serviceUuids.any { it.uuid == NUS_SERVICE_UUID }
 
     }
 
@@ -466,17 +554,27 @@ class BluetoothController(private val context: Context) {
 
     private fun shouldUseBle(device: BluetoothDevice): Boolean {
 
+        if (device.name?.equals(DEVICE_BT_NAME, ignoreCase = true) == true) {
+
+            return true
+
+        }
+
+        if (device.name?.startsWith(DEVICE_BT_NAME_PREFIX, ignoreCase = true) == true) {
+
+            return true
+
+        }
+
         return when (device.type) {
 
             BluetoothDevice.DEVICE_TYPE_LE -> true
 
             BluetoothDevice.DEVICE_TYPE_CLASSIC -> false
 
-            BluetoothDevice.DEVICE_TYPE_DUAL -> false
+            BluetoothDevice.DEVICE_TYPE_DUAL -> true
 
-            else -> device.name?.equals(DEVICE_BT_NAME, ignoreCase = true) == true &&
-
-                device.type != BluetoothDevice.DEVICE_TYPE_CLASSIC
+            else -> false
 
         }
 
@@ -526,7 +624,7 @@ class BluetoothController(private val context: Context) {
 
             return if (ble) {
 
-                "Không mở được kênh BLE tới TB-1E (ESP32-S3). Bấm refresh, chọn TB-1E, thử lại."
+                "Không mở được kênh BLE tới TB-1E. Bấm refresh, chọn TB-1E, thử lại. Nếu vẫn lỗi: Settings → Bluetooth → quên TB-1E."
 
             } else {
 
@@ -740,7 +838,7 @@ class BluetoothController(private val context: Context) {
 
                         if (message.isNotEmpty()) {
 
-                            _lastReceived.value = message
+                            handleIncomingMessage(message)
 
                         }
 
@@ -764,7 +862,7 @@ class BluetoothController(private val context: Context) {
 
                         if (message.isNotEmpty()) {
 
-                            _lastReceived.value = message
+                            handleIncomingMessage(message)
 
                         }
 
@@ -832,7 +930,7 @@ class BluetoothController(private val context: Context) {
 
                         if (message.isNotEmpty()) {
 
-                            _lastReceived.value = message
+                            handleIncomingMessage(message)
 
                         }
 
@@ -932,6 +1030,34 @@ class BluetoothController(private val context: Context) {
 
 
 
+    private fun handleIncomingMessage(message: String) {
+
+        _lastReceived.value = message
+
+        when (message) {
+
+            "MODE: MANUAL" -> _deviceMode.value = DeviceMode.Manual
+
+            "MODE: AUTO" -> _deviceMode.value = DeviceMode.Auto
+
+            "LIMIT: TOP" -> _topLimitActive.value = true
+
+            "LIMIT: TOP OFF" -> _topLimitActive.value = false
+
+            "LIMIT: BOT" -> _botLimitActive.value = true
+
+            "LIMIT: BOT OFF" -> _botLimitActive.value = false
+
+            "HOLD: ON" -> _onHoldActive.value = true
+
+            "HOLD: OFF" -> _onHoldActive.value = false
+
+        }
+
+    }
+
+
+
     fun disconnect(sendStop: Boolean = true) {
 
         connectJob?.cancel()
@@ -961,6 +1087,14 @@ class BluetoothController(private val context: Context) {
         readJob = null
 
         cleanupConnection()
+
+        _deviceMode.value = null
+
+        _topLimitActive.value = false
+
+        _botLimitActive.value = false
+
+        _onHoldActive.value = false
 
         _connectionState.value = ConnectionState.Disconnected
 

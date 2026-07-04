@@ -18,6 +18,11 @@ struct DiscoveredDevice: Identifiable, Equatable {
     var label: String { "\(name) (\(id.uuidString.prefix(8)))" }
 }
 
+enum DeviceMode: Equatable {
+    case manual
+    case auto
+}
+
 final class BluetoothManager: NSObject, ObservableObject {
     static let deviceName = "TB-1E"
     static let appVersion = "1.0"
@@ -33,6 +38,10 @@ final class BluetoothManager: NSObject, ObservableObject {
     @Published private(set) var lastError: String?
     @Published private(set) var lastSent: String?
     @Published private(set) var lastReceived: String?
+    @Published private(set) var deviceMode: DeviceMode?
+    @Published private(set) var topLimitActive = false
+    @Published private(set) var botLimitActive = false
+    @Published private(set) var onHoldActive = false
     @Published private(set) var isBluetoothReady = false
 
     private var central: CBCentralManager!
@@ -110,6 +119,7 @@ final class BluetoothManager: NSObject, ObservableObject {
         rxCharacteristic = nil
         connectedPeripheral = nil
         pendingConnectId = nil
+        resetMachineState()
         connectionState = .disconnected
     }
 
@@ -124,6 +134,37 @@ final class BluetoothManager: NSObject, ObservableObject {
 
         peripheral.writeValue(data, for: characteristic, type: .withResponse)
         lastSent = command
+    }
+
+    private func resetMachineState() {
+        deviceMode = nil
+        topLimitActive = false
+        botLimitActive = false
+        onHoldActive = false
+    }
+
+    private func handleIncomingMessage(_ message: String) {
+        lastReceived = message
+        switch message {
+        case "MODE: MANUAL":
+            deviceMode = .manual
+        case "MODE: AUTO":
+            deviceMode = .auto
+        case "LIMIT: TOP":
+            topLimitActive = true
+        case "LIMIT: TOP OFF":
+            topLimitActive = false
+        case "LIMIT: BOT":
+            botLimitActive = true
+        case "LIMIT: BOT OFF":
+            botLimitActive = false
+        case "HOLD: ON":
+            onHoldActive = true
+        case "HOLD: OFF":
+            onHoldActive = false
+        default:
+            break
+        }
     }
 
     private static func matchesDevice(_ peripheral: CBPeripheral, advertisedName: String? = nil) -> Bool {
@@ -171,6 +212,7 @@ final class BluetoothManager: NSObject, ObservableObject {
         rxCharacteristic = nil
         connectedPeripheral = nil
         pendingConnectId = nil
+        resetMachineState()
     }
 }
 
@@ -212,6 +254,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         rxCharacteristic = nil
         connectedPeripheral = nil
+        resetMachineState()
         connectionState = .disconnected
         if error != nil {
             lastError = "Mất kết nối TB-1E."
@@ -283,6 +326,7 @@ extension BluetoothManager: CBPeripheralDelegate {
         }
 
         lastReceived = message
+        handleIncomingMessage(message)
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {

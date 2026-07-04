@@ -16,7 +16,7 @@ Works over **Web Bluetooth (BLE)** — connect to ESP32 **TB-1E**, hold **LÊN /
 
 **PC (Chrome):** open the GitHub Pages URL → **KẾT NỐI** → pick **TB-1E**. Hold **LÊN / DỪNG / XUỐNG** with mouse, or keys **↑ ↓ Space** (release sends `RELEASE`).
 
-**Hardware:** ESP32-S3 / C3 / C6 with BLE firmware. Classic ESP32-WROOM (SPP only) does **not** work in the browser.
+**Hardware:** ESP32-WROOM-32 or ESP32-S3/C3/C6 with BLE firmware.
 
 ## Deploy on GitHub Pages (PC Chrome or phone)
 
@@ -96,6 +96,8 @@ cp ../android/app/src/main/res/drawable/asset1.jpg web/assets/asset1.jpg
 | XUỐNG pressed | `DOWN` |
 | DỪNG pressed | `STOP` |
 | Release | `RELEASE` |
+
+ESP32 also sends `MODE: MANUAL` or `MODE: AUTO` when connected or when the physical mode switch changes. In **Auto** mode, LÊN / DỪNG / XUỐNG are disabled in the app.
 
 BLE service: Nordic UART `6E400001-B5A3-F393-E0A9-E50E24DCCA9E`
 

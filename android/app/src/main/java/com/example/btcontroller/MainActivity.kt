@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import com.example.btcontroller.BuildConfig
 import com.example.btcontroller.bluetooth.BluetoothController
 import com.example.btcontroller.bluetooth.ConnectionState
+import com.example.btcontroller.bluetooth.DeviceMode
 import com.example.btcontroller.ui.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -34,6 +35,10 @@ class MainActivity : ComponentActivity() {
     private var lastError by mutableStateOf<String?>(null)
     private var lastSent by mutableStateOf<String?>(null)
     private var lastReceived by mutableStateOf<String?>(null)
+    private var deviceMode by mutableStateOf<DeviceMode?>(null)
+    private var topLimitActive by mutableStateOf(false)
+    private var botLimitActive by mutableStateOf(false)
+    private var onHoldActive by mutableStateOf(false)
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -80,6 +85,30 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            bluetoothController.deviceMode.collect { mode ->
+                deviceMode = mode
+            }
+        }
+
+        lifecycleScope.launch {
+            bluetoothController.topLimitActive.collect { active ->
+                topLimitActive = active
+            }
+        }
+
+        lifecycleScope.launch {
+            bluetoothController.botLimitActive.collect { active ->
+                botLimitActive = active
+            }
+        }
+
+        lifecycleScope.launch {
+            bluetoothController.onHoldActive.collect { active ->
+                onHoldActive = active
+            }
+        }
+
         requestPermissionsIfNeeded()
         refreshDevices()
 
@@ -92,6 +121,10 @@ class MainActivity : ComponentActivity() {
                     lastError = lastError,
                     lastSent = lastSent,
                     lastReceived = lastReceived,
+                    deviceMode = deviceMode,
+                    topLimitActive = topLimitActive,
+                    botLimitActive = botLimitActive,
+                    onHoldActive = onHoldActive,
                     onDeviceSelected = { device -> selectedDevice = device },
                     onConnectClick = { connectSelectedDevice() },
                     onDisconnectClick = { bluetoothController.disconnect() },
@@ -162,7 +195,7 @@ class MainActivity : ComponentActivity() {
                 ?: devices.firstOrNull()
 
             if (devices.isEmpty()) {
-                showToast("Power on TB-1E (ESP32), then tap refresh in the app menu")
+                showToast("Bật ESP32 TB-1E, bấm Refresh trong menu (quét BLE ~6 giây)")
             }
         }
     }

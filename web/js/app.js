@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.2";
+const APP_VERSION = "1.3";
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
   assetWidth: 590,
@@ -24,6 +24,10 @@ const KEY_COMMANDS = {
 
 const state = {
   connection: "disconnected",
+  deviceMode: null,
+  topLimitActive: false,
+  botLimitActive: false,
+  onHoldActive: false,
   lastSent: null,
   lastReceived: null,
   lastError: null,
@@ -41,14 +45,51 @@ const bt = new TB1EBluetooth({
   },
   onMessage: (message) => {
     state.lastReceived = message;
+    switch (message) {
+      case "MODE: MANUAL":
+        state.deviceMode = "manual";
+        break;
+      case "MODE: AUTO":
+        state.deviceMode = "auto";
+        break;
+      case "LIMIT: TOP":
+        state.topLimitActive = true;
+        break;
+      case "LIMIT: TOP OFF":
+        state.topLimitActive = false;
+        break;
+      case "LIMIT: BOT":
+        state.botLimitActive = true;
+        break;
+      case "LIMIT: BOT OFF":
+        state.botLimitActive = false;
+        break;
+      case "HOLD: ON":
+        state.onHoldActive = true;
+        break;
+      case "HOLD: OFF":
+        state.onHoldActive = false;
+        break;
+      default:
+        break;
+    }
+    updateUi();
     updateMenuMeta();
   },
   onError: (message) => {
     state.lastError = message;
     state.connection = "disconnected";
+    state.deviceMode = null;
+    state.topLimitActive = false;
+    state.botLimitActive = false;
+    state.onHoldActive = false;
     updateUi();
   },
   onDisconnect: () => {
+    state.deviceMode = null;
+    state.topLimitActive = false;
+    state.botLimitActive = false;
+    state.onHoldActive = false;
     releaseAllKeys();
   },
 });
@@ -58,9 +99,12 @@ const els = {
   unsupported: document.getElementById("unsupported-banner"),
   desktopHint: document.getElementById("desktop-hint"),
   connectBtn: document.getElementById("connect-btn"),
+  connectAllBtn: document.getElementById("connect-all-btn"),
   statusDot: document.getElementById("status-dot"),
   statusText: document.getElementById("status-text"),
+  modeText: document.getElementById("mode-text"),
   errorText: document.getElementById("error-text"),
+  bleHint: document.getElementById("ble-hint"),
   menuBtn: document.getElementById("menu-btn"),
   menu: document.getElementById("menu"),
   menuBackdrop: document.getElementById("menu-backdrop"),
@@ -98,21 +142,62 @@ function connectLabel(connection) {
   }
 }
 
+function modeLabel(mode) {
+  switch (mode) {
+    case "manual":
+      return "Mode: Manual";
+    case "auto":
+      return "Mode: Auto — latch UP/DOWN";
+    default:
+      return "";
+  }
+}
+
+function statusHint() {
+  if (state.deviceMode === "auto") {
+    return "Auto — release keeps direction until STOP or limit";
+  }
+  return "";
+}
+
 function updateUi() {
   els.version.textContent = `v${APP_VERSION}`;
   els.statusText.textContent = statusLabel(state.connection);
   els.statusDot.className = `status-dot ${state.connection}`;
+  if (els.modeText) {
+    const hint = statusHint();
+    const mode = modeLabel(state.deviceMode);
+    els.modeText.textContent = hint || mode;
+    els.modeText.className = `mode-text ${state.deviceMode || ""}`;
+  }
   els.connectBtn.textContent = connectLabel(state.connection);
   els.connectBtn.disabled = state.connection === "connecting";
+  if (els.connectAllBtn) {
+    els.connectAllBtn.disabled = state.connection === "connecting";
+  }
   els.errorText.textContent = state.lastError || "";
 
-  const enabled = state.connection === "connected";
-  els.controlButtons.forEach((btn) => {
-    btn.disabled = !enabled;
-  });
+  const connected = state.connection === "connected";
+  const upBtn = document.querySelector('.control-btn[data-action="up"]');
+  const stopBtn = document.querySelector('.control-btn[data-action="stop"]');
+  const downBtn = document.querySelector('.control-btn[data-action="down"]');
+
+  if (upBtn) {
+    upBtn.disabled = !connected || state.topLimitActive;
+  }
+  if (stopBtn) {
+    stopBtn.disabled = !connected;
+  }
+  if (downBtn) {
+    downBtn.disabled = !connected || state.botLimitActive;
+  }
 
   if (els.desktopHint) {
     els.desktopHint.hidden = !isDesktopPointer();
+  }
+
+  if (els.bleHint) {
+    els.bleHint.hidden = !isDesktopPointer() || state.connection === "connected";
   }
 }
 
@@ -144,8 +229,9 @@ async function toggleConnect(browseAll = false) {
     state.lastError = null;
   } catch (error) {
     if (error?.name === "NotFoundError") {
-      state.lastError =
-        "Chưa kết nối. Bấm KẾT NỐI lại và chọn TB-1E (đừng bấm Cancel). Nếu danh sách trống: bật ESP32 + Bluetooth PC.";
+      state.lastError = browseAll
+        ? "Chưa chọn thiết bị. Thử từng mục Thiết bị không xác định (ESP32) hoặc bật lại ESP32."
+        : "Không thấy TB-1E. Bấm Quét tất cả thiết bị BLE và chọn TB-1E hoặc Thiết bị không xác định.";
       state.connection = "disconnected";
     } else if (error?.name === "NotAllowedError") {
       state.lastError = "Chrome chưa được phép dùng Bluetooth. Cho phép trong cài đặt trình duyệt.";
@@ -154,7 +240,8 @@ async function toggleConnect(browseAll = false) {
       state.lastError = "Cần mở trang qua HTTPS (GitHub Pages hoặc localhost).";
       state.connection = "error";
     } else if (error?.name === "NetworkError") {
-      state.lastError = "Kết nối GATT thất bại. Rút/cắm ESP32, tắt app Bluetooth khác, thử lại.";
+      state.lastError =
+        "Thiết bị sai hoặc GATT lỗi. Thử Thiết bị không xác định khác, hoặc xóa TB-1E khỏi Bluetooth Windows rồi thử lại.";
       state.connection = "disconnected";
     } else {
       state.lastError = error?.message || "Không kết nối được TB-1E.";
@@ -179,7 +266,7 @@ async function sendCommand(command) {
   }
 }
 
-function bindMomentaryButton(button, pressCommand) {
+function bindMomentaryButton(button, pressCommand, releaseOnUp = true) {
   let pressed = false;
 
   const onPress = async () => {
@@ -191,7 +278,37 @@ function bindMomentaryButton(button, pressCommand) {
   const onRelease = async () => {
     if (!pressed) return;
     pressed = false;
-    await sendCommand("RELEASE");
+    if (releaseOnUp) {
+      await sendCommand("RELEASE");
+    }
+  };
+
+  button.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    button.setPointerCapture(event.pointerId);
+    onPress();
+  });
+
+  button.addEventListener("pointerup", onRelease);
+  button.addEventListener("pointercancel", onRelease);
+  button.addEventListener("lostpointercapture", onRelease);
+}
+
+function bindDirectionButton(button, pressCommand) {
+  let pressed = false;
+
+  const onPress = async () => {
+    if (button.disabled || pressed) return;
+    pressed = true;
+    await sendCommand(pressCommand);
+  };
+
+  const onRelease = async () => {
+    if (!pressed) return;
+    pressed = false;
+    if (state.deviceMode !== "auto") {
+      await sendCommand("RELEASE");
+    }
   };
 
   button.addEventListener("pointerdown", (event) => {
@@ -226,6 +343,13 @@ function bindKeyboard() {
       return;
     }
 
+    if (command === "UP" && state.topLimitActive) {
+      return;
+    }
+    if (command === "DOWN" && state.botLimitActive) {
+      return;
+    }
+
     event.preventDefault();
     keysHeld.add(event.key);
     sendCommand(command);
@@ -238,6 +362,11 @@ function bindKeyboard() {
 
     event.preventDefault();
     keysHeld.delete(event.key);
+
+    const command = KEY_COMMANDS[event.key];
+    if (state.deviceMode === "auto" && command !== "STOP") {
+      return;
+    }
     sendCommand("RELEASE");
   });
 
@@ -336,7 +465,7 @@ function showUnsupportedBanner() {
     els.unsupported.classList.add("show");
     els.unsupported.classList.add("info");
     els.unsupported.textContent =
-      "PC: bật Bluetooth Windows, mở Chrome/Edge, bấm KẾT NỐI và chọn TB-1E. Phím ↑ ↓ Space = LÊN XUỐNG DỪNG.";
+      "PC: bấm Quét tất cả thiết bị BLE nếu không thấy TB-1E. Chọn TB-1E hoặc Thiết bị không xác định (ESP32). Phím ↑ ↓ Space.";
   }
 }
 
@@ -347,22 +476,24 @@ function init() {
   window.addEventListener("resize", drawLeaderLines);
 
   els.connectBtn.addEventListener("click", () => toggleConnect(false));
-  document.getElementById("connect-all-btn")?.addEventListener("click", () => {
+  els.connectAllBtn?.addEventListener("click", () => toggleConnect(true));
+  document.getElementById("connect-all-menu-btn")?.addEventListener("click", () => {
     closeMenu();
     toggleConnect(true);
   });
   els.menuBtn.addEventListener("click", openMenu);
   els.menuBackdrop.addEventListener("click", closeMenu);
 
-  bindMomentaryButton(
+  bindDirectionButton(
     document.querySelector('.control-btn[data-action="up"]'),
     "UP",
   );
   bindMomentaryButton(
     document.querySelector('.control-btn[data-action="stop"]'),
     "STOP",
+    true,
   );
-  bindMomentaryButton(
+  bindDirectionButton(
     document.querySelector('.control-btn[data-action="down"]'),
     "DOWN",
   );

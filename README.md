@@ -10,8 +10,8 @@ No HC-05 module required — Bluetooth is built into the ESP32.
 
 | Board in Arduino IDE | Chip | Bluetooth | App connection |
 |----------------------|------|-----------|----------------|
-| **ESP32 Dev Module** | WROOM-32 | Classic BT (SPP) | Pair in Settings, then connect in app |
-| **ESP32S3 Dev Module** | S3 | BLE only | Android, **Chrome web**, **iOS app** |
+| **ESP32 Dev Module** | WROOM-32 | **BLE** (NUS) | Android, **Chrome web**, pair via app/browser |
+| **ESP32S3 Dev Module** | S3 | BLE only | Same as WROOM |
 | ESP32-C3 / C6 | C3 / C6 | BLE only | Same as S3 |
 
 **Important:** If you see `BluetoothSerial.h: No such file`, you selected **ESP32-S3** (or C3/C6). That is normal — the sketch now uses **BLE** on those boards automatically. Keep your **ESP32S3 Dev Module** board selected and upload again.
@@ -24,13 +24,67 @@ No HC-05 module required — Bluetooth is built into the ESP32.
 | **GND** | GND |
 | **GPIO 26** | IN1 |
 | **GPIO 27** | IN2 |
-| **GPIO 14** | Stop signal (HIGH = stop) |
+| **GPIO 14** | Stop signal |
+| **GPIO 25** | BLE connected (idle HIGH; LOW while phone/PC is connected) |
+| **GPIO 32** | Manual / Auto mode switch (see below) |
+| **GPIO 18** | Top limit switch (see below) |
+| **GPIO 19** | Bottom limit switch (see below) |
+| **GPIO 33** | ON-HOLD switch (see below) |
 
 | Command | GPIO 26 (IN1) | GPIO 27 (IN2) | GPIO 14 (STOP) |
 |---------|---------------|---------------|----------------|
-| UP      | HIGH          | LOW           | LOW            |
-| DOWN    | LOW           | HIGH          | LOW            |
-| STOP    | LOW           | LOW           | **HIGH**       |
+| UP      | LOW           | HIGH          | HIGH           |
+| DOWN    | HIGH          | LOW           | HIGH           |
+| STOP    | HIGH          | HIGH          | **LOW**        |
+| RELEASE / idle | HIGH     | HIGH          | HIGH           |
+
+### Manual / Auto mode switch (GPIO 32)
+
+Physical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32** with internal pull-up:
+
+| Switch position | GPIO 32 | Mode | App behavior |
+|-----------------|---------|------|----------------|
+| **Manual** | LOW (pin to GND) | Manual | Momentary — hold LÊN/DỪNG/XUỐNG, release sends `RELEASE` |
+| **Auto** | HIGH (open or 3.3V) | Auto | Latch — press/release LÊN or XUỐNG keeps output until DỪNG, opposite direction, or limit |
+
+**Wiring (SPDT or toggle to GND):**
+
+- Common → **GPIO 32**
+- **Manual** position → **GND**
+- **Auto** position → leave open (pull-up) or tie to **3.3V**
+
+On mode change or BLE connect, ESP32 notifies the app with `MODE: MANUAL` or `MODE: AUTO`.
+
+### Limit switches (GPIO 18 / GPIO 19)
+
+Two **normally-open** limit switches at the top and bottom of travel. ESP32 reads them with internal pull-up:
+
+| Switch | GPIO | Pin level | Meaning |
+|--------|------|-----------|---------|
+| **Top limit** | **18** | **LOW** | At top — **LÊN disabled**, GPIO 14/26/27 → HIGH |
+| **Bottom limit** | **19** | **LOW** | At bottom — **XUỐNG disabled**, GPIO 14/26/27 → HIGH |
+| Either | — | **HIGH** | Not at that limit |
+
+**Wiring (each limit switch):**
+
+- One terminal → **GPIO 18** or **GPIO 19**
+- Other terminal → **GND**
+- Switch closes to GND when the carriage hits the limit
+
+On limit change or BLE connect, ESP32 sends `LIMIT: TOP`, `LIMIT: TOP OFF`, `LIMIT: BOT`, or `LIMIT: BOT OFF`.
+
+### ON-HOLD switch (GPIO 33)
+
+Physical hold switch. ESP32 reads **GPIO 33** with internal pull-up:
+
+| Switch | GPIO 33 | Effect |
+|--------|---------|--------|
+| **ON-HOLD active** | **LOW** (pin to GND) | GPIO 14/26/27 → HIGH **once** on entry; buttons stay enabled |
+| Normal | **HIGH** | No hold |
+
+**Wiring:** one terminal → **GPIO 33**, other → **GND** (closes to GND when hold is engaged).
+
+ESP32 sends `HOLD: ON` or `HOLD: OFF` on change and on BLE connect.
 
 Device advertises as **TB-1E** when powered on.
 
@@ -44,7 +98,19 @@ Commands are newline-terminated ASCII strings:
 | STOP   | `STOP` |
 | DOWN   | `DOWN` |
 
-ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOPPED`.
+Mode notifications from ESP32:
+
+| Message | Meaning |
+|---------|---------|
+| `MODE: MANUAL` | Manual mode — momentary buttons |
+| `MODE: AUTO` | Auto mode — UP/DOWN latch after release |
+| `LIMIT: TOP` / `LIMIT: TOP OFF` | Top limit active / cleared |
+| `LIMIT: BOT` / `LIMIT: BOT OFF` | Bottom limit active / cleared |
+| `HOLD: ON` / `HOLD: OFF` | ON-HOLD entered / cleared (informational) |
+| `ERR: TOP LIMIT` | UP rejected — at top |
+| `ERR: BOT LIMIT` | DOWN rejected — at bottom |
+
+ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOP`.
 
 ## Setup
 
@@ -58,8 +124,7 @@ ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOPPED`.
 4. Select the correct **COM port** (CP2102 / CH340 USB driver if needed).
 5. Upload the sketch.
 6. Serial Monitor **115200 baud** — you should see:
-   - `Bluetooth: Classic SPP` (WROOM-32), or
-   - `Bluetooth: BLE UART` (S3/C3/C6)
+   - `Bluetooth: BLE UART (TB-1E)`
    - `Bluetooth name: TB-1E`
 
 ### 2. Android app (v1.3+)
@@ -71,11 +136,11 @@ ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOPPED`.
 5. Select **TB-1E** → **KẾT NỐI MÁY THỬ DÂY AN TOÀN**.
 6. Use **LÊN**, **DỪNG**, **XUỐNG**.
 
-**WROOM-32 only:** you can also pair **TB-1E** in **Settings → Bluetooth** first (optional).
+**WROOM-32 / S3:** connect from the app or Chrome — do not rely on Windows Settings pairing alone.
 
 ### 3. iOS app (v1.0)
 
-Requires **ESP32-S3 / BLE** (iOS does not support Classic Bluetooth SPP).
+Requires **ESP32 BLE** firmware (WROOM-32 or S3/C3/C6).
 
 1. On a Mac, open `ios/TB1EController.xcodeproj` in Xcode.
 2. Set your **Signing Team** and run on your iPhone.
@@ -85,7 +150,7 @@ Requires **ESP32-S3 / BLE** (iOS does not support Classic Bluetooth SPP).
 
 Browser controller in `web/` — no install, **Web Bluetooth** (same protocol as Android app).
 
-1. ESP32-S3 / C3 / C6 with BLE firmware, name **TB-1E**
+1. ESP32 with BLE firmware (WROOM-32 or S3/C3/C6), name **TB-1E**
 2. Open **GitHub Pages** URL in **Chrome or Edge on PC**, or Chrome on Android — see [web/README.md](web/README.md)
 3. **KẾT NỐI** → hold **LÊN / DỪNG / XUỐNG** (mouse/touch) or **↑ ↓ Space** on PC keyboard
 

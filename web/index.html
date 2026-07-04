@@ -17,7 +17,7 @@
       <header>
         <div>
           <h1>Bluetooth Controller</h1>
-          <div class="version" id="app-version">v1.2</div>
+          <div class="version" id="app-version">v1.3</div>
         </div>
         <button id="menu-btn" class="icon-btn" type="button" aria-label="Menu">⋯</button>
       </header>
@@ -31,11 +31,20 @@
 
         <div id="controls-top">
           <button id="connect-btn" type="button">KẾT NỐI MÁY THỬ DÂY AN TOÀN</button>
+          <button id="connect-all-btn" class="connect-all-btn" type="button">
+            Quét tất cả thiết bị BLE
+          </button>
           <div id="status-row">
             <span id="status-dot" class="status-dot"></span>
             <span id="status-text">Status: Disconnected</span>
           </div>
+          <div id="mode-text" class="mode-text"></div>
           <div id="error-text"></div>
+          <div id="ble-hint" class="ble-hint" hidden>
+            Windows: nếu không thấy <strong>TB-1E</strong>, chọn
+            <strong>Thiết bị không xác định</strong> (ESP32). Bấm nút
+            <strong>Quét tất cả thiết bị BLE</strong> ở trên.
+          </div>
         </div>
 
         <button class="control-btn" data-action="up" type="button" disabled>LÊN</button>
@@ -50,7 +59,7 @@
 
     <div id="menu-backdrop"></div>
     <nav id="menu" aria-label="Device menu">
-      <button class="menu-item" type="button" id="connect-all-btn">Connect — show all BLE devices</button>
+      <button class="menu-item" type="button" id="connect-all-menu-btn">Connect — show all BLE devices</button>
       <button class="menu-item" type="button" onclick="location.reload()">Refresh page</button>
       <div class="menu-divider"></div>
       <div class="menu-meta">

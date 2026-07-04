@@ -18,4 +18,8 @@
     <string name="no_paired_devices">No paired devices</string>
     <string name="last_sent">Last sent: %1$s</string>
     <string name="last_received">Last received: %1$s</string>
+    <string name="mode_manual">Mode: Manual</string>
+    <string name="mode_auto">Mode: Auto</string>
+    <string name="mode_auto_latch">Auto — release keeps direction until STOP or limit</string>
+    <string name="hold_active">ON-HOLD — UP/DOWN disabled</string>
 </resources>

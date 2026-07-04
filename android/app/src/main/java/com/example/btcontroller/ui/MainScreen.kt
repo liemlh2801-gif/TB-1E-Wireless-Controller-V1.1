@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.btcontroller.R
 import com.example.btcontroller.bluetooth.ConnectionState
+import com.example.btcontroller.bluetooth.DeviceMode
 
 private val GoldBar = Color(0xFFD4AF37)
 private val PanelButtonFill = Color(0xFFE0E0E0)
@@ -98,6 +99,10 @@ fun MainScreen(
     lastError: String?,
     lastSent: String?,
     lastReceived: String?,
+    deviceMode: DeviceMode?,
+    topLimitActive: Boolean,
+    botLimitActive: Boolean,
+    onHoldActive: Boolean,
     onDeviceSelected: (BluetoothDevice) -> Unit,
     onConnectClick: () -> Unit,
     onDisconnectClick: () -> Unit,
@@ -123,6 +128,10 @@ fun MainScreen(
             lastError = lastError,
             lastSent = lastSent,
             lastReceived = lastReceived,
+            deviceMode = deviceMode,
+            topLimitActive = topLimitActive,
+            botLimitActive = botLimitActive,
+            onHoldActive = onHoldActive,
             onDeviceSelected = onDeviceSelected,
             onConnectClick = onConnectClick,
             onDisconnectClick = onDisconnectClick,
@@ -152,6 +161,10 @@ private fun MainScreenContent(
     lastError: String?,
     lastSent: String?,
     lastReceived: String?,
+    deviceMode: DeviceMode?,
+    topLimitActive: Boolean,
+    botLimitActive: Boolean,
+    onHoldActive: Boolean,
     onDeviceSelected: (BluetoothDevice) -> Unit,
     onConnectClick: () -> Unit,
     onDisconnectClick: () -> Unit,
@@ -169,6 +182,11 @@ private fun MainScreenContent(
     menuExpanded: Boolean,
     onMenuExpandedChange: (Boolean) -> Unit,
 ) {
+    val isAuto = deviceMode == DeviceMode.Auto
+    val upEnabled = isConnected && !topLimitActive
+    val downEnabled = isConnected && !botLimitActive
+    val stopEnabled = isConnected
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -270,7 +288,19 @@ private fun MainScreenContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                StatusRow(connectionState = connectionState)
+                StatusRow(connectionState = connectionState, deviceMode = deviceMode)
+
+                } else if (isAuto) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(R.string.mode_auto_latch),
+                        color = Color(0xFF1565C0),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 lastError?.let { error ->
                     Spacer(modifier = Modifier.height(4.dp))
@@ -292,23 +322,23 @@ private fun MainScreenContent(
 
             PanelButton(
                 text = stringResource(R.string.btn_up),
-                enabled = isConnected,
+                enabled = upEnabled,
                 onPress = onUpPress,
-                onRelease = onUpRelease,
+                onRelease = if (isAuto) ({}) else onUpRelease,
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_UP_Y),
             )
             PanelButton(
                 text = stringResource(R.string.btn_stop),
-                enabled = isConnected,
+                enabled = stopEnabled,
                 onPress = onStopPress,
                 onRelease = onStopRelease,
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_STOP_Y),
             )
             PanelButton(
                 text = stringResource(R.string.btn_down),
-                enabled = isConnected,
+                enabled = downEnabled,
                 onPress = onDownPress,
-                onRelease = onDownRelease,
+                onRelease = if (isAuto) ({}) else onDownRelease,
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_DOWN_Y),
             )
         }
@@ -502,6 +532,10 @@ private fun PanelButton(
 @Composable
 private fun StatusRow(
     connectionState: ConnectionState,
+    deviceMode: DeviceMode?,
+    topLimitActive: Boolean,
+    botLimitActive: Boolean,
+    onHoldActive: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -511,12 +545,25 @@ private fun StatusRow(
     ) {
         StatusDot(connectionState)
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = statusLabel(connectionState),
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            color = BorderBlack,
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = statusLabel(connectionState),
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = BorderBlack,
+            )
+            deviceMode?.let { mode ->
+                Text(
+                    text = when (mode) {
+                        DeviceMode.Manual -> stringResource(R.string.mode_manual)
+                        DeviceMode.Auto -> stringResource(R.string.mode_auto)
+                    },
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
+                )
+            }
+        }
     }
 }
 
@@ -544,6 +591,10 @@ private fun DeviceMenu(
     selectedDevice: BluetoothDevice?,
     lastSent: String?,
     lastReceived: String?,
+    deviceMode: DeviceMode?,
+    topLimitActive: Boolean,
+    botLimitActive: Boolean,
+    onHoldActive: Boolean,
     lastError: String?,
     deviceLabel: (BluetoothDevice) -> String,
     onDeviceSelected: (BluetoothDevice) -> Unit,

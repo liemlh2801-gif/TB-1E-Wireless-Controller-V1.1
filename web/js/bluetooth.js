@@ -6,6 +6,12 @@ const DEVICE_NAME = "TB-1E";
 const RECONNECT_DELAY_MS = 1500;
 const KEEPALIVE_MS = 12000;
 const MAX_RECONNECT_ATTEMPTS = 5;
+const GATT_ATTACH_ATTEMPTS = 3;
+const GATT_SETTLE_MS = 400;
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export function isWebBluetoothSupported() {
   return typeof navigator !== "undefined" && !!navigator.bluetooth;
@@ -88,24 +94,60 @@ export class TB1EBluetooth {
       throw new Error("No Bluetooth device selected");
     }
 
-    if (!this.device.gatt.connected) {
-      this.server = await this.device.gatt.connect();
-    } else {
-      this.server = this.device.gatt;
+    let lastError = null;
+
+    for (let attempt = 0; attempt < GATT_ATTACH_ATTEMPTS; attempt += 1) {
+      try {
+        if (attempt > 0) {
+          await delay(RECONNECT_DELAY_MS);
+        }
+
+        if (!this.device.gatt.connected) {
+          this.server = await this.device.gatt.connect();
+        } else {
+          this.server = this.device.gatt;
+        }
+
+        // Windows needs a short pause after pairing before GATT setup.
+        await delay(GATT_SETTLE_MS);
+
+        const service = await this.server.getPrimaryService(NUS_SERVICE);
+        this.rxChar = await service.getCharacteristic(NUS_RX);
+        this.txChar = await service.getCharacteristic(NUS_TX);
+
+        await this.txChar.startNotifications();
+        this.txChar.removeEventListener(
+          "characteristicvaluechanged",
+          this.onNotify,
+        );
+        this.txChar.addEventListener(
+          "characteristicvaluechanged",
+          this.onNotify,
+        );
+
+        this.connected = true;
+        this.reconnecting = false;
+        this.onStatus("connected");
+        this.startKeepAlive();
+        return;
+      } catch (error) {
+        lastError = error;
+        this.connected = false;
+        this.server = null;
+        this.rxChar = null;
+        this.txChar = null;
+
+        if (this.device?.gatt?.connected) {
+          try {
+            this.device.gatt.disconnect();
+          } catch (_) {
+            // Ignore cleanup errors between retries.
+          }
+        }
+      }
     }
 
-    const service = await this.server.getPrimaryService(NUS_SERVICE);
-    this.rxChar = await service.getCharacteristic(NUS_RX);
-    this.txChar = await service.getCharacteristic(NUS_TX);
-
-    await this.txChar.startNotifications();
-    this.txChar.removeEventListener("characteristicvaluechanged", this.onNotify);
-    this.txChar.addEventListener("characteristicvaluechanged", this.onNotify);
-
-    this.connected = true;
-    this.reconnecting = false;
-    this.onStatus("connected");
-    this.startKeepAlive();
+    throw lastError || new Error("GATT attach failed");
   }
 
   async connect(options = {}) {
