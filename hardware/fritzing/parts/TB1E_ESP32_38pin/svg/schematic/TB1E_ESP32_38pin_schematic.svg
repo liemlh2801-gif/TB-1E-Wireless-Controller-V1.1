@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2.6in" height="4.8in" viewBox="0 0 260 480">
+<g id="breadboard">
+<rect x="15" y="10" width="230" height="460" rx="6" fill="#00979d" stroke="#004446" stroke-width="2"/>
+<text x="130" y="28" text-anchor="middle" font-size="10" fill="#fff" font-family="Arial">ESP32 DevKit</text>
+<text x="130" y="40" text-anchor="middle" font-size="7" fill="#fff" font-family="Arial">38 Pin  TB-1E</text>
+<rect id="connector0pin" x="17" y="52" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="58" font-size="6" fill="#fff" font-family="Arial">3V3</text>
+<rect id="connector1pin" x="17" y="74" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="80" font-size="6" fill="#fff" font-family="Arial">EN</text>
+<rect id="connector2pin" x="17" y="96" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="102" font-size="6" fill="#fff" font-family="Arial">VP</text>
+<rect id="connector3pin" x="17" y="118" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="124" font-size="6" fill="#fff" font-family="Arial">VN</text>
+<rect id="connector4pin" x="17" y="140" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="146" font-size="6" fill="#fff" font-family="Arial">GPIO34</text>
+<rect id="connector5pin" x="17" y="162" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="168" font-size="6" fill="#fff" font-family="Arial">GPIO35</text>
+<rect id="connector6pin" x="17" y="184" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="190" font-size="6" fill="#fff" font-family="Arial">GPIO32</text>
+<rect id="connector7pin" x="17" y="206" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="212" font-size="6" fill="#fff" font-family="Arial">GPIO33</text>
+<rect id="connector8pin" x="17" y="228" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="234" font-size="6" fill="#fff" font-family="Arial">GPIO25</text>
+<rect id="connector9pin" x="17" y="250" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="256" font-size="6" fill="#fff" font-family="Arial">GPIO26</text>
+<rect id="connector10pin" x="17" y="272" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="278" font-size="6" fill="#fff" font-family="Arial">GPIO27</text>
+<rect id="connector11pin" x="17" y="294" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="300" font-size="6" fill="#fff" font-family="Arial">GPIO14</text>
+<rect id="connector12pin" x="17" y="316" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="322" font-size="6" fill="#fff" font-family="Arial">GPIO12</text>
+<rect id="connector13pin" x="17" y="338" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="344" font-size="6" fill="#fff" font-family="Arial">GPIO13</text>
+<rect id="connector14pin" x="17" y="360" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="366" font-size="6" fill="#fff" font-family="Arial">GND</text>
+<rect id="connector15pin" x="17" y="382" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="388" font-size="6" fill="#fff" font-family="Arial">VIN</text>
+<rect id="connector16pin" x="17" y="404" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="410" font-size="6" fill="#fff" font-family="Arial">NC1</text>
+<rect id="connector17pin" x="17" y="426" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="432" font-size="6" fill="#fff" font-family="Arial">NC2</text>
+<rect id="connector18pin" x="17" y="448" width="8" height="6" fill="#ccc" stroke="#888"/><text x="28" y="454" font-size="6" fill="#fff" font-family="Arial">NC3</text>
+<rect id="connector19pin" x="235" y="52" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="58" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GND</text>
+<rect id="connector20pin" x="235" y="74" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="80" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO23</text>
+<rect id="connector21pin" x="235" y="96" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="102" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO22</text>
+<rect id="connector22pin" x="235" y="118" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="124" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">TX0</text>
+<rect id="connector23pin" x="235" y="140" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="146" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">RX0</text>
+<rect id="connector24pin" x="235" y="162" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="168" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO21</text>
+<rect id="connector25pin" x="235" y="184" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="190" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO19</text>
+<rect id="connector26pin" x="235" y="206" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="212" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO18</text>
+<rect id="connector27pin" x="235" y="228" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="234" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO5</text>
+<rect id="connector28pin" x="235" y="250" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="256" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO17</text>
+<rect id="connector29pin" x="235" y="272" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="278" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO16</text>
+<rect id="connector30pin" x="235" y="294" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="300" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO4</text>
+<rect id="connector31pin" x="235" y="316" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="322" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO0</text>
+<rect id="connector32pin" x="235" y="338" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="344" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO2</text>
+<rect id="connector33pin" x="235" y="360" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="366" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GPIO15</text>
+<rect id="connector34pin" x="235" y="382" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="388" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">GND</text>
+<rect id="connector35pin" x="235" y="404" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="410" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">NC4</text>
+<rect id="connector36pin" x="235" y="426" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="432" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">NC5</text>
+<rect id="connector37pin" x="235" y="448" width="8" height="6" fill="#ccc" stroke="#888"/><text x="188" y="454" font-size="6" fill="#fff" text-anchor="end" font-family="Arial">NC6</text>
+</g>
+</svg>

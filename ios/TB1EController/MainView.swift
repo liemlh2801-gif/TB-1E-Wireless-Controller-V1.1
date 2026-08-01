@@ -219,11 +219,11 @@ struct MainView: View {
     }
 
     private var upEnabled: Bool {
-        bluetooth.isConnected && !bluetooth.topLimitActive
+        bluetooth.isConnected
     }
 
     private var downEnabled: Bool {
-        bluetooth.isConnected && !bluetooth.botLimitActive
+        bluetooth.isConnected
     }
 
     private var stopEnabled: Bool {

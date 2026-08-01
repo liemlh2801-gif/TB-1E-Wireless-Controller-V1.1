@@ -1,0 +1,1543 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 76238d0..3bdd558 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -40,51 +40,58 @@[m [mNo HC-05 module required — Bluetooth is built into the ESP32.[m
+ [m
+ ### Manual / Auto mode switch (GPIO 32)[m
+ [m
+[31m-Physical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32** with internal pull-up:[m
+[32m+[m[32mPhysical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32** with internal pull-down (Manual is default):[m
+ [m
+ | Switch position | GPIO 32 | Mode | App behavior |[m
+ |-----------------|---------|------|----------------|[m
+[31m-| **Manual** | LOW (pin to GND) | Manual | Momentary — hold LÊN/DỪNG/XUỐNG, release sends `RELEASE` |[m
+[31m-| **Auto** | HIGH (open or 3.3V) | Auto | Latch — press/release LÊN or XUỐNG keeps output until DỪNG, opposite direction, or limit |[m
+[32m+[m[32m| **Manual** (default) | **Open** or **GND** | Manual | Momentary — hold LÊN/DỪNG/XUỐNG, release sends `RELEASE` |[m
+[32m+[m[32m| **Auto** | **3.3V only** | Auto | Latch — press/release LÊN or XUỐNG keeps output until DỪNG, opposite direction, or limit |[m
+ [m
+[31m-**Wiring (SPDT or toggle to GND):**[m
+[32m+[m[32m**Wiring:**[m
+ [m
+[31m-- Common → **GPIO 32**[m
+[31m-- **Manual** position → **GND**[m
+[31m-- **Auto** position → leave open (pull-up) or tie to **3.3V**[m
+[32m+[m[32m- **Manual:** leave GPIO 32 **open**, or connect to **GND**[m
+[32m+[m[32m- **Auto:** connect GPIO 32 to **3.3V** only (do not use open/float for Auto)[m
+ [m
+ On mode change or BLE connect, ESP32 notifies the app with `MODE: MANUAL` or `MODE: AUTO`.[m
+ [m
+ ### Limit switches (GPIO 18 / GPIO 19)[m
+ [m
+[31m-Two **normally-open** limit switches at the top and bottom of travel. ESP32 reads them with internal pull-up:[m
+[32m+[m[32mTwo **normally-open** limit switches. ESP32 reads **GPIO 18** (top) and **GPIO 19** (bottom) with internal pull-up:[m
+ [m
+[31m-| Switch | GPIO | Pin level | Meaning |[m
+[31m-|--------|------|-----------|---------|[m
+[31m-| **Top limit** | **18** | **LOW** | At top — **LÊN disabled**, GPIO 14/26/27 → HIGH |[m
+[31m-| **Bottom limit** | **19** | **LOW** | At bottom — **XUỐNG disabled**, GPIO 14/26/27 → HIGH |[m
+[31m-| Either | — | **HIGH** | Not at that limit |[m
+[32m+[m[32m| Switch | GPIO | Active (limit hit) | Inactive (normal) |[m
+[32m+[m[32m|--------|------|--------------------|-------------------|[m
+[32m+[m[32m| **Top limit** | **18** | **LOW** (pin to **GND**) | **Open** or **HIGH** |[m
+[32m+[m[32m| **Bottom limit** | **19** | **LOW** (pin to **GND**) | **Open** or **HIGH** |[m
+[32m+[m
+[32m+[m[32m**While top limit active:** GPIO 26 set HIGH, then disabled (cannot go LOW); GPIO 27 and GPIO 14 unchanged.[m
+[32m+[m
+[32m+[m[32m**While bottom limit active:** GPIO 27 set HIGH, then disabled (cannot go LOW); GPIO 26 and GPIO 14 unchanged.[m
+ [m
+ **Wiring (each limit switch):**[m
+ [m
+[31m-- One terminal → **GPIO 18** or **GPIO 19**[m
+[32m+[m[32m- One terminal → **GPIO 18** (top) or **GPIO 19** (bottom)[m
+ - Other terminal → **GND**[m
+[31m-- Switch closes to GND when the carriage hits the limit[m
+[32m+[m[32m- Switch closes to GND when the carriage hits the limit (NO switch)[m
+[32m+[m
+[32m+[m[32mWhen top limit clears, GPIO 26 is enabled again; if **GPIO 21** is still connected to **GND**, GPIO 26 is allowed to go **LOW**.[m
+[32m+[m
+[32m+[m[32mWhen bottom limit clears, GPIO 27 is enabled again; if **GPIO 22** is still connected to **GND**, GPIO 27 is allowed to go **LOW**.[m
+ [m
+ On limit change or BLE connect, ESP32 sends `LIMIT: TOP`, `LIMIT: TOP OFF`, `LIMIT: BOT`, or `LIMIT: BOT OFF`.[m
+ [m
+ ### ON-HOLD switch (GPIO 33)[m
+ [m
+[31m-Physical hold switch. ESP32 reads **GPIO 33** with internal pull-up:[m
+[32m+[m[32mESP32 reads **GPIO 33** with internal pull-up:[m
+ [m
+ | Switch | GPIO 33 | Effect |[m
+ |--------|---------|--------|[m
+[31m-| **ON-HOLD active** | **LOW** (pin to GND) | GPIO 14/26/27 → HIGH **once** on entry; buttons stay enabled |[m
+[31m-| Normal | **HIGH** | No hold |[m
+[32m+[m[32m| **ON-HOLD active** | **LOW** (pin to **GND**) | **UP input and output stay enabled**; AUTO-DOWN latch cleared |[m
+[32m+[m[32m| **Inactive** | **Open** or **HIGH** | Normal operation |[m
+[32m+[m[32m| **ON-HOLD release** (active→inactive) | LOW→open | If ON-HOLD stays **inactive for 3 seconds**: GPIO 26 inactive (HIGH), GPIO 27 **GND** (LOW), GPIO 14 inactive (HIGH) — same as panel XUỐNG press-release once in Auto (if GPIO 4 enabled). Count resets if ON-HOLD goes active again. |[m
+ [m
+ **Wiring:** one terminal → **GPIO 33**, other → **GND** (closes to GND when hold is engaged).[m
+ [m
+[31m-ESP32 sends `HOLD: ON` or `HOLD: OFF` on change and on BLE connect.[m
+[32m+[m[32mPanel **LÊN** (GPIO 21), app **UP**, and GPIO 26 output are **never disabled** while ON-HOLD is active.[m
+ [m
+ Device advertises as **TB-1E** when powered on.[m
+ [m
+[36m@@ -106,9 +113,6 @@[m [mMode notifications from ESP32:[m
+ | `MODE: AUTO` | Auto mode — UP/DOWN latch after release |[m
+ | `LIMIT: TOP` / `LIMIT: TOP OFF` | Top limit active / cleared |[m
+ | `LIMIT: BOT` / `LIMIT: BOT OFF` | Bottom limit active / cleared |[m
+[31m-| `HOLD: ON` / `HOLD: OFF` | ON-HOLD entered / cleared (informational) |[m
+[31m-| `ERR: TOP LIMIT` | UP rejected — at top |[m
+[31m-| `ERR: BOT LIMIT` | DOWN rejected — at bottom |[m
+ [m
+ ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOP`.[m
+ [m
+[1mdiff --git a/android/app/src/main/java/com/example/btcontroller/ui/MainScreen.kt b/android/app/src/main/java/com/example/btcontroller/ui/MainScreen.kt[m
+[1mindex c079317..5b013b1 100644[m
+[1m--- a/android/app/src/main/java/com/example/btcontroller/ui/MainScreen.kt[m
+[1m+++ b/android/app/src/main/java/com/example/btcontroller/ui/MainScreen.kt[m
+[36m@@ -183,8 +183,8 @@[m [mprivate fun MainScreenContent([m
+     onMenuExpandedChange: (Boolean) -> Unit,[m
+ ) {[m
+     val isAuto = deviceMode == DeviceMode.Auto[m
+[31m-    val upEnabled = isConnected && !topLimitActive[m
+[31m-    val downEnabled = isConnected && !botLimitActive[m
+[32m+[m[32m    val upEnabled = isConnected[m
+[32m+[m[32m    val downEnabled = isConnected[m
+     val stopEnabled = isConnected[m
+ [m
+     Scaffold([m
+[1mdiff --git a/android/app/src/main/res/values/strings.xml b/android/app/src/main/res/values/strings.xml[m
+[1mindex a7167b7..fc14498 100644[m
+[1m--- a/android/app/src/main/res/values/strings.xml[m
+[1m+++ b/android/app/src/main/res/values/strings.xml[m
+[36m@@ -21,5 +21,5 @@[m
+     <string name="mode_manual">Mode: Manual</string>[m
+     <string name="mode_auto">Mode: Auto</string>[m
+     <string name="mode_auto_latch">Auto — release keeps direction until STOP or limit</string>[m
+[31m-    <string name="hold_active">ON-HOLD — UP/DOWN disabled</string>[m
+[32m+[m[32m    <string name="hold_active">ON-HOLD active</string>[m
+ </resources>[m
+[1mdiff --git a/esp32/bt_controller/bt_controller.ino b/esp32/bt_controller/bt_controller.ino[m
+[1mindex 6f933da..37e2584 100644[m
+[1m--- a/esp32/bt_controller/bt_controller.ino[m
+[1m+++ b/esp32/bt_controller/bt_controller.ino[m
+[36m@@ -18,9 +18,15 @@[m
+ [m
+  *[m
+ [m
+[31m- * GPIO 32 mode switch: LOW = Manual (momentary), HIGH = Auto (latch UP/DOWN).[m
+[32m+[m[32m * GPIO 32 mode: INPUT_PULLDOWN — Manual=open/GND, Auto=3.3V only.[m
+ [m
+[31m- * GPIO 18 top limit, GPIO 19 bottom limit, GPIO 33 ON-HOLD: LOW = active.[m
+[32m+[m[32m * GPIO 18 top limit: while active GPIO26 disabled; GPIO 19 bottom limit: while active GPIO27 disabled.[m
+[32m+[m[32m * GPIO 33 ON-HOLD: active=LOW/GND; after active→inactive, if inactive 3s → DOWN (GPIO26 inactive, GPIO27 GND, GPIO14 inactive).[m
+[32m+[m[32m * While ON-HOLD active, UP input (GPIO21/app) and UP output (GPIO26) are never disabled.[m
+[32m+[m[32m * AUTO-DOWN output: GPIO26 HIGH, GPIO27 LOW, GPIO14 HIGH until button or bottom limit.[m
+[32m+[m[32m * GPIO 21/22/23 panel LÊN/XUỐNG/DỪNG: LOW to GND = pressed (INPUT_PULLUP).[m
+[32m+[m[32m * Panel inputs are always polled — never disabled.[m
+[32m+[m[32m * STOP (panel GPIO23 / app) input and output are never disabled.[m
+ [m
+  */[m
+ [m
+[36m@@ -38,15 +44,21 @@[m [mconst int STOP_PIN = 14;[m
+ [m
+ const int BT_CONNECTED_PIN = 25;  // idle HIGH; LOW while phone/PC is connected via BLE[m
+ [m
+[31m-const int MODE_SWITCH_PIN = 32;   // INPUT_PULLUP: LOW = Manual, HIGH = Auto[m
+[32m+[m[32mconst int MODE_SWITCH_PIN = 32;   // INPUT_PULLDOWN: open/GND=Manual (default), 3.3V=Auto[m
+ [m
+[31m-const int TOP_LIMIT_PIN = 18;     // INPUT_PULLUP: LOW = top limit reached[m
+[32m+[m[32mconst int TOP_LIMIT_PIN = 18;     // INPUT_PULLUP: LOW to GND=active, open/HIGH=inactive[m
+ [m
+[31m-const int BOT_LIMIT_PIN = 19;     // INPUT_PULLUP: LOW = bottom limit reached[m
+[32m+[m[32mconst int BOT_LIMIT_PIN = 19;     // INPUT_PULLUP: LOW to GND=active, open/HIGH=inactive[m
+ [m
+[31m-const int ON_HOLD_PIN = 33;       // INPUT_PULLUP: LOW = ON-HOLD active[m
+[32m+[m[32mconst int AUTO_DOWN_PIN = 4;      // INPUT_PULLDOWN: 3.3V=enabled, open/GND=inactive[m
+ [m
+[32m+[m[32mconst int ON_HOLD_PIN = 33;       // INPUT_PULLUP: LOW=active (to GND); release=open (HIGH) latches AUTO-DOWN[m
+ [m
+[32m+[m[32mconst int PANEL_UP_PIN = 21;      // INPUT_PULLUP: LOW to GND = LÊN pressed[m
+[32m+[m
+[32m+[m[32mconst int PANEL_DOWN_PIN = 22;    // INPUT_PULLUP: LOW to GND = XUỐNG pressed[m
+[32m+[m
+[32m+[m[32mconst int PANEL_STOP_PIN = 23;    // INPUT_PULLUP: LOW to GND = DỪNG pressed[m
+ [m
+ const char BT_DEVICE_NAME[] = "TB-1E";[m
+ [m
+[36m@@ -54,6 +66,10 @@[m [mconst long USB_BAUD = 115200;[m
+ [m
+ const unsigned long INPUT_DEBOUNCE_MS = 50;[m
+ [m
+[32m+[m[32mconst unsigned long PANEL_DEBOUNCE_MS = 10;[m
+[32m+[m
+[32m+[m[32mconst unsigned long AUTO_DOWN_FIRST_START_DELAY_MS = 3000;[m
+[32m+[m
+ [m
+ [m
+ bool modeSwitchAuto = false;[m
+[36m@@ -76,13 +92,37 @@[m [munsigned long topLimitLastChangeMs = 0;[m
+ [m
+ unsigned long botLimitLastChangeMs = 0;[m
+ [m
+[32m+[m[32menum PanelEdge { PANEL_EDGE_NONE, PANEL_EDGE_RISE, PANEL_EDGE_FALL };[m
+[32m+[m
+[32m+[m[32mstruct PanelButtonState {[m
+[32m+[m
+[32m+[m[32m  bool stable;[m
+[32m+[m
+[32m+[m[32m  bool lastRaw;[m
+[32m+[m
+[32m+[m[32m  unsigned long lastChangeMs;[m
+[32m+[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mbool autoDownFirstStartPending = true;[m
+[32m+[m
+[32m+[m[32munsigned long autoDownFirstStartAt = 0;[m
+[32m+[m
+[32m+[m[32mbool autoDownOnHoldInactiveArmed = false;[m
+[32m+[m
+[32m+[m[32munsigned long autoDownOnHoldInactiveSince = 0;[m
+[32m+[m
+[32m+[m[32mbool autoDownOnHoldInactiveFired = false;[m
+[32m+[m
+[32m+[m[32mbool autoDownLatched = false;[m
+ [m
+[32m+[m[32mPanelButtonState onHoldInput = {false, false, 0};[m
+ [m
+[31m-bool onHoldActive = false;[m
+[32m+[m[32mPanelButtonState panelUp = {false, false, 0};[m
+ [m
+[31m-bool onHoldLastReading = false;[m
+[32m+[m[32mPanelButtonState panelDown = {false, false, 0};[m
+ [m
+[31m-unsigned long onHoldLastChangeMs = 0;[m
+[32m+[m[32mPanelButtonState panelStop = {false, false, 0};[m
+ [m
+ [m
+ [m
+[36m@@ -90,6 +130,10 @@[m [mvoid logUsb(const char* line);[m
+ [m
+ void setAllHigh();[m
+ [m
+[32m+[m[32mvoid writeIn1(bool levelHigh);[m
+[32m+[m
+[32m+[m[32mvoid writeIn2(bool levelHigh);[m
+[32m+[m
+ void setBtConnectedOutput(bool connected);[m
+ [m
+ void onAppDisconnected();[m
+[36m@@ -100,6 +144,8 @@[m [mvoid moveDown();[m
+ [m
+ void stopPressed();[m
+ [m
+[32m+[m[32mvoid stopReleased();[m
+[32m+[m
+ void handleCommand(const String& cmd);[m
+ [m
+ bool isAppConnected();[m
+[36m@@ -110,21 +156,49 @@[m [mbool isTopLimitActive();[m
+ [m
+ bool isBotLimitActive();[m
+ [m
+[31m-bool isOnHoldActive();[m
+[31m-[m
+ void sendModeStatus();[m
+ [m
+ void sendLimitStatus();[m
+ [m
+[31m-void sendHoldStatus();[m
+[31m-[m
+ void pollModeSwitch();[m
+ [m
+ void pollLimitSwitches();[m
+ [m
+[32m+[m[32mvoid scheduleAutoDownFirstStart();[m
+[32m+[m
+[32m+[m[32mvoid pollAutoDownFirstStart();[m
+[32m+[m
+[32m+[m[32mvoid resetAutoDownOnHoldInactiveTimer();[m
+[32m+[m
+[32m+[m[32mvoid armAutoDownOnHoldInactiveTimer();[m
+[32m+[m
+[32m+[m[32mvoid pollAutoDownOnHoldInactive();[m
+[32m+[m
+ void pollOnHold();[m
+ [m
+[31m-void enforceSafety();[m
+[32m+[m[32mvoid activateAutoDown();[m
+[32m+[m
+[32m+[m[32mvoid clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32mvoid maintainAutoDownLatch();[m
+[32m+[m
+[32m+[m[32mbool isAutoDownEnabled();[m
+[32m+[m
+[32m+[m[32mbool isStopOutputActive();[m
+[32m+[m
+[32m+[m[32mbool isPanelStopPressed();[m
+[32m+[m
+[32m+[m[32mvoid setupPanelInputs();[m
+[32m+[m
+[32m+[m[32mbool readPanelPressed(int pin);[m
+[32m+[m
+[32m+[m[32mvoid initPanelButtons();[m
+[32m+[m
+[32m+[m[32mPanelEdge pollPanelEdge(PanelButtonState& btn, int pin);[m
+[32m+[m
+[32m+[m[32mvoid pollPanelButtons();[m
+[32m+[m
+[32m+[m[32mvoid enforceLimitOutputs();[m
+ [m
+ [m
+ [m
+[36m@@ -216,8 +290,6 @@[m [mclass BleServerCallbacks : public BLEServerCallbacks {[m
+ [m
+     sendLimitStatus();[m
+ [m
+[31m-    sendHoldStatus();[m
+[31m-[m
+   }[m
+ [m
+ [m
+[36m@@ -402,6 +474,38 @@[m [mvoid setAllHigh() {[m
+ [m
+ [m
+ [m
+[32m+[m[32mvoid writeIn1(bool levelHigh) {[m
+[32m+[m
+[32m+[m[32m  if (!levelHigh && topLimitActive) {[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN1, HIGH);[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  digitalWrite(IN1, levelHigh ? HIGH : LOW);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid writeIn2(bool levelHigh) {[m
+[32m+[m
+[32m+[m[32m  if (!levelHigh && botLimitActive) {[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN2, HIGH);[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  digitalWrite(IN2, levelHigh ? HIGH : LOW);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+ void setBtConnectedOutput(bool connected) {[m
+ [m
+   digitalWrite(BT_CONNECTED_PIN, connected ? LOW : HIGH);[m
+[36m@@ -412,6 +516,8 @@[m [mvoid setBtConnectedOutput(bool connected) {[m
+ [m
+ void onAppDisconnected() {[m
+ [m
+[32m+[m[32m  clearAutoDownLatch();[m
+[32m+[m
+   setAllHigh();[m
+ [m
+   logUsb("No app connection — GPIO26/27/14 HIGH");[m
+[36m@@ -432,9 +538,9 @@[m [mvoid stopPressed() {[m
+ [m
+ [m
+ [m
+[31m-void moveUp() {[m
+[32m+[m[32mvoid stopReleased() {[m
+ [m
+[31m-  digitalWrite(IN1, LOW);[m
+[32m+[m[32m  digitalWrite(IN1, HIGH);[m
+ [m
+   digitalWrite(IN2, HIGH);[m
+ [m
+[36m@@ -444,11 +550,23 @@[m [mvoid moveUp() {[m
+ [m
+ [m
+ [m
+[32m+[m[32mvoid moveUp() {[m
+[32m+[m
+[32m+[m[32m  writeIn1(LOW);[m
+[32m+[m
+[32m+[m[32m  writeIn2(HIGH);[m
+[32m+[m
+[32m+[m[32m  digitalWrite(STOP_PIN, HIGH);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+ void moveDown() {[m
+ [m
+[31m-  digitalWrite(IN1, HIGH);[m
+[32m+[m[32m  writeIn1(HIGH);[m
+ [m
+[31m-  digitalWrite(IN2, LOW);[m
+[32m+[m[32m  writeIn2(LOW);[m
+ [m
+   digitalWrite(STOP_PIN, HIGH);[m
+ [m
+[36m@@ -488,7 +606,7 @@[m [mbool readBotLimitRaw() {[m
+ [m
+ [m
+ [m
+[31m-bool readOnHoldRaw() {[m
+[32m+[m[32mbool readOnHoldPressed() {[m
+ [m
+   return digitalRead(ON_HOLD_PIN) == LOW;[m
+ [m
+[36m@@ -496,25 +614,49 @@[m [mbool readOnHoldRaw() {[m
+ [m
+ [m
+ [m
+[31m-bool isTopLimitActive() {[m
+[32m+[m[32mbool isOnHoldActive() {[m
+ [m
+[31m-  return topLimitActive;[m
+[32m+[m[32m  return readOnHoldPressed();[m
+ [m
+ }[m
+ [m
+ [m
+ [m
+[31m-bool isBotLimitActive() {[m
+[32m+[m[32mbool isAutoDownEnabled() {[m
+ [m
+[31m-  return botLimitActive;[m
+[32m+[m[32m  return digitalRead(AUTO_DOWN_PIN) == HIGH;[m
+ [m
+ }[m
+ [m
+ [m
+ [m
+[31m-bool isOnHoldActive() {[m
+[32m+[m[32mbool isStopOutputActive() {[m
+[32m+[m
+[32m+[m[32m  return digitalRead(STOP_PIN) == LOW;[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mbool isPanelStopPressed() {[m
+[32m+[m
+[32m+[m[32m  return digitalRead(PANEL_STOP_PIN) == LOW;[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mbool isTopLimitActive() {[m
+ [m
+[31m-  return onHoldActive;[m
+[32m+[m[32m  return topLimitActive;[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mbool isBotLimitActive() {[m
+[32m+[m
+[32m+[m[32m  return botLimitActive;[m
+ [m
+ }[m
+ [m
+[36m@@ -562,331 +704,605 @@[m [mvoid sendLimitStatus() {[m
+ [m
+ [m
+ [m
+[31m-void sendHoldStatus() {[m
+[32m+[m[32mvoid clearAutoDownLatch() {[m
+ [m
+[31m-  sendBtReply(onHoldActive ? "HOLD: ON" : "HOLD: OFF");[m
+[32m+[m[32m  if (autoDownLatched) {[m
+ [m
+[31m-}[m
+[32m+[m[32m    autoDownLatched = false;[m
+ [m
+[32m+[m[32m    logUsb("AUTO-DOWN latch cleared");[m
+ [m
+[32m+[m[32m  }[m
+ [m
+[31m-void onModeChanged() {[m
+[32m+[m[32m}[m
+ [m
+[31m-  setAllHigh();[m
+ [m
+[31m-  logUsb(isAutoMode()[m
+ [m
+[31m-    ? "MODE: AUTO — UP/DOWN latch until STOP, opposite dir, or limit"[m
+[32m+[m[32mvoid activateAutoDown() {[m
+ [m
+[31m-    : "MODE: MANUAL — momentary UP/DOWN/STOP");[m
+[32m+[m[32m  if (!isAutoMode()) {[m
+ [m
+[31m-  sendModeStatus();[m
+[32m+[m[32m    return;[m
+ [m
+[31m-}[m
+[32m+[m[32m  }[m
+ [m
+[32m+[m[32m  if (!isAutoDownEnabled()) {[m
+ [m
+[32m+[m[32m    logUsb("AUTO-DOWN skipped — GPIO4 not on 3.3V");[m
+ [m
+[31m-void onTopLimitChanged() {[m
+[32m+[m[32m    return;[m
+ [m
+[31m-  setAllHigh();[m
+[32m+[m[32m  }[m
+ [m
+[31m-  if (topLimitActive) {[m
+[32m+[m[32m  if (isBotLimitActive()) {[m
+ [m
+[31m-    sendBtReply("LIMIT: TOP");[m
+[32m+[m[32m    logUsb("AUTO-DOWN skipped — bottom limit active");[m
+ [m
+[31m-    logUsb("LIMIT TOP — GPIO14/26/27 HIGH, UP disabled");[m
+[32m+[m[32m    return;[m
+ [m
+[31m-  } else {[m
+[32m+[m[32m  }[m
+ [m
+[31m-    sendBtReply("LIMIT: TOP OFF");[m
+[32m+[m[32m  autoDownLatched = true;[m
+ [m
+[31m-    logUsb("Top limit clear — UP enabled");[m
+[32m+[m[32m  moveDown();[m
+ [m
+[31m-  }[m
+[32m+[m[32m  logUsb("AUTO-DOWN latched — GPIO26 HIGH, GPIO27 LOW, GPIO14 HIGH");[m
+ [m
+ }[m
+ [m
+ [m
+ [m
+[31m-void onBotLimitChanged() {[m
+[31m-[m
+[31m-  setAllHigh();[m
+[31m-[m
+[31m-  if (botLimitActive) {[m
+[32m+[m[32mvoid maintainAutoDownLatch() {[m
+ [m
+[31m-    sendBtReply("LIMIT: BOT");[m
+[32m+[m[32m  if (!autoDownLatched) {[m
+ [m
+[31m-    logUsb("LIMIT BOT — GPIO14/26/27 HIGH, DOWN disabled");[m
+[32m+[m[32m    return;[m
+ [m
+[31m-  } else {[m
+[32m+[m[32m  }[m
+ [m
+[31m-    sendBtReply("LIMIT: BOT OFF");[m
+[32m+[m[32m  if (isOnHoldActive()) {[m
+ [m
+[31m-    logUsb("Bottom limit clear — DOWN enabled");[m
+[32m+[m[32m    return;[m
+ [m
+   }[m
+ [m
+[31m-}[m
+[32m+[m[32m  if (isPanelStopPressed() || isStopOutputActive()) {[m
+ [m
+[32m+[m[32m    return;[m
+ [m
+[32m+[m[32m  }[m
+ [m
+[31m-void onOnHoldChanged() {[m
+[32m+[m[32m  if (botLimitActive) {[m
+ [m
+[31m-  if (onHoldActive) {[m
+[32m+[m[32m    clearAutoDownLatch();[m
+ [m
+[31m-    setAllHigh();[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    sendBtReply("HOLD: ON");[m
+[32m+[m[32m  }[m
+ [m
+[31m-    logUsb("ON-HOLD active — GPIO14/26/27 HIGH");[m
+[32m+[m[32m  moveDown();[m
+ [m
+[31m-  } else {[m
+[32m+[m[32m}[m
+ [m
+[31m-    sendBtReply("HOLD: OFF");[m
+ [m
+[31m-    logUsb("ON-HOLD released");[m
+ [m
+[31m-  }[m
+[32m+[m[32mvoid scheduleAutoDownFirstStart() {[m
+ [m
+[31m-}[m
+[32m+[m[32m  if (!isAutoMode() || !isAutoDownEnabled()) {[m
+ [m
+[32m+[m[32m    autoDownFirstStartPending = false;[m
+ [m
+[32m+[m[32m    return;[m
+ [m
+[31m-void pollDebouncedInput([m
+[32m+[m[32m  }[m
+ [m
+[31m-  bool& active,[m
+[32m+[m[32m  if (readOnHoldPressed()) {[m
+ [m
+[31m-  bool& lastReading,[m
+[32m+[m[32m    autoDownFirstStartPending = false;[m
+ [m
+[31m-  unsigned long& lastChangeMs,[m
+[32m+[m[32m    logUsb("AUTO-DOWN first start skipped — ON-HOLD active (GPIO33 LOW) at boot");[m
+ [m
+[31m-  bool (*readRaw)(),[m
+[32m+[m[32m    return;[m
+ [m
+[31m-  void (*onChanged)()[m
+[32m+[m[32m  }[m
+ [m
+[31m-) {[m
+[32m+[m[32m  autoDownFirstStartAt = millis() + AUTO_DOWN_FIRST_START_DELAY_MS;[m
+ [m
+[31m-  const bool reading = readRaw();[m
+[32m+[m[32m  logUsb("AUTO-DOWN first start scheduled — DOWN in 3 seconds");[m
+ [m
+[32m+[m[32m}[m
+ [m
+ [m
+[31m-  if (reading != lastReading) {[m
+ [m
+[31m-    lastChangeMs = millis();[m
+[32m+[m[32mvoid resetAutoDownOnHoldInactiveTimer() {[m
+ [m
+[31m-    lastReading = reading;[m
+[32m+[m[32m  if (autoDownOnHoldInactiveArmed && !autoDownOnHoldInactiveFired) {[m
+[32m+[m
+[32m+[m[32m    logUsb("AUTO-DOWN ON-HOLD inactive count reset");[m
+ [m
+   }[m
+ [m
+[32m+[m[32m  autoDownOnHoldInactiveArmed = false;[m
+ [m
+[32m+[m[32m  autoDownOnHoldInactiveFired = false;[m
+ [m
+[31m-  if (millis() - lastChangeMs >= INPUT_DEBOUNCE_MS && reading != active) {[m
+[32m+[m[32m}[m
+ [m
+[31m-    active = reading;[m
+ [m
+[31m-    onChanged();[m
+ [m
+[31m-  }[m
+[32m+[m[32mvoid armAutoDownOnHoldInactiveTimer() {[m
+ [m
+[31m-}[m
+[32m+[m[32m  if (!isAutoMode()) {[m
+ [m
+[32m+[m[32m    return;[m
+ [m
+[32m+[m[32m  }[m
+ [m
+[31m-void pollModeSwitch() {[m
+[32m+[m[32m  if (!isAutoDownEnabled()) {[m
+ [m
+[31m-  pollDebouncedInput([m
+[32m+[m[32m    logUsb("AUTO-DOWN skipped — GPIO4 not on 3.3V");[m
+ [m
+[31m-    modeSwitchAuto,[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    modeSwitchLastReading,[m
+[32m+[m[32m  }[m
+ [m
+[31m-    modeSwitchLastChangeMs,[m
+[32m+[m[32m  autoDownOnHoldInactiveArmed = true;[m
+ [m
+[31m-    readModeSwitchRaw,[m
+[32m+[m[32m  autoDownOnHoldInactiveSince = millis();[m
+ [m
+[31m-    onModeChanged[m
+[32m+[m[32m  autoDownOnHoldInactiveFired = false;[m
+ [m
+[31m-  );[m
+[32m+[m[32m  logUsb("ON-HOLD active→inactive — counting 3s inactive for DOWN");[m
+ [m
+ }[m
+ [m
+ [m
+ [m
+[31m-void pollLimitSwitches() {[m
+[31m-[m
+[31m-  pollDebouncedInput([m
+[31m-[m
+[31m-    topLimitActive,[m
+[31m-[m
+[31m-    topLimitLastReading,[m
+[32m+[m[32mvoid pollAutoDownOnHoldInactive() {[m
+ [m
+[31m-    topLimitLastChangeMs,[m
+[32m+[m[32m  if (!autoDownOnHoldInactiveArmed || autoDownOnHoldInactiveFired) {[m
+ [m
+[31m-    readTopLimitRaw,[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    onTopLimitChanged[m
+[32m+[m[32m  }[m
+ [m
+[31m-  );[m
+[32m+[m[32m  if (readOnHoldPressed()) {[m
+ [m
+[31m-  pollDebouncedInput([m
+[32m+[m[32m    resetAutoDownOnHoldInactiveTimer();[m
+ [m
+[31m-    botLimitActive,[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    botLimitLastReading,[m
+[32m+[m[32m  }[m
+ [m
+[31m-    botLimitLastChangeMs,[m
+[32m+[m[32m  if (millis() - autoDownOnHoldInactiveSince < AUTO_DOWN_FIRST_START_DELAY_MS) {[m
+ [m
+[31m-    readBotLimitRaw,[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    onBotLimitChanged[m
+[32m+[m[32m  }[m
+ [m
+[31m-  );[m
+[32m+[m[32m  autoDownOnHoldInactiveFired = true;[m
+ [m
+[31m-}[m
+[32m+[m[32m  if (!isAutoMode() || !isAutoDownEnabled()) {[m
+ [m
+[32m+[m[32m    logUsb("AUTO-DOWN cancelled — not Auto or GPIO4 inactive");[m
+ [m
+[32m+[m[32m    return;[m
+ [m
+[31m-void pollOnHold() {[m
+[32m+[m[32m  }[m
+ [m
+[31m-  pollDebouncedInput([m
+[32m+[m[32m  if (isBotLimitActive()) {[m
+ [m
+[31m-    onHoldActive,[m
+[32m+[m[32m    logUsb("AUTO-DOWN skipped — bottom limit active");[m
+ [m
+[31m-    onHoldLastReading,[m
+[32m+[m[32m    return;[m
+ [m
+[31m-    onHoldLastChangeMs,[m
+[32m+[m[32m  }[m
+ [m
+[31m-    readOnHoldRaw,[m
+[32m+[m[32m  clearAutoDownLatch();[m
+ [m
+[31m-    onOnHoldChanged[m
+[32m+[m[32m  moveDown();[m
+ [m
+[31m-  );[m
+[32m+[m[32m  logUsb("ON-HOLD inactive 3s — DOWN (GPIO26 inactive, GPIO27 GND, GPIO14 inactive)");[m
+ [m
+ }[m
+ [m
+ [m
+ [m
+[31m-void enforceSafety() {[m
+[32m+[m[32mvoid pollAutoDownFirstStart() {[m
+ [m
+[31m-  if (topLimitActive && isMovingUp()) {[m
+[32m+[m[32m  if (!autoDownFirstStartPending) {[m
+ [m
+[31m-    setAllHigh();[m
+[32m+[m[32m    return;[m
+ [m
+   }[m
+ [m
+[31m-  if (botLimitActive && isMovingDown()) {[m
+[32m+[m[32m  if (millis() < autoDownFirstStartAt) {[m
+ [m
+[31m-    setAllHigh();[m
+[32m+[m[32m    return;[m
+ [m
+   }[m
+ [m
+[31m-}[m
+[32m+[m[32m  autoDownFirstStartPending = false;[m
+ [m
+[32m+[m[32m  if (!isAutoMode() || !isAutoDownEnabled()) {[m
+ [m
+[32m+[m[32m    logUsb("AUTO-DOWN first start cancelled — not Auto or GPIO4 inactive");[m
+ [m
+[31m-bool isStopActive() {[m
+[31m-  return digitalRead(STOP_PIN) == LOW;[m
+[31m-}[m
+[32m+[m[32m    return;[m
+ [m
+[31m-void handleCommand(const String& cmd) {[m
+[32m+[m[32m  }[m
+ [m
+[31m-  if (!isAppConnected()) {[m
+[32m+[m[32m  if (readOnHoldPressed()) {[m
+ [m
+[31m-    setAllHigh();[m
+[32m+[m[32m    logUsb("AUTO-DOWN first start cancelled — ON-HOLD active (GPIO33 LOW)");[m
+ [m
+     return;[m
+ [m
+   }[m
+ [m
+[32m+[m[32m  logUsb("AUTO-DOWN first start — 3s elapsed, DOWN once");[m
+ [m
+[32m+[m[32m  activateAutoDown();[m
+ [m
+[31m-  Serial.print("RX: ");[m
+[32m+[m[32m}[m
+ [m
+[31m-  Serial.println(cmd);[m
+ [m
+ [m
+[32m+[m[32mvoid pollOnHold() {[m
+ [m
+[31m-  if (cmd == "RELEASE") {[m
+[32m+[m[32m  // ON-HOLD: LOW to GND = active; open (pull-up HIGH) = inactive[m
+ [m
+[31m-    if (isAutoMode()) {[m
+[32m+[m[32m  const PanelEdge holdEdge = pollPanelEdge(onHoldInput, ON_HOLD_PIN);[m
+ [m
+[31m-      if (isStopActive()) {[m
+ [m
+[31m-        setAllHigh();[m
+ [m
+[31m-        sendBtReply("STATUS: RELEASED");[m
+[32m+[m[32m  if (holdEdge == PANEL_EDGE_FALL) {[m
+ [m
+[31m-        logUsb("TX: STATUS: RELEASED (stop released)");[m
+[32m+[m[32m    resetAutoDownOnHoldInactiveTimer();[m
+ [m
+[31m-      }[m
+[32m+[m[32m    clearAutoDownLatch();[m
+ [m
+[31m-      return;[m
+[32m+[m[32m    logUsb("ON-HOLD active (GPIO33 to GND) — UP input/output enabled");[m
+ [m
+[31m-    }[m
+[32m+[m[32m  } else if (holdEdge == PANEL_EDGE_RISE) {[m
+ [m
+[31m-    setAllHigh();[m
+[32m+[m[32m    armAutoDownOnHoldInactiveTimer();[m
+ [m
+[31m-    sendBtReply("STATUS: RELEASED");[m
+[32m+[m[32m  }[m
+ [m
+[31m-    logUsb("TX: STATUS: RELEASED");[m
+[32m+[m[32m}[m
+ [m
+[31m-    logUsb("MOTOR: all HIGH (GPIO26/27/14=HIGH)");[m
+ [m
+[31m-    return;[m
+ [m
+[31m-  }[m
+[32m+[m[32mvoid onModeChanged() {[m
+ [m
+[32m+[m[32m  resetAutoDownOnHoldInactiveTimer();[m
+ [m
+[32m+[m[32m  clearAutoDownLatch();[m
+ [m
+[31m-  if (cmd == "UP") {[m
+[32m+[m[32m  setAllHigh();[m
+ [m
+[31m-    if (isTopLimitActive()) {[m
+[32m+[m[32m  initPanelButtons();[m
+ [m
+[31m-      setAllHigh();[m
+[32m+[m[32m  logUsb(isAutoMode()[m
+ [m
+[31m-      sendBtReply("ERR: TOP LIMIT");[m
+[32m+[m[32m    ? "MODE: AUTO — panel UP/DOWN latch until DỪNG; DỪNG momentary"[m
+ [m
+[31m-      logUsb("RX blocked — top limit active");[m
+[32m+[m[32m    : "MODE: MANUAL — panel momentary UP/DOWN/DỪNG");[m
+ [m
+[31m-      return;[m
+[32m+[m[32m  sendModeStatus();[m
+ [m
+[31m-    }[m
+[32m+[m[32m}[m
+ [m
+[31m-    moveUp();[m
+ [m
+[31m-    sendBtReply("STATUS: UP");[m
+ [m
+[31m-    logUsb("TX: STATUS: UP");[m
+[32m+[m[32mvoid onTopLimitChanged() {[m
+ [m
+[31m-    logUsb("MOTOR: UP (GPIO26=LOW, GPIO27=HIGH, GPIO14=HIGH)");[m
+[32m+[m[32m  if (topLimitActive) {[m
+ [m
+[31m-    return;[m
+[32m+[m[32m    digitalWrite(IN1, HIGH);[m
+ [m
+[31m-  }[m
+[32m+[m[32m    sendBtReply("LIMIT: TOP");[m
+ [m
+[32m+[m[32m    logUsb("LIMIT TOP — GPIO26 set HIGH, then disabled");[m
+ [m
+[32m+[m[32m  } else {[m
+ [m
+[31m-  if (cmd == "DOWN") {[m
+[32m+[m[32m    sendBtReply("LIMIT: TOP OFF");[m
+ [m
+[31m-    if (isBotLimitActive()) {[m
+[32m+[m[32m    logUsb("Top limit clear — GPIO26 enabled");[m
+ [m
+[31m-      setAllHigh();[m
+[32m+[m[32m    if (readPanelPressed(PANEL_UP_PIN)) {[m
+ [m
+[31m-      sendBtReply("ERR: BOT LIMIT");[m
+[32m+[m[32m      moveUp();[m
+ [m
+[31m-      logUsb("RX blocked — bottom limit active");[m
+[32m+[m[32m      logUsb("GPIO21 still to GND — GPIO26 allowed LOW");[m
+ [m
+[31m-      return;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid onBotLimitChanged() {[m
+[32m+[m
+[32m+[m[32m  if (botLimitActive) {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN2, HIGH);[m
+[32m+[m
+[32m+[m[32m    sendBtReply("LIMIT: BOT");[m
+[32m+[m
+[32m+[m[32m    logUsb("LIMIT BOT — GPIO27 set HIGH, then disabled");[m
+[32m+[m
+[32m+[m[32m  } else {[m
+[32m+[m
+[32m+[m[32m    sendBtReply("LIMIT: BOT OFF");[m
+[32m+[m
+[32m+[m[32m    logUsb("Bottom limit clear — GPIO27 enabled");[m
+[32m+[m
+[32m+[m[32m    if (readPanelPressed(PANEL_DOWN_PIN)) {[m
+[32m+[m
+[32m+[m[32m      moveDown();[m
+[32m+[m
+[32m+[m[32m      logUsb("GPIO22 still to GND — GPIO27 allowed LOW");[m
+ [m
+     }[m
+ [m
+[31m-    moveDown();[m
+[32m+[m[32m  }[m
+ [m
+[31m-    sendBtReply("STATUS: DOWN");[m
+[32m+[m[32m}[m
+ [m
+[31m-    logUsb("TX: STATUS: DOWN");[m
+ [m
+[31m-    logUsb("MOTOR: DOWN (GPIO26=HIGH, GPIO27=LOW, GPIO14=HIGH)");[m
+[32m+[m
+[32m+[m[32mvoid pollDebouncedInput([m
+[32m+[m
+[32m+[m[32m  bool& active,[m
+[32m+[m
+[32m+[m[32m  bool& lastReading,[m
+[32m+[m
+[32m+[m[32m  unsigned long& lastChangeMs,[m
+[32m+[m
+[32m+[m[32m  bool (*readRaw)(),[m
+[32m+[m
+[32m+[m[32m  void (*onChanged)()[m
+[32m+[m
+[32m+[m[32m) {[m
+[32m+[m
+[32m+[m[32m  const bool reading = readRaw();[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (reading != lastReading) {[m
+[32m+[m
+[32m+[m[32m    lastChangeMs = millis();[m
+[32m+[m
+[32m+[m[32m    lastReading = reading;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (millis() - lastChangeMs >= INPUT_DEBOUNCE_MS && reading != active) {[m
+[32m+[m
+[32m+[m[32m    active = reading;[m
+[32m+[m
+[32m+[m[32m    onChanged();[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid pollModeSwitch() {[m
+[32m+[m
+[32m+[m[32m  pollDebouncedInput([m
+[32m+[m
+[32m+[m[32m    modeSwitchAuto,[m
+[32m+[m
+[32m+[m[32m    modeSwitchLastReading,[m
+[32m+[m
+[32m+[m[32m    modeSwitchLastChangeMs,[m
+[32m+[m
+[32m+[m[32m    readModeSwitchRaw,[m
+[32m+[m
+[32m+[m[32m    onModeChanged[m
+[32m+[m
+[32m+[m[32m  );[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid pollLimitSwitches() {[m
+[32m+[m
+[32m+[m[32m  pollDebouncedInput([m
+[32m+[m
+[32m+[m[32m    topLimitActive,[m
+[32m+[m
+[32m+[m[32m    topLimitLastReading,[m
+[32m+[m
+[32m+[m[32m    topLimitLastChangeMs,[m
+[32m+[m
+[32m+[m[32m    readTopLimitRaw,[m
+[32m+[m
+[32m+[m[32m    onTopLimitChanged[m
+[32m+[m
+[32m+[m[32m  );[m
+[32m+[m
+[32m+[m[32m  pollDebouncedInput([m
+[32m+[m
+[32m+[m[32m    botLimitActive,[m
+[32m+[m
+[32m+[m[32m    botLimitLastReading,[m
+[32m+[m
+[32m+[m[32m    botLimitLastChangeMs,[m
+[32m+[m
+[32m+[m[32m    readBotLimitRaw,[m
+[32m+[m
+[32m+[m[32m    onBotLimitChanged[m
+[32m+[m
+[32m+[m[32m  );[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid setupAutoDownInputs() {[m
+[32m+[m
+[32m+[m[32m  pinMode(AUTO_DOWN_PIN, INPUT_PULLDOWN);[m
+[32m+[m
+[32m+[m[32m  pinMode(ON_HOLD_PIN, INPUT_PULLUP);[m
+[32m+[m
+[32m+[m[32m  initPanelButton(onHoldInput, ON_HOLD_PIN);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mbool readPanelPressed(int pin) {[m
+[32m+[m
+[32m+[m[32m  return digitalRead(pin) == LOW;[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid setupPanelInputs() {[m
+[32m+[m
+[32m+[m[32m  pinMode(PANEL_UP_PIN, INPUT_PULLUP);[m
+[32m+[m
+[32m+[m[32m  pinMode(PANEL_DOWN_PIN, INPUT_PULLUP);[m
+[32m+[m
+[32m+[m[32m  pinMode(PANEL_STOP_PIN, INPUT_PULLUP);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid initPanelButton(PanelButtonState& btn, int pin) {[m
+[32m+[m
+[32m+[m[32m  const bool raw = readPanelPressed(pin);[m
+[32m+[m
+[32m+[m[32m  btn.lastRaw = raw;[m
+[32m+[m
+[32m+[m[32m  btn.stable = raw;[m
+[32m+[m
+[32m+[m[32m  btn.lastChangeMs = millis();[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid initPanelButtons() {[m
+[32m+[m
+[32m+[m[32m  initPanelButton(panelUp, PANEL_UP_PIN);[m
+[32m+[m
+[32m+[m[32m  initPanelButton(panelDown, PANEL_DOWN_PIN);[m
+[32m+[m
+[32m+[m[32m  initPanelButton(panelStop, PANEL_STOP_PIN);[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mPanelEdge pollPanelEdge(PanelButtonState& btn, int pin) {[m
+[32m+[m
+[32m+[m[32m  const bool raw = readPanelPressed(pin);[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (raw != btn.lastRaw) {[m
+[32m+[m
+[32m+[m[32m    btn.lastChangeMs = millis();[m
+[32m+[m
+[32m+[m[32m    btn.lastRaw = raw;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (millis() - btn.lastChangeMs < PANEL_DEBOUNCE_MS) {[m
+[32m+[m
+[32m+[m[32m    return PANEL_EDGE_NONE;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  const bool debounced = btn.lastRaw;[m
+[32m+[m
+[32m+[m[32m  if (debounced == btn.stable) {[m
+[32m+[m
+[32m+[m[32m    return PANEL_EDGE_NONE;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  const bool wasStable = btn.stable;[m
+[32m+[m
+[32m+[m[32m  btn.stable = debounced;[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (debounced && !wasStable) {[m
+[32m+[m
+[32m+[m[32m    return PANEL_EDGE_RISE;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  if (!debounced && wasStable) {[m
+[32m+[m
+[32m+[m[32m    return PANEL_EDGE_FALL;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  return PANEL_EDGE_NONE;[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid pollPanelButtons() {[m
+[32m+[m
+[32m+[m[32m  if (!isAutoMode()) {[m
+[32m+[m
+[32m+[m[32m    pollPanelEdge(panelUp, PANEL_UP_PIN);[m
+[32m+[m
+[32m+[m[32m    pollPanelEdge(panelDown, PANEL_DOWN_PIN);[m
+[32m+[m
+[32m+[m[32m    pollPanelEdge(panelStop, PANEL_STOP_PIN);[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    if (panelStop.stable) {[m
+[32m+[m
+[32m+[m[32m      clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m      stopPressed();[m
+[32m+[m
+[32m+[m[32m    } else if (panelUp.stable) {[m
+[32m+[m
+[32m+[m[32m      clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m      moveUp();[m
+[32m+[m
+[32m+[m[32m    } else if (panelDown.stable) {[m
+[32m+[m
+[32m+[m[32m      clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m      moveDown();[m
+[32m+[m
+[32m+[m[32m    } else if (!autoDownLatched) {[m
+[32m+[m
+[32m+[m[32m      stopReleased();[m
+[32m+[m
+[32m+[m[32m    }[m
+ [m
+     return;[m
+ [m
+[36m@@ -894,15 +1310,177 @@[m [mvoid handleCommand(const String& cmd) {[m
+ [m
+ [m
+ [m
+[31m-  if (cmd == "STOP") {[m
+[32m+[m[32m  const PanelEdge stopEdge = pollPanelEdge(panelStop, PANEL_STOP_PIN);[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (panelStop.stable) {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+ [m
+     stopPressed();[m
+ [m
+[31m-    sendBtReply("STATUS: STOP");[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+ [m
+[31m-    logUsb("TX: STATUS: STOP");[m
+[32m+[m[32m  if (stopEdge == PANEL_EDGE_FALL) {[m
+ [m
+[31m-    logUsb("MOTOR: STOP (GPIO26=HIGH, GPIO27=HIGH, GPIO14=LOW)");[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    stopReleased();[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (pollPanelEdge(panelUp, PANEL_UP_PIN) == PANEL_EDGE_RISE) {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    moveUp();[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  if (pollPanelEdge(panelDown, PANEL_DOWN_PIN) == PANEL_EDGE_RISE) {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    moveDown();[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid enforceLimitOutputs() {[m
+[32m+[m
+[32m+[m[32m  if (topLimitActive && digitalRead(IN1) == LOW) {[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN1, HIGH);[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  if (botLimitActive && digitalRead(IN2) == LOW) {[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN2, HIGH);[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvoid handleCommand(const String& cmd) {[m
+[32m+[m
+[32m+[m[32m  if (cmd == "STOP" || cmd == "RELEASE") {[m
+[32m+[m
+[32m+[m[32m    if (cmd == "RELEASE") {[m
+[32m+[m
+[32m+[m[32m      clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m      stopReleased();[m
+[32m+[m
+[32m+[m[32m      if (isAppConnected()) {[m
+[32m+[m
+[32m+[m[32m        sendBtReply("STATUS: RELEASED");[m
+[32m+[m
+[32m+[m[32m        logUsb("TX: STATUS: RELEASED");[m
+[32m+[m
+[32m+[m[32m        logUsb("MOTOR: STOP released (GPIO26/27/14=HIGH)");[m
+[32m+[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      return;[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    stopPressed();[m
+[32m+[m
+[32m+[m[32m    if (isAppConnected()) {[m
+[32m+[m
+[32m+[m[32m      Serial.print("RX: ");[m
+[32m+[m
+[32m+[m[32m      Serial.println(cmd);[m
+[32m+[m
+[32m+[m[32m      sendBtReply("STATUS: STOP");[m
+[32m+[m
+[32m+[m[32m      logUsb("TX: STATUS: STOP");[m
+[32m+[m
+[32m+[m[32m      logUsb("MOTOR: STOP (GPIO26=HIGH, GPIO27=HIGH, GPIO14=LOW)");[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (!isAppConnected()) {[m
+[32m+[m
+[32m+[m[32m    setAllHigh();[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  Serial.print("RX: ");[m
+[32m+[m
+[32m+[m[32m  Serial.println(cmd);[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (cmd == "UP") {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    if (isTopLimitActive() || readTopLimitRaw()) {[m
+[32m+[m
+[32m+[m[32m      logUsb("UP at top limit — GPIO26 disabled, GPIO27 still active");[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    moveUp();[m
+[32m+[m
+[32m+[m[32m    sendBtReply("STATUS: UP");[m
+[32m+[m
+[32m+[m[32m    logUsb("TX: STATUS: UP");[m
+[32m+[m
+[32m+[m[32m    logUsb("MOTOR: UP (GPIO26=LOW, GPIO27=HIGH, GPIO14=HIGH)");[m
+[32m+[m
+[32m+[m[32m    return;[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  if (cmd == "DOWN") {[m
+[32m+[m
+[32m+[m[32m    clearAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m    if (isBotLimitActive() || readBotLimitRaw()) {[m
+[32m+[m
+[32m+[m[32m      logUsb("DOWN at bottom limit — GPIO27 disabled, GPIO26 still active");[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    moveDown();[m
+[32m+[m
+[32m+[m[32m    sendBtReply("STATUS: DOWN");[m
+[32m+[m
+[32m+[m[32m    logUsb("TX: STATUS: DOWN");[m
+[32m+[m
+[32m+[m[32m    logUsb("MOTOR: DOWN (GPIO26=HIGH, GPIO27=LOW, GPIO14=HIGH)");[m
+ [m
+     return;[m
+ [m
+[36m@@ -930,13 +1508,15 @@[m [mvoid setup() {[m
+ [m
+   pinMode(BT_CONNECTED_PIN, OUTPUT);[m
+ [m
+[31m-  pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);[m
+[32m+[m[32m  pinMode(MODE_SWITCH_PIN, INPUT_PULLDOWN);[m
+ [m
+   pinMode(TOP_LIMIT_PIN, INPUT_PULLUP);[m
+ [m
+   pinMode(BOT_LIMIT_PIN, INPUT_PULLUP);[m
+ [m
+[31m-  pinMode(ON_HOLD_PIN, INPUT_PULLUP);[m
+[32m+[m[32m  setupAutoDownInputs();[m
+[32m+[m
+[32m+[m[32m  setupPanelInputs();[m
+ [m
+   setAllHigh();[m
+ [m
+[36m@@ -958,6 +1538,12 @@[m [mvoid setup() {[m
+ [m
+   topLimitLastChangeMs = millis();[m
+ [m
+[32m+[m[32m  if (topLimitActive) {[m
+[32m+[m
+[32m+[m[32m    digitalWrite(IN1, HIGH);[m
+[32m+[m
+[32m+[m[32m  }[m
+[32m+[m
+ [m
+ [m
+   botLimitLastReading = readBotLimitRaw();[m
+[36m@@ -966,19 +1552,15 @@[m [mvoid setup() {[m
+ [m
+   botLimitLastChangeMs = millis();[m
+ [m
+[32m+[m[32m  if (botLimitActive) {[m
+ [m
+[32m+[m[32m    digitalWrite(IN2, HIGH);[m
+ [m
+[31m-  onHoldLastReading = readOnHoldRaw();[m
+[31m-[m
+[31m-  onHoldActive = onHoldLastReading;[m
+[31m-[m
+[31m-  onHoldLastChangeMs = millis();[m
+[32m+[m[32m  }[m
+ [m
+[31m-  if (onHoldActive) {[m
+ [m
+[31m-    setAllHigh();[m
+ [m
+[31m-  }[m
+[32m+[m[32m  initPanelButtons();[m
+ [m
+ [m
+ [m
+[36m@@ -1008,17 +1590,19 @@[m [mvoid setup() {[m
+ [m
+   logUsb(isAutoMode() ? "Mode switch: AUTO" : "Mode switch: MANUAL");[m
+ [m
+[31m-  logUsb("GPIO32 mode — LOW=Manual, HIGH=Auto");[m
+[32m+[m[32m  logUsb("GPIO32 mode — open/GND=Manual (default), 3.3V=Auto");[m
+ [m
+[31m-  logUsb("GPIO18 top limit, GPIO19 bottom limit — LOW=at limit");[m
+[32m+[m[32m  logUsb("GPIO18 top limit, GPIO19 bottom limit — LOW/GND=active, open/HIGH=inactive");[m
+ [m
+[31m-  logUsb("GPIO33 ON-HOLD — LOW=hold active");[m
+[32m+[m[32m  logUsb("GPIO4 AUTO-DOWN — 3.3V=enabled; ON-HOLD inactive 3s triggers DOWN; first start latches DOWN");[m
+[32m+[m
+[32m+[m[32m  logUsb("GPIO21 LÊN, GPIO22 XUỐNG, GPIO23 DỪNG — LOW to GND=pressed");[m
+ [m
+   if (topLimitActive) logUsb("Top limit active at startup");[m
+ [m
+   if (botLimitActive) logUsb("Bottom limit active at startup");[m
+ [m
+[31m-  if (onHoldActive) logUsb("ON-HOLD active at startup — GPIO14/26/27 HIGH");[m
+[32m+[m[32m  scheduleAutoDownFirstStart();[m
+ [m
+   logUsb("Waiting for commands...");[m
+ [m
+[36m@@ -1042,7 +1626,15 @@[m [mvoid loop() {[m
+ [m
+   pollOnHold();[m
+ [m
+[31m-  enforceSafety();[m
+[32m+[m[32m  pollAutoDownOnHoldInactive();[m
+[32m+[m
+[32m+[m[32m  pollAutoDownFirstStart();[m
+[32m+[m
+[32m+[m[32m  maintainAutoDownLatch();[m
+[32m+[m
+[32m+[m[32m  pollPanelButtons();[m
+[32m+[m
+[32m+[m[32m  enforceLimitOutputs();[m
+ [m
+ [m
+ [m
+[36m@@ -1056,10 +1648,6 @@[m [mvoid loop() {[m
+ [m
+     onAppDisconnected();[m
+ [m
+[31m-  } else if (!appConnected) {[m
+[31m-[m
+[31m-    setAllHigh();[m
+[31m-[m
+   }[m
+ [m
+   appWasConnected = appConnected;[m
+[1mdiff --git a/ios/TB1EController/MainView.swift b/ios/TB1EController/MainView.swift[m
+[1mindex 70ae5d2..f26cb90 100644[m
+[1m--- a/ios/TB1EController/MainView.swift[m
+[1m+++ b/ios/TB1EController/MainView.swift[m
+[36m@@ -219,11 +219,11 @@[m [mstruct MainView: View {[m
+     }[m
+ [m
+     private var upEnabled: Bool {[m
+[31m-        bluetooth.isConnected && !bluetooth.topLimitActive[m
+[32m+[m[32m        bluetooth.isConnected[m
+     }[m
+ [m
+     private var downEnabled: Bool {[m
+[31m-        bluetooth.isConnected && !bluetooth.botLimitActive[m
+[32m+[m[32m        bluetooth.isConnected[m
+     }[m
+ [m
+     private var stopEnabled: Bool {[m
+[1mdiff --git a/web/js/app.js b/web/js/app.js[m
+[1mindex ba06f4b..5d98433 100644[m
+[1m--- a/web/js/app.js[m
+[1m+++ b/web/js/app.js[m
+[36m@@ -183,13 +183,13 @@[m [mfunction updateUi() {[m
+   const downBtn = document.querySelector('.control-btn[data-action="down"]');[m
+ [m
+   if (upBtn) {[m
+[31m-    upBtn.disabled = !connected || state.topLimitActive;[m
+[32m+[m[32m    upBtn.disabled = !connected;[m
+   }[m
+   if (stopBtn) {[m
+     stopBtn.disabled = !connected;[m
+   }[m
+   if (downBtn) {[m
+[31m-    downBtn.disabled = !connected || state.botLimitActive;[m
+[32m+[m[32m    downBtn.disabled = !connected;[m
+   }[m
+ [m
+   if (els.desktopHint) {[m
+[36m@@ -343,13 +343,6 @@[m [mfunction bindKeyboard() {[m
+       return;[m
+     }[m
+ [m
+[31m-    if (command === "UP" && state.topLimitActive) {[m
+[31m-      return;[m
+[31m-    }[m
+[31m-    if (command === "DOWN" && state.botLimitActive) {[m
+[31m-      return;[m
+[31m-    }[m
+[31m-[m
+     event.preventDefault();[m
+     keysHeld.add(event.key);[m
+     sendCommand(command);[m

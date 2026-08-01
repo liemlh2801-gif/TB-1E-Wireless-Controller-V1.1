@@ -1,0 +1,1261 @@
+<project title="TB-1E_ESP32_CW022_Wiring" version="0.100.0">
+    <properties>
+        <property name="saveddate" show="1">7/21/2026</property>
+        <property name="saveddate-eu" show="1">21-07-2026</property>
+        <property name="saveddate-us" show="1">2026-07-21</property>
+        <property name="savedfilename" show="1">TB-1E_ESP32_CW022_Wiring</property>
+        <property name="savedfilepath" show="1">D:/01 Lam viec/Gia công/bản vẽ/May thu day an toan/APP/arduino-bt-controller/hardware/qelectrotech/TB-1E_ESP32_CW022_Wiring.qet</property>
+        <property name="savedtime" show="1">22:07</property>
+    </properties>
+    <newdiagrams>
+        <border cols="17" colsize="60" rows="8" displaycols="true" displayrows="true" rowsize="80"/>
+        <inset date="null" title="" auto_page_num="" displayAt="bottom" filename="" author="" plant="" locmach="" indexrev="" folio="%id/%total" version=""/>
+        <conductors num="_" conductor_color="" type="multi" displaytext="1" onetextperfolio="0" vertirotatetext="270" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+        <report label="%f-%l%c"/>
+        <xrefs>
+            <xref type="protection" displayhas="cross" offset="0" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="" master_label="%f-%l%c"/>
+            <xref type="coil" displayhas="cross" offset="40" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="AlignTop" master_label="%f-%l%c"/>
+            <xref type="commutator" displayhas="cross" offset="0" slave_label="(%f-%l%c)" showpowerctc="true" delayprefix="" switchprefix="" powerprefix="" snapto="label" xrefpos="" master_label="%f-%l%c"/>
+        </xrefs>
+        <conductors_autonums freeze_new_conductors="false" current_autonum=""/>
+        <folio_autonums/>
+        <element_autonums freeze_new_elements="false" current_autonum=""/>
+    </newdiagrams>
+    <diagram colsize="240" indexrev="" displaycols="true" plant="" locmach="" title="" rows="32" rowsize="320" height="10260" filename="" order="1" date="null" author="" version="0.100.0" freezeNewConductor="false" cols="68" displayAt="bottom" auto_page_num="Create an auto folio numbering" folio="%id/%total" displayrows="true" freezeNewElement="false">
+        <defaultconductor num="_" conductor_color="" type="multi" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+        <elements>
+            <element type="embed://import/10_electric/20_manufacturers_articles/arduino/liaison5v.elmt" x="3840" y="2040" z="10" freezeLabel="false" prefix="" uuid="{7364a193-dfb2-46fe-b66a-45199da4434f}" orientation="0">
+                <terminals>
+                    <terminal x="-10" y="6" id="0" orientation="2"/>
+                    <terminal x="0" y="6" id="1" orientation="2"/>
+                    <terminal x="10" y="6" id="2" orientation="2"/>
+                </terminals>
+                <inputs/>
+                <elementInformations>
+                    <elementInformation name="formula" show="1">3V3</elementInformation>
+                    <elementInformation name="label" show="1">3V3</elementInformation>
+                </elementInformations>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="-4" y="-8.5" rotation="0" font="Liberation Sans,7,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{5646bc7b-9141-4742-ab5c-0ff84cab13c3}" keep_visual_rotation="false" text_from="ElementInfo" Valignment="AlignTop">
+                        <text>3V3</text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+            <element type="embed://import/10_electric/10_allpole/110_network_supplies/terre.elmt" x="3840" y="2240" z="10" freezeLabel="false" prefix="" uuid="{6e6fca8a-debc-4535-af4e-87fa0eb37d85}" orientation="0">
+                <terminals>
+                    <terminal x="0" y="-7" id="3" orientation="0"/>
+                </terminals>
+                <inputs/>
+                <properties>
+                    <element_type terminal_led="false" terminal_type="generic" terminal_function="generic"/>
+                </properties>
+                <dynamic_texts>
+                    <dynamic_elmt_text frame="false" Halignment="AlignLeft" x="2" y="-22.5" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{6be98d81-0bbe-4ad4-8f83-7d12c3119ae5}" keep_visual_rotation="true" text_from="ElementInfo" Valignment="AlignTop">
+                        <text></text>
+                        <info_name>label</info_name>
+                    </dynamic_elmt_text>
+                </dynamic_texts>
+                <texts_groups/>
+            </element>
+        </elements>
+        <inputs>
+            <input x="4080" y="3270" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3291.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>GND&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3168.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G19&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4080" y="3550" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM4&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2869.76" y="3248.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G5&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5070" y="2820" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>N/A&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160.56" y="3198.88" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>CT HÀNH TRÌNH&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>DƯỚI&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="2968.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SP&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="2820" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3370" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4160" y="2400" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4300" y="2400" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3240" y="2360" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>AUTO&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4340" y="3280" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:16pt; font-weight:600; color:#aaaa00;&quot;>AC ~220V&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3320" y="2360" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4420" y="3330" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; color:#00aaff;&quot;>DOWN-CONTACTOR&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4420" y="3190" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; color:#00aaff;&quot;>UP-CONTACTOR&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3590" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO4&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4360" y="2750" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2861.12" y="3140.82" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3088.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G35&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3048.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G34&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3208.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G25&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3168.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G33&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3608.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>V5&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="2888.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>3V3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3170" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO1&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3448.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G13&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3128.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G32&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4410" y="2370" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SIG&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="3240" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3208.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G18&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2869.76" y="3408.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G0&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3368.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G4&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3488.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G15&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3008.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>TXD&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3310" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3288.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G17&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2861.12" y="2900.82" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4014.8" y="3110.36" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RELAY 1&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>MOTOR&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>LÊN&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3230" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3371.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>IN2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="2928.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G23&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4014.8" y="3390.36" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RELAY 3&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>LOAD&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>OUT&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3528.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SD1&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3608.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>CLK&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4390" y="2410" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RESET&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4390" y="2330" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>ACTIVE&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3411.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>IN3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="2888.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>GND&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3328.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G14&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4580" y="2760" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;>ĐẦU CÂN ĐIỆN TỬ&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="3140" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5070" y="3340" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>N/A&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3460" y="3220" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;>ESP32 GND&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4360" y="2830" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RELAY OUT - OVERLOAD ACTIVE&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3510" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC4&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4080" y="3410" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="2720" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3248.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G26&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3408.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>GND&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3080" y="3340" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-weight:600; color:#aa007f;&quot;>CONNECT TO 3V3 TO ENABLE&lt;/span>&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-weight:600; color:#aa007f;&quot;> AUTO-DOWN FUNCTION&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3368.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G12&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160.56" y="2678.88" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>CT HÀNH TRÌNH&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>TRÊN&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4120" y="2340" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;>TIMER ĐẾM NGƯỢC&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3331.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>IN1&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3048.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RXD&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2869.76" y="3448.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3451.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>IN4&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3701.35" y="3491.25" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>VCC&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3088.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G21&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4014.8" y="3250.36" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RELAY 2&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>MOTOR&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>XUỐNG&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="3340" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4014.8" y="3530.36" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>RELAY 4&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>ĐÈN&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>BLT&lt;/p>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>CONNECT&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="2928.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>EN&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3488.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SD2&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3288.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G27&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3568.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SD0&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3528.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SD3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="5160" y="2620" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="2968.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G22&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3380" y="2360" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>MANUAL&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3700" y="2500" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>DỪNG&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3700" y="2660" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>XUỐNG&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4080" y="3130" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>COM1&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3450" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NO3&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3328.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>G16&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="3700" y="2340" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>LÊN&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2859.76" y="3128.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>GND&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3568.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>CMD&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2861.12" y="3380.82" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="4090" y="3090" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>NC1&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2489.76" y="3008.93" rotation="0" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>SN&lt;/p>&lt;/body>&lt;/html>"/>
+            <input x="2660" y="3540" rotation="270" font="Liberation Sans,9,-1,0,50,0,0,0,0,0,Regular" text="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Liberation Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;>ESP32 VROOM 38PINS&lt;/span>&lt;/p>&lt;/body>&lt;/html>"/>
+        </inputs>
+        <shapes>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2620" y2="2620" x1="4080" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3300" y2="3300" x1="4260" x2="4340">
+                <pen style="SolidLine" widthF="3" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="3180" x1="5020" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3320" y2="3340" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2320" y2="2280" x1="3420" x2="3460">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2340" y2="2340" x1="4440" x2="4500">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3140" y2="3100" x1="2440" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2340" y2="2320" x1="4500" x2="4560">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3160" y2="3300" x1="4260" x2="4260">
+                <pen style="SolidLine" widthF="3" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2719" y2="2759" x1="3580" x2="3520">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2380" y2="2360" x1="4500" x2="4560">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="3200" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3100" y2="2480" x1="2280" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2480" y2="2420" x1="3340" x2="3340">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2480" y2="2480" x1="2280" x2="3340">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3300" y2="3300" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2900" y2="2040" x1="2360" x2="2360">
+                <pen style="SolidLine" widthF="3" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2119" y2="2119" x1="4980" x2="4600">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3560" y2="3560" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4120" y2="3240" x1="3040" x2="3040">
+                <pen style="SolidLine" widthF="2" color="#ff55ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3380" y2="3460" x1="4000" x2="4080" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2640" y2="2660" x1="5080" x2="5020">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3460" y2="3460" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3300" y2="3260" x1="3642" x2="3602">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3280" y2="4140" x1="5060" x2="5060">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4139" y2="3199" x1="3061" x2="3061">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4139" y2="4139" x1="5061" x2="3061">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2440" y2="3080" x1="3420" x2="3420">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4118" y2="4118" x1="5038" x2="3038">
+                <pen style="SolidLine" widthF="2" color="#ff55ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3898" y2="3898" x1="3518" x2="2318">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3238" y2="3220" x1="3040" x2="2940">
+                <pen style="SolidLine" widthF="2" color="#ff55ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="2660" x1="4980" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2440" y2="2440" x1="3520" x2="3420">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3500" y2="3500" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2780" y2="4118" x1="5040" x2="5038">
+                <pen style="SolidLine" widthF="2" color="#ff55ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4060" y2="3380" x1="2360" x2="2360">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3600" y2="3620" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3580" y2="3580" x1="4260" x2="4420">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3620" y2="3820" x1="4260" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3520" y2="3520" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2780" y2="2200" x1="2840" x2="2840">
+                <pen style="SolidLine" widthF="3" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2040" y2="2040" x1="2360" x2="3840">
+                <pen style="SolidLine" widthF="3" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3820" y2="3080" x1="3360" x2="3360">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3180" y2="3180" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3140" y2="3140" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3100" y2="3180" x1="4000" x2="4080" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3620" y2="3620" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3100" y2="3100" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3620" y2="3620" x1="2440" x2="2400">
+                <pen style="SolidLine" widthF="3" color="#ff0000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3260" y2="3260" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2660" y2="2660" x1="5020" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3140" y2="3140" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2940" y2="2920" x1="2940" x2="3080">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2900" y2="2900" x1="2960" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2420" y2="2420" x1="4440" x2="4500">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3460" y2="3460" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3580" y2="3580" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3340" y2="3340" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3240" y2="3320" x1="4000" x2="4080" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2759" y2="2759" x1="3380" x2="3520">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3540" y2="3540" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3340" y2="3340" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3100" y2="3100" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="0" y1="2860" y2="3660" x1="2460" x2="2920" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3360" y2="3360" x1="3000" x2="3080">
+                <pen style="SolidLine" widthF="2" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3100" y2="3100" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3320" y2="3320" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2200" y2="2200" x1="2840" x2="3840">
+                <pen style="SolidLine" widthF="3" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3500" y2="3500" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3580" y2="3580" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2900" y2="2900" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3220" y2="3220" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3460" y2="3460" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3020" y2="3020" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3460" y2="3460" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3380" y2="3340" x1="2360" x2="2440">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2980" y2="2980" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3340" y2="3340" x1="4260" x2="4420">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3520" y2="3600" x1="4000" x2="4080" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="3180" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2780" y2="2780" x1="2960" x2="2840">
+                <pen style="SolidLine" widthF="3" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3060" y2="3060" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3420" y2="3420" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3420" y2="3420" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3020" y2="3020" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2200" y2="2240" x1="3840" x2="3840">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3300" y2="3300" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3620" y2="3620" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3380" y2="3380" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2900" y2="2780" x1="2960" x2="2960">
+                <pen style="SolidLine" widthF="3" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3260" y2="3260" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2700" y2="2540" x1="3760" x2="3760">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3380" y2="3380" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3340" y2="3340" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2860" y2="2980" x1="4200" x2="4200">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3280" y2="3280" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2840" y2="2840" x1="4280" x2="4360">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2940" y2="2940" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3200" y2="3200" x1="4260" x2="4420">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3500" y2="3500" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2120" y2="2120" x1="4600" x2="4040">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3540" y2="3540" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2980" y2="2980" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3420" y2="3420" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2420" y2="2480" x1="4160" x2="4160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3300" y2="3300" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2420" y2="2480" x1="4300" x2="4300">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3600" y2="3600" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3240" y2="3240" x1="4130" x2="4200">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3420" y2="3420" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3220" y2="3220" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2900" y2="2900" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3140" y2="3140" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3040" y2="3760" x1="3680" x2="4160" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3260" y2="3260" x1="3600" x2="3520">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="2940" y2="2940" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3180" y2="3180" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2840" y2="2860" x1="4280" x2="4200">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3380" y2="3380" x1="2900" x2="2940">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3499" y2="3499" x1="3620" x2="3640">
+                <pen style="SolidLine" widthF="3" color="#ff0000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Ellipse" closed="0" z="0" is_movable="1" y1="2340" y2="2440" x1="3600" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2560" x1="3620" x2="3580">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2620" y2="2940" x1="3962" x2="3962">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2600" y2="2600" x1="3520" x2="3340">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2480" y2="2560" x1="4160" x2="4120">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3260" y2="3260" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2400" y2="2440" x1="3580" x2="3520">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3380" y2="3380" x1="3640" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2400" y2="2400" x1="3680" x2="3720">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2360" y2="2120" x1="4600" x2="4600">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2120" x1="4040" x2="4040">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2120" y2="2200" x1="3600" x2="3600">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2740" y2="2740" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2400" y2="2380" x1="3720" x2="3760">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2620" y2="2620" x1="4082" x2="3962">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3380" y2="3360" x1="2940" x2="3000">
+                <pen style="SolidLine" widthF="2" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3360" y2="3300" x1="2320" x2="2440">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2360" y2="2320" x1="3260" x2="3260">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2720" y2="2720" x1="3680" x2="3720">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3460" y2="3480" x1="3640" x2="3560">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2360" y2="2360" x1="4560" x2="4600">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4019" y2="3499" x1="3620" x2="3620">
+                <pen style="SolidLine" widthF="3" color="#ff0000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3360" y2="3360" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2760" y2="2760" x1="4280" x2="4360">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3620" y2="4020" x1="2400" x2="2400">
+                <pen style="SolidLine" widthF="3" color="#ff0000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3418" y2="3898" x1="3518" x2="3518">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="3120" y2="3400" x1="5120" x2="5280" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2980" y2="2960" x1="2940" x2="3080">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3260" y2="3280" x1="5080" x2="5060">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Ellipse" closed="0" z="0" is_movable="1" y1="2340" y2="2400" x1="3220" x2="3460">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="0" y1="3060" y2="3060" x1="2440" x2="2480">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="1980" y2="2620" x1="4080" x2="4080">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3160" y2="3180" x1="5080" x2="5020">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2740" y2="2780" x1="5080" x2="5040">
+                <pen style="SolidLine" widthF="2" color="#ff55ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2380" y2="2380" x1="4440" x2="4500">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4020" y2="4020" x1="2400" x2="3620">
+                <pen style="SolidLine" widthF="3" color="#ff0000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="2720" y2="2880" x1="4320" x2="4820" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4060" y2="2400" x1="5460" x2="5460">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2840" y2="2840" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3940" y2="3340" x1="2280" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="4060" y2="4060" x1="2360" x2="5460">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3340" y2="3260" x1="2280" x2="2440">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2400" y2="2400" x1="3620" x2="3580">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="3140" x1="2440" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3940" y2="3940" x1="3460" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3140" y2="1980" x1="2240" x2="2240">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2360" y2="2320" x1="3420" x2="3420">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3898" y2="3360" x1="2318" x2="2320">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3380" y2="3418" x1="3640" x2="3518">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2540" y2="2200" x1="3760" x2="3760">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2900" y2="2900" x1="2440" x2="2360">
+                <pen style="SolidLine" widthF="3" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3340" y2="3400" x1="3640" x2="3460">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3320" y2="3320" x1="2280" x2="2280">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2420" y2="2400" x1="4500" x2="4560">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2560" x1="4120" x2="4040">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2160" y2="2160" x1="4000" x2="3660">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="1980" y2="1980" x1="2240" x2="4080">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2400" y2="2400" x1="5460" x2="4560">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2620" y2="2560" x1="4260" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2320" y2="2320" x1="4560" x2="4880">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2940" y2="2940" x1="3960" x2="3440">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3140" y2="3140" x1="2280" x2="2240">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2980" y2="2320" x1="4880" x2="4880">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2560" x1="3680" x2="3720">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2960" y2="2960" x1="3080" x2="3380">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2380" y2="2420" x1="3340" x2="3340">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3160" y2="3160" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2640" y2="2640" x1="5080" x2="5160">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Ellipse" closed="0" z="0" is_movable="1" y1="2660" y2="2760" x1="3600" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2540" x1="3720" x2="3760">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2120" y2="2120" x1="4040" x2="3600">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3100" y2="3080" x1="2940" x2="3080">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2600" x1="3580" x2="3520">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2320" y2="2280" x1="3260" x2="3300">
+                <pen style="SolidLine" widthF="2" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2659" y2="2119" x1="4980" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2720" y2="2700" x1="3720" x2="3760">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2959" y2="2759" x1="3380" x2="3380">
+                <pen style="SolidLine" widthF="2" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2720" y2="2720" x1="3620" x2="3580">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2600" y2="2920" x1="3340" x2="3340">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2780" y2="2780" x1="4200" x2="4000">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3400" y2="3940" x1="3460" x2="3460">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3180" y2="3180" x1="2960" x2="2940">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2560" y2="2480" x1="4260" x2="4300">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2160" y2="2200" x1="3660" x2="3660">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="2600" y2="2880" x1="5120" x2="5280" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3080" y2="3080" x1="3080" x2="3420">
+                <pen style="SolidLine" widthF="2" color="#ffaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Ellipse" closed="0" z="0" is_movable="1" y1="2500" y2="2600" x1="3600" x2="3700">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2760" y2="2780" x1="4280" x2="4200">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2280" y2="2040" x1="3300" x2="3300">
+                <pen style="SolidLine" widthF="2" color="#aa007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2920" y2="2920" x1="3080" x2="3340">
+                <pen style="SolidLine" widthF="2" color="#00aa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2280" y2="2200" x1="3460" x2="3460">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3200" y2="3180" x1="3060" x2="2960">
+                <pen style="SolidLine" widthF="2" color="#00aaff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2780" y2="2160" x1="4000" x2="4000">
+                <pen style="SolidLine" widthF="2" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3420" y2="3440" x1="3640" x2="3580">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3440" y2="2980" x1="3580" x2="3580">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3480" y2="3480" x1="4260" x2="5040">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3280" y2="3300" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="3" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2980" y2="2980" x1="3580" x2="4200">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3460" y2="3480" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3140" y2="3160" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="3" color="#aaaa00"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3440" y2="3440" x1="4260" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3420" y2="3440" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2980" y2="2980" x1="4200" x2="4880">
+                <pen style="SolidLine" widthF="2" color="#00007f"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Rectangle" ry="0" closed="0" z="0" is_movable="1" y1="2320" y2="2440" x1="4110" x2="4470" rx="0">
+                <pen style="SolidLine" widthF="1" color="#000000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3440" y2="3180" x1="4980" x2="4980">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3480" y2="3480" x1="3440" x2="3560">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="2940" y2="3478" x1="3440" x2="3440">
+                <pen style="SolidLine" widthF="2" color="#ff00ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3580" y2="3440" x1="4420" x2="4420">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3560" y2="3580" x1="4200" x2="4260">
+                <pen style="SolidLine" widthF="2" color="#550000"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+            <shape type="Line" closed="0" z="0" is_movable="1" y1="3820" y2="3820" x1="4260" x2="3360">
+                <pen style="SolidLine" widthF="2" color="#0000ff"/>
+                <brush style="NoBrush" color="#000000"/>
+            </shape>
+        </shapes>
+    </diagram>
+    <diagram colsize="60" indexrev="" displaycols="true" plant="" locmach="" title="" rows="8" rowsize="80" height="660" filename="" order="2" date="null" author="" version="0.100.0" freezeNewConductor="false" cols="17" displayAt="bottom" auto_page_num="" folio="%id/%total" displayrows="true" freezeNewElement="false">
+        <defaultconductor num="_" conductor_color="" type="multi" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+    </diagram>
+    <diagram colsize="60" indexrev="" displaycols="true" plant="" locmach="" title="" rows="8" rowsize="80" height="660" filename="" order="3" date="null" author="" version="0.100.0" freezeNewConductor="false" cols="17" displayAt="bottom" auto_page_num="" folio="%id/%total" displayrows="true" freezeNewElement="false">
+        <defaultconductor num="_" conductor_color="" type="multi" displaytext="1" vertirotatetext="270" onetextperfolio="0" color2="#000000" horizrotatetext="0" bicolor="false" condsize="1" numsize="7" tension_protocol="" bus="" dash-size="2" conductor_section="" vertical-alignment="AlignRight" function="" horizontal-alignment="AlignBottom" text_color="#000000" cable="" formula=""/>
+    </diagram>
+    <collection>
+        <category name="import">
+            <names>
+                <name lang="ca">Elements importats</name>
+                <name lang="cs">Zavedené prvky</name>
+                <name lang="da">Importerede elementer</name>
+                <name lang="de">Importierte Elemente</name>
+                <name lang="el">Εισηγμένα στοιχεία</name>
+                <name lang="en">Imported elements</name>
+                <name lang="es">Elementos importados</name>
+                <name lang="fr">Éléments importés</name>
+                <name lang="hr">Uvezeni elementi</name>
+                <name lang="it">Elementi importati</name>
+                <name lang="ja">インバートされた要素</name>
+                <name lang="nl">Elementen geïmporteerd</name>
+                <name lang="nl_BE">Elementen geïmporteerd</name>
+                <name lang="pl">Elementy importowane</name>
+                <name lang="pt">Elementos importados</name>
+                <name lang="pt_BR">Elementos importados</name>
+                <name lang="ro">Elemente importate</name>
+                <name lang="ru">Импортированные элементы</name>
+                <name lang="sl">Uvoženi elementi</name>
+                <name lang="sv">Importerade element</name>
+                <name lang="tr">İthal öğeler</name>
+                <name lang="uk">Імпортовані елементи</name>
+                <name lang="zh">导入元件</name>
+            </names>
+            <category name="10_electric">
+                <names>
+                    <name lang="cs">Elektrotechnika</name>
+                    <name lang="da">Elektrisk</name>
+                    <name lang="de">Elektrik</name>
+                    <name lang="el">Ηλεκτρικά</name>
+                    <name lang="en">Electric</name>
+                    <name lang="es">Eléctrica</name>
+                    <name lang="fr">Electrique</name>
+                    <name lang="it">Elettrica</name>
+                    <name lang="ja">電気</name>
+                    <name lang="nl">Elektrotechniek</name>
+                    <name lang="pl">Elektrotechnika</name>
+                    <name lang="pt_BR">Elétrica</name>
+                    <name lang="ru">Электротехника</name>
+                    <name lang="zn">电气工程</name>
+                </names>
+                <category name="10_allpole">
+                    <names>
+                        <name lang="cs">Vícežilový</name>
+                        <name lang="da">Flere ledere</name>
+                        <name lang="de">Allpolig</name>
+                        <name lang="el">Πολυγραμμικό</name>
+                        <name lang="en">All-pole</name>
+                        <name lang="es">Multifilar</name>
+                        <name lang="fr">Multifilaire</name>
+                        <name lang="hu">Többvonalas szimbólumok</name>
+                        <name lang="it">Multifilare</name>
+                        <name lang="ja">複線</name>
+                        <name lang="nl">Veel polig</name>
+                        <name lang="pl">Schematy wieloliniowe</name>
+                        <name lang="pt_BR">Multifilar</name>
+                        <name lang="ru">Многополюсные</name>
+                    </names>
+                    <category name="110_network_supplies">
+                        <names>
+                            <name lang="cs">Napájení</name>
+                            <name lang="da">Netværkskilder</name>
+                            <name lang="de">Netzquellen</name>
+                            <name lang="el">Παροχές δικτύου</name>
+                            <name lang="en">Network sources</name>
+                            <name lang="es">Fuentes de red</name>
+                            <name lang="fr">Sources réseau</name>
+                            <name lang="hu">Hálózati források</name>
+                            <name lang="it">Alimentazione da rete</name>
+                            <name lang="ja">電源網</name>
+                            <name lang="nl">Netvoedingen</name>
+                            <name lang="pl">Sieć elektroenergetyczna</name>
+                            <name lang="pt_BR">Alimentação</name>
+                            <name lang="ru">Подвод питания, сеть</name>
+                        </names>
+                        <element name="terre.elmt">
+                            <definition type="element" link_type="terminal" hotspot_x="10" hotspot_y="21" width="20" height="30" version="0.100.0">
+                                <uuid uuid="{629cc7bb-f9bc-c960-c50d-cf66719469f9}"/>
+                                <names>
+                                    <name lang="ar">تأريض</name>
+                                    <name lang="ca">Terra</name>
+                                    <name lang="cs">Uzemnění</name>
+                                    <name lang="de">Erde</name>
+                                    <name lang="el">Γείωση</name>
+                                    <name lang="en">Ground</name>
+                                    <name lang="es">Tierra</name>
+                                    <name lang="fr">Terre</name>
+                                    <name lang="hu">Földelő</name>
+                                    <name lang="it">Terra</name>
+                                    <name lang="nl">Aarde</name>
+                                    <name lang="pl">Uziemienie</name>
+                                    <name lang="pt">Terra</name>
+                                    <name lang="ru">Земля</name>
+                                </names>
+                                <kindInformations>
+                                    <kindInformation name="type">generic</kindInformation>
+                                    <kindInformation name="function">generic</kindInformation>
+                                </kindInformations>
+                                <informations>Author: The QElectroTech team
+License: see http://qelectrotech.org/wiki/doc/elements_license</informations>
+                                <description>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="2" y="-22.5" z="1" rotation="0" font="Liberation Sans,9,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{0af57a27-1887-4576-8b51-200ca996e582}" keep_visual_rotation="true" Valignment="AlignTop" text_from="ElementInfo">
+                                        <text/>
+                                        <info_name>label</info_name>
+                                    </dynamic_text>
+                                    <line end1="none" end2="none" y1="4" antialias="false" y2="4" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-3" length1="1.5" x2="3" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="2" antialias="false" y2="2" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-5" length1="1.5" x2="5" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="0" antialias="false" y2="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-7" length1="1.5" x2="7" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="-10" antialias="false" y2="0" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="0" length1="1.5" x2="0" length2="1.5"/>
+                                    <terminal type="Generic" x="0" y="-11" name="PE" uuid="{f52570dd-b18e-012e-919f-8d749298ae42}" orientation="n"/>
+                                </description>
+                            </definition>
+                        </element>
+                    </category>
+                </category>
+                <category name="20_manufacturers_articles">
+                    <names>
+                        <name lang="cs">Tovární díly</name>
+                        <name lang="da">Producent produkter</name>
+                        <name lang="de">Herstellerartikel</name>
+                        <name lang="el">Κατασκευαστές υλικού</name>
+                        <name lang="en">Manufacturers articles</name>
+                        <name lang="es">Articulos de fabricantes</name>
+                        <name lang="fr">Articles constructeurs</name>
+                        <name lang="it">Marchi produttori</name>
+                        <name lang="ja">製品</name>
+                        <name lang="pl">Urządzenia producentów</name>
+                        <name lang="ru">База изделий производителей</name>
+                    </names>
+                    <category name="arduino">
+                        <names>
+                            <name lang="cs">Arduino</name>
+                            <name lang="de">Arduino</name>
+                            <name lang="en">Arduino</name>
+                            <name lang="fr">Arduino</name>
+                        </names>
+                        <element name="liaison5v.elmt">
+                            <definition type="element" link_type="simple" hotspot_x="25" hotspot_y="10" width="60" height="30" version="0.100.0">
+                                <uuid uuid="{68946130-eb32-7434-57a8-8d8f08e9544b}"/>
+                                <names>
+                                    <name lang="ar">توصيلة  5V</name>
+                                    <name lang="ca">5 volts</name>
+                                    <name lang="cs">Napájení +5V</name>
+                                    <name lang="en">5 volt</name>
+                                    <name lang="fr">Liaisons 5volt</name>
+                                    <name lang="it">Alim. +5v</name>
+                                    <name lang="nl">Voedingrail +5v</name>
+                                    <name lang="pl">Łączówka +5V</name>
+                                </names>
+                                <informations>ezza</informations>
+                                <description>
+                                    <dynamic_text Halignment="AlignLeft" frame="false" x="-4" y="-8.5" z="1" rotation="0" font="Liberation Sans,7,-1,5,50,0,0,0,0,0,Regular" text_width="-1" uuid="{3f296a4d-83b5-4c2b-a9bc-42b12f00b737}" keep_visual_rotation="false" Valignment="AlignTop" text_from="ElementInfo">
+                                        <text/>
+                                        <info_name>label</info_name>
+                                    </dynamic_text>
+                                    <rect ry="0" x="-15" y="-6" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="1" height="7" rx="0"/>
+                                    <rect ry="0" x="-18" y="-3" antialias="false" style="line-style:normal;line-weight:normal;filling:none;color:black" width="7" height="1" rx="0"/>
+                                    <line end1="none" end2="none" y1="10" antialias="false" y2="10" style="line-style:dashed;line-weight:normal;filling:none;color:black" x1="-23" length1="1.5" x2="33" length2="1.5"/>
+                                    <line end1="none" end2="none" y1="10" antialias="false" y2="10" style="line-style:normal;line-weight:normal;filling:none;color:black" x1="-15" length1="1.5" x2="18" length2="1.5"/>
+                                    <terminal type="Generic" x="-10" y="10" name="" uuid="{4ec457eb-02f8-4a96-9a1a-6688c715f1e3}" orientation="s"/>
+                                    <terminal type="Generic" x="0" y="10" name="" uuid="{7a13d76b-a4a0-4e7d-afaa-e85cea221eb5}" orientation="s"/>
+                                    <terminal type="Generic" x="10" y="10" name="" uuid="{aa9e9dce-a0bc-4560-8c08-d85c4bfe8978}" orientation="s"/>
+                                </description>
+                            </definition>
+                        </element>
+                    </category>
+                </category>
+            </category>
+        </category>
+    </collection>
+</project>

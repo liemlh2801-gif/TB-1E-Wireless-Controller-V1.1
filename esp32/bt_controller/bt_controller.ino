@@ -18,9 +18,15 @@
 
  *
 
- * GPIO 32 mode switch: LOW = Manual (momentary), HIGH = Auto (latch UP/DOWN).
+ * GPIO 32 mode: INPUT_PULLDOWN — Manual=open/GND, Auto=3.3V only.
 
- * GPIO 18 top limit, GPIO 19 bottom limit, GPIO 33 ON-HOLD: LOW = active.
+ * GPIO 18 top limit: while active GPIO26 disabled; GPIO 19 bottom limit: while active GPIO27 disabled.
+ * GPIO 33 ON-HOLD: active=LOW/GND; after active→inactive, if inactive 3s → DOWN (GPIO26 inactive, GPIO27 GND, GPIO14 inactive).
+ * While ON-HOLD active, UP input (GPIO21/app) and UP output (GPIO26) are never disabled.
+ * AUTO-DOWN output: GPIO26 HIGH, GPIO27 LOW, GPIO14 HIGH until button or bottom limit.
+ * GPIO 21/22/23 panel LÊN/XUỐNG/DỪNG: LOW to GND = pressed (INPUT_PULLUP).
+ * Panel inputs are always polled — never disabled.
+ * STOP (panel GPIO23 / app) input and output are never disabled.
 
  */
 
@@ -38,21 +44,31 @@ const int STOP_PIN = 14;
 
 const int BT_CONNECTED_PIN = 25;  // idle HIGH; LOW while phone/PC is connected via BLE
 
-const int MODE_SWITCH_PIN = 32;   // INPUT_PULLUP: LOW = Manual, HIGH = Auto
+const int MODE_SWITCH_PIN = 32;   // INPUT_PULLDOWN: open/GND=Manual (default), 3.3V=Auto
 
-const int TOP_LIMIT_PIN = 18;     // INPUT_PULLUP: LOW = top limit reached
+const int TOP_LIMIT_PIN = 18;     // INPUT_PULLUP: LOW to GND=active, open/HIGH=inactive
 
-const int BOT_LIMIT_PIN = 19;     // INPUT_PULLUP: LOW = bottom limit reached
+const int BOT_LIMIT_PIN = 19;     // INPUT_PULLUP: LOW to GND=active, open/HIGH=inactive
 
-const int ON_HOLD_PIN = 33;       // INPUT_PULLUP: LOW = ON-HOLD active
+const int AUTO_DOWN_PIN = 4;      // INPUT_PULLDOWN: 3.3V=enabled, open/GND=inactive
 
+const int ON_HOLD_PIN = 33;       // INPUT_PULLUP: LOW=active (to GND); release=open (HIGH) latches AUTO-DOWN
 
+const int PANEL_UP_PIN = 21;      // INPUT_PULLUP: LOW to GND = LÊN pressed
+
+const int PANEL_DOWN_PIN = 22;    // INPUT_PULLUP: LOW to GND = XUỐNG pressed
+
+const int PANEL_STOP_PIN = 23;    // INPUT_PULLUP: LOW to GND = DỪNG pressed
 
 const char BT_DEVICE_NAME[] = "TB-1E";
 
 const long USB_BAUD = 115200;
 
 const unsigned long INPUT_DEBOUNCE_MS = 50;
+
+const unsigned long PANEL_DEBOUNCE_MS = 10;
+
+const unsigned long AUTO_DOWN_FIRST_START_DELAY_MS = 3000;
 
 
 
@@ -76,19 +92,47 @@ unsigned long topLimitLastChangeMs = 0;
 
 unsigned long botLimitLastChangeMs = 0;
 
+enum PanelEdge { PANEL_EDGE_NONE, PANEL_EDGE_RISE, PANEL_EDGE_FALL };
 
+struct PanelButtonState {
 
-bool onHoldActive = false;
+  bool stable;
 
-bool onHoldLastReading = false;
+  bool lastRaw;
 
-unsigned long onHoldLastChangeMs = 0;
+  unsigned long lastChangeMs;
+
+};
+
+bool autoDownFirstStartPending = true;
+
+unsigned long autoDownFirstStartAt = 0;
+
+bool autoDownOnHoldInactiveArmed = false;
+
+unsigned long autoDownOnHoldInactiveSince = 0;
+
+bool autoDownOnHoldInactiveFired = false;
+
+bool autoDownLatched = false;
+
+PanelButtonState onHoldInput = {false, false, 0};
+
+PanelButtonState panelUp = {false, false, 0};
+
+PanelButtonState panelDown = {false, false, 0};
+
+PanelButtonState panelStop = {false, false, 0};
 
 
 
 void logUsb(const char* line);
 
 void setAllHigh();
+
+void writeIn1(bool levelHigh);
+
+void writeIn2(bool levelHigh);
 
 void setBtConnectedOutput(bool connected);
 
@@ -100,6 +144,8 @@ void moveDown();
 
 void stopPressed();
 
+void stopReleased();
+
 void handleCommand(const String& cmd);
 
 bool isAppConnected();
@@ -110,21 +156,49 @@ bool isTopLimitActive();
 
 bool isBotLimitActive();
 
-bool isOnHoldActive();
-
 void sendModeStatus();
 
 void sendLimitStatus();
-
-void sendHoldStatus();
 
 void pollModeSwitch();
 
 void pollLimitSwitches();
 
+void scheduleAutoDownFirstStart();
+
+void pollAutoDownFirstStart();
+
+void resetAutoDownOnHoldInactiveTimer();
+
+void armAutoDownOnHoldInactiveTimer();
+
+void pollAutoDownOnHoldInactive();
+
 void pollOnHold();
 
-void enforceSafety();
+void activateAutoDown();
+
+void clearAutoDownLatch();
+
+void maintainAutoDownLatch();
+
+bool isAutoDownEnabled();
+
+bool isStopOutputActive();
+
+bool isPanelStopPressed();
+
+void setupPanelInputs();
+
+bool readPanelPressed(int pin);
+
+void initPanelButtons();
+
+PanelEdge pollPanelEdge(PanelButtonState& btn, int pin);
+
+void pollPanelButtons();
+
+void enforceLimitOutputs();
 
 
 
@@ -215,8 +289,6 @@ class BleServerCallbacks : public BLEServerCallbacks {
     sendModeStatus();
 
     sendLimitStatus();
-
-    sendHoldStatus();
 
   }
 
@@ -402,6 +474,38 @@ void setAllHigh() {
 
 
 
+void writeIn1(bool levelHigh) {
+
+  if (!levelHigh && topLimitActive) {
+
+    digitalWrite(IN1, HIGH);
+
+    return;
+
+  }
+
+  digitalWrite(IN1, levelHigh ? HIGH : LOW);
+
+}
+
+
+
+void writeIn2(bool levelHigh) {
+
+  if (!levelHigh && botLimitActive) {
+
+    digitalWrite(IN2, HIGH);
+
+    return;
+
+  }
+
+  digitalWrite(IN2, levelHigh ? HIGH : LOW);
+
+}
+
+
+
 void setBtConnectedOutput(bool connected) {
 
   digitalWrite(BT_CONNECTED_PIN, connected ? LOW : HIGH);
@@ -411,6 +515,8 @@ void setBtConnectedOutput(bool connected) {
 
 
 void onAppDisconnected() {
+
+  clearAutoDownLatch();
 
   setAllHigh();
 
@@ -432,9 +538,9 @@ void stopPressed() {
 
 
 
-void moveUp() {
+void stopReleased() {
 
-  digitalWrite(IN1, LOW);
+  digitalWrite(IN1, HIGH);
 
   digitalWrite(IN2, HIGH);
 
@@ -444,11 +550,23 @@ void moveUp() {
 
 
 
+void moveUp() {
+
+  writeIn1(LOW);
+
+  writeIn2(HIGH);
+
+  digitalWrite(STOP_PIN, HIGH);
+
+}
+
+
+
 void moveDown() {
 
-  digitalWrite(IN1, HIGH);
+  writeIn1(HIGH);
 
-  digitalWrite(IN2, LOW);
+  writeIn2(LOW);
 
   digitalWrite(STOP_PIN, HIGH);
 
@@ -488,9 +606,41 @@ bool readBotLimitRaw() {
 
 
 
-bool readOnHoldRaw() {
+bool readOnHoldPressed() {
 
   return digitalRead(ON_HOLD_PIN) == LOW;
+
+}
+
+
+
+bool isOnHoldActive() {
+
+  return readOnHoldPressed();
+
+}
+
+
+
+bool isAutoDownEnabled() {
+
+  return digitalRead(AUTO_DOWN_PIN) == HIGH;
+
+}
+
+
+
+bool isStopOutputActive() {
+
+  return digitalRead(STOP_PIN) == LOW;
+
+}
+
+
+
+bool isPanelStopPressed() {
+
+  return digitalRead(PANEL_STOP_PIN) == LOW;
 
 }
 
@@ -507,14 +657,6 @@ bool isTopLimitActive() {
 bool isBotLimitActive() {
 
   return botLimitActive;
-
-}
-
-
-
-bool isOnHoldActive() {
-
-  return onHoldActive;
 
 }
 
@@ -562,9 +704,271 @@ void sendLimitStatus() {
 
 
 
-void sendHoldStatus() {
+void clearAutoDownLatch() {
 
-  sendBtReply(onHoldActive ? "HOLD: ON" : "HOLD: OFF");
+  if (autoDownLatched) {
+
+    autoDownLatched = false;
+
+    logUsb("AUTO-DOWN latch cleared");
+
+  }
+
+}
+
+
+
+void activateAutoDown() {
+
+  if (!isAutoMode()) {
+
+    return;
+
+  }
+
+  if (!isAutoDownEnabled()) {
+
+    logUsb("AUTO-DOWN skipped — GPIO4 not on 3.3V");
+
+    return;
+
+  }
+
+  if (isBotLimitActive()) {
+
+    logUsb("AUTO-DOWN skipped — bottom limit active");
+
+    return;
+
+  }
+
+  autoDownLatched = true;
+
+  moveDown();
+
+  logUsb("AUTO-DOWN latched — GPIO26 HIGH, GPIO27 LOW, GPIO14 HIGH");
+
+}
+
+
+
+void maintainAutoDownLatch() {
+
+  if (!autoDownLatched) {
+
+    return;
+
+  }
+
+  if (isOnHoldActive()) {
+
+    return;
+
+  }
+
+  if (isPanelStopPressed() || isStopOutputActive()) {
+
+    return;
+
+  }
+
+  if (botLimitActive) {
+
+    clearAutoDownLatch();
+
+    return;
+
+  }
+
+  moveDown();
+
+}
+
+
+
+void scheduleAutoDownFirstStart() {
+
+  if (!isAutoMode() || !isAutoDownEnabled()) {
+
+    autoDownFirstStartPending = false;
+
+    return;
+
+  }
+
+  if (readOnHoldPressed()) {
+
+    autoDownFirstStartPending = false;
+
+    logUsb("AUTO-DOWN first start skipped — ON-HOLD active (GPIO33 LOW) at boot");
+
+    return;
+
+  }
+
+  autoDownFirstStartAt = millis() + AUTO_DOWN_FIRST_START_DELAY_MS;
+
+  logUsb("AUTO-DOWN first start scheduled — DOWN in 3 seconds");
+
+}
+
+
+
+void resetAutoDownOnHoldInactiveTimer() {
+
+  if (autoDownOnHoldInactiveArmed && !autoDownOnHoldInactiveFired) {
+
+    logUsb("AUTO-DOWN ON-HOLD inactive count reset");
+
+  }
+
+  autoDownOnHoldInactiveArmed = false;
+
+  autoDownOnHoldInactiveFired = false;
+
+}
+
+
+
+void armAutoDownOnHoldInactiveTimer() {
+
+  if (!isAutoMode()) {
+
+    return;
+
+  }
+
+  if (!isAutoDownEnabled()) {
+
+    logUsb("AUTO-DOWN skipped — GPIO4 not on 3.3V");
+
+    return;
+
+  }
+
+  autoDownOnHoldInactiveArmed = true;
+
+  autoDownOnHoldInactiveSince = millis();
+
+  autoDownOnHoldInactiveFired = false;
+
+  logUsb("ON-HOLD active→inactive — counting 3s inactive for DOWN");
+
+}
+
+
+
+void pollAutoDownOnHoldInactive() {
+
+  if (!autoDownOnHoldInactiveArmed || autoDownOnHoldInactiveFired) {
+
+    return;
+
+  }
+
+  if (readOnHoldPressed()) {
+
+    resetAutoDownOnHoldInactiveTimer();
+
+    return;
+
+  }
+
+  if (millis() - autoDownOnHoldInactiveSince < AUTO_DOWN_FIRST_START_DELAY_MS) {
+
+    return;
+
+  }
+
+  autoDownOnHoldInactiveFired = true;
+
+  if (!isAutoMode() || !isAutoDownEnabled()) {
+
+    logUsb("AUTO-DOWN cancelled — not Auto or GPIO4 inactive");
+
+    return;
+
+  }
+
+  if (isBotLimitActive()) {
+
+    logUsb("AUTO-DOWN skipped — bottom limit active");
+
+    return;
+
+  }
+
+  clearAutoDownLatch();
+
+  moveDown();
+
+  logUsb("ON-HOLD inactive 3s — DOWN (GPIO26 inactive, GPIO27 GND, GPIO14 inactive)");
+
+}
+
+
+
+void pollAutoDownFirstStart() {
+
+  if (!autoDownFirstStartPending) {
+
+    return;
+
+  }
+
+  if (millis() < autoDownFirstStartAt) {
+
+    return;
+
+  }
+
+  autoDownFirstStartPending = false;
+
+  if (!isAutoMode() || !isAutoDownEnabled()) {
+
+    logUsb("AUTO-DOWN first start cancelled — not Auto or GPIO4 inactive");
+
+    return;
+
+  }
+
+  if (readOnHoldPressed()) {
+
+    logUsb("AUTO-DOWN first start cancelled — ON-HOLD active (GPIO33 LOW)");
+
+    return;
+
+  }
+
+  logUsb("AUTO-DOWN first start — 3s elapsed, DOWN once");
+
+  activateAutoDown();
+
+}
+
+
+
+void pollOnHold() {
+
+  // ON-HOLD: LOW to GND = active; open (pull-up HIGH) = inactive
+
+  const PanelEdge holdEdge = pollPanelEdge(onHoldInput, ON_HOLD_PIN);
+
+
+
+  if (holdEdge == PANEL_EDGE_FALL) {
+
+    resetAutoDownOnHoldInactiveTimer();
+
+    clearAutoDownLatch();
+
+    logUsb("ON-HOLD active (GPIO33 to GND) — UP input/output enabled");
+
+  } else if (holdEdge == PANEL_EDGE_RISE) {
+
+    armAutoDownOnHoldInactiveTimer();
+
+  }
 
 }
 
@@ -572,13 +976,19 @@ void sendHoldStatus() {
 
 void onModeChanged() {
 
+  resetAutoDownOnHoldInactiveTimer();
+
+  clearAutoDownLatch();
+
   setAllHigh();
+
+  initPanelButtons();
 
   logUsb(isAutoMode()
 
-    ? "MODE: AUTO — UP/DOWN latch until STOP, opposite dir, or limit"
+    ? "MODE: AUTO — panel UP/DOWN latch until DỪNG; DỪNG momentary"
 
-    : "MODE: MANUAL — momentary UP/DOWN/STOP");
+    : "MODE: MANUAL — panel momentary UP/DOWN/DỪNG");
 
   sendModeStatus();
 
@@ -588,19 +998,27 @@ void onModeChanged() {
 
 void onTopLimitChanged() {
 
-  setAllHigh();
-
   if (topLimitActive) {
+
+    digitalWrite(IN1, HIGH);
 
     sendBtReply("LIMIT: TOP");
 
-    logUsb("LIMIT TOP — GPIO14/26/27 HIGH, UP disabled");
+    logUsb("LIMIT TOP — GPIO26 set HIGH, then disabled");
 
   } else {
 
     sendBtReply("LIMIT: TOP OFF");
 
-    logUsb("Top limit clear — UP enabled");
+    logUsb("Top limit clear — GPIO26 enabled");
+
+    if (readPanelPressed(PANEL_UP_PIN)) {
+
+      moveUp();
+
+      logUsb("GPIO21 still to GND — GPIO26 allowed LOW");
+
+    }
 
   }
 
@@ -610,41 +1028,29 @@ void onTopLimitChanged() {
 
 void onBotLimitChanged() {
 
-  setAllHigh();
-
   if (botLimitActive) {
+
+    clearAutoDownLatch();
+
+    digitalWrite(IN2, HIGH);
 
     sendBtReply("LIMIT: BOT");
 
-    logUsb("LIMIT BOT — GPIO14/26/27 HIGH, DOWN disabled");
+    logUsb("LIMIT BOT — GPIO27 set HIGH, then disabled");
 
   } else {
 
     sendBtReply("LIMIT: BOT OFF");
 
-    logUsb("Bottom limit clear — DOWN enabled");
+    logUsb("Bottom limit clear — GPIO27 enabled");
 
-  }
+    if (readPanelPressed(PANEL_DOWN_PIN)) {
 
-}
+      moveDown();
 
+      logUsb("GPIO22 still to GND — GPIO27 allowed LOW");
 
-
-void onOnHoldChanged() {
-
-  if (onHoldActive) {
-
-    setAllHigh();
-
-    sendBtReply("HOLD: ON");
-
-    logUsb("ON-HOLD active — GPIO14/26/27 HIGH");
-
-  } else {
-
-    sendBtReply("HOLD: OFF");
-
-    logUsb("ON-HOLD released");
+    }
 
   }
 
@@ -746,37 +1152,205 @@ void pollLimitSwitches() {
 
 
 
-void pollOnHold() {
+void setupAutoDownInputs() {
 
-  pollDebouncedInput(
+  pinMode(AUTO_DOWN_PIN, INPUT_PULLDOWN);
 
-    onHoldActive,
+  pinMode(ON_HOLD_PIN, INPUT_PULLUP);
 
-    onHoldLastReading,
-
-    onHoldLastChangeMs,
-
-    readOnHoldRaw,
-
-    onOnHoldChanged
-
-  );
+  initPanelButton(onHoldInput, ON_HOLD_PIN);
 
 }
 
 
 
-void enforceSafety() {
+bool readPanelPressed(int pin) {
 
-  if (topLimitActive && isMovingUp()) {
+  return digitalRead(pin) == LOW;
 
-    setAllHigh();
+}
+
+
+
+void setupPanelInputs() {
+
+  pinMode(PANEL_UP_PIN, INPUT_PULLUP);
+
+  pinMode(PANEL_DOWN_PIN, INPUT_PULLUP);
+
+  pinMode(PANEL_STOP_PIN, INPUT_PULLUP);
+
+}
+
+
+
+void initPanelButton(PanelButtonState& btn, int pin) {
+
+  const bool raw = readPanelPressed(pin);
+
+  btn.lastRaw = raw;
+
+  btn.stable = raw;
+
+  btn.lastChangeMs = millis();
+
+}
+
+
+
+void initPanelButtons() {
+
+  initPanelButton(panelUp, PANEL_UP_PIN);
+
+  initPanelButton(panelDown, PANEL_DOWN_PIN);
+
+  initPanelButton(panelStop, PANEL_STOP_PIN);
+
+}
+
+
+
+PanelEdge pollPanelEdge(PanelButtonState& btn, int pin) {
+
+  const bool raw = readPanelPressed(pin);
+
+
+
+  if (raw != btn.lastRaw) {
+
+    btn.lastChangeMs = millis();
+
+    btn.lastRaw = raw;
 
   }
 
-  if (botLimitActive && isMovingDown()) {
 
-    setAllHigh();
+
+  if (millis() - btn.lastChangeMs < PANEL_DEBOUNCE_MS) {
+
+    return PANEL_EDGE_NONE;
+
+  }
+
+
+
+  const bool debounced = btn.lastRaw;
+
+  if (debounced == btn.stable) {
+
+    return PANEL_EDGE_NONE;
+
+  }
+
+
+
+  const bool wasStable = btn.stable;
+
+  btn.stable = debounced;
+
+
+
+  if (debounced && !wasStable) {
+
+    return PANEL_EDGE_RISE;
+
+  }
+
+  if (!debounced && wasStable) {
+
+    return PANEL_EDGE_FALL;
+
+  }
+
+  return PANEL_EDGE_NONE;
+
+}
+
+
+
+void pollPanelButtons() {
+
+  if (!isAutoMode()) {
+
+    pollPanelEdge(panelUp, PANEL_UP_PIN);
+
+    pollPanelEdge(panelDown, PANEL_DOWN_PIN);
+
+    pollPanelEdge(panelStop, PANEL_STOP_PIN);
+
+
+
+    if (panelStop.stable) {
+
+      clearAutoDownLatch();
+
+      stopPressed();
+
+    } else if (panelUp.stable) {
+
+      clearAutoDownLatch();
+
+      moveUp();
+
+    } else if (panelDown.stable) {
+
+      clearAutoDownLatch();
+
+      moveDown();
+
+    } else if (!autoDownLatched) {
+
+      stopReleased();
+
+    }
+
+    return;
+
+  }
+
+
+
+  const PanelEdge stopEdge = pollPanelEdge(panelStop, PANEL_STOP_PIN);
+
+
+
+  if (panelStop.stable) {
+
+    clearAutoDownLatch();
+
+    stopPressed();
+
+    return;
+
+  }
+
+
+
+  if (stopEdge == PANEL_EDGE_FALL) {
+
+    clearAutoDownLatch();
+
+    stopReleased();
+
+    return;
+
+  }
+
+
+
+  if (pollPanelEdge(panelUp, PANEL_UP_PIN) == PANEL_EDGE_RISE) {
+
+    clearAutoDownLatch();
+
+    moveUp();
+
+  }
+
+  if (pollPanelEdge(panelDown, PANEL_DOWN_PIN) == PANEL_EDGE_RISE) {
+
+    clearAutoDownLatch();
+
+    moveDown();
 
   }
 
@@ -784,11 +1358,71 @@ void enforceSafety() {
 
 
 
-bool isStopActive() {
-  return digitalRead(STOP_PIN) == LOW;
+void enforceLimitOutputs() {
+
+  if (topLimitActive && digitalRead(IN1) == LOW) {
+
+    digitalWrite(IN1, HIGH);
+
+  }
+
+  if (botLimitActive && digitalRead(IN2) == LOW) {
+
+    digitalWrite(IN2, HIGH);
+
+  }
+
 }
+
+
 
 void handleCommand(const String& cmd) {
+
+  if (cmd == "STOP" || cmd == "RELEASE") {
+
+    if (cmd == "RELEASE") {
+
+      clearAutoDownLatch();
+
+      stopReleased();
+
+      if (isAppConnected()) {
+
+        sendBtReply("STATUS: RELEASED");
+
+        logUsb("TX: STATUS: RELEASED");
+
+        logUsb("MOTOR: STOP released (GPIO26/27/14=HIGH)");
+
+      }
+
+      return;
+
+    }
+
+    clearAutoDownLatch();
+
+    stopPressed();
+
+    if (isAppConnected()) {
+
+      Serial.print("RX: ");
+
+      Serial.println(cmd);
+
+      sendBtReply("STATUS: STOP");
+
+      logUsb("TX: STATUS: STOP");
+
+      logUsb("MOTOR: STOP (GPIO26=HIGH, GPIO27=HIGH, GPIO14=LOW)");
+
+    }
+
+    return;
+
+  }
+
+
 
   if (!isAppConnected()) {
 
@@ -806,49 +1440,13 @@ void handleCommand(const String& cmd) {
 
 
 
-  if (cmd == "RELEASE") {
-
-    if (isAutoMode()) {
-
-      if (isStopActive()) {
-
-        setAllHigh();
-
-        sendBtReply("STATUS: RELEASED");
-
-        logUsb("TX: STATUS: RELEASED (stop released)");
-
-      }
-
-      return;
-
-    }
-
-    setAllHigh();
-
-    sendBtReply("STATUS: RELEASED");
-
-    logUsb("TX: STATUS: RELEASED");
-
-    logUsb("MOTOR: all HIGH (GPIO26/27/14=HIGH)");
-
-    return;
-
-  }
-
-
-
   if (cmd == "UP") {
 
-    if (isTopLimitActive()) {
+    clearAutoDownLatch();
 
-      setAllHigh();
+    if (isTopLimitActive() || readTopLimitRaw()) {
 
-      sendBtReply("ERR: TOP LIMIT");
-
-      logUsb("RX blocked — top limit active");
-
-      return;
+      logUsb("UP at top limit — GPIO26 disabled, GPIO27 still active");
 
     }
 
@@ -868,15 +1466,11 @@ void handleCommand(const String& cmd) {
 
   if (cmd == "DOWN") {
 
-    if (isBotLimitActive()) {
+    clearAutoDownLatch();
 
-      setAllHigh();
+    if (isBotLimitActive() || readBotLimitRaw()) {
 
-      sendBtReply("ERR: BOT LIMIT");
-
-      logUsb("RX blocked — bottom limit active");
-
-      return;
+      logUsb("DOWN at bottom limit — GPIO27 disabled, GPIO26 still active");
 
     }
 
@@ -887,22 +1481,6 @@ void handleCommand(const String& cmd) {
     logUsb("TX: STATUS: DOWN");
 
     logUsb("MOTOR: DOWN (GPIO26=HIGH, GPIO27=LOW, GPIO14=HIGH)");
-
-    return;
-
-  }
-
-
-
-  if (cmd == "STOP") {
-
-    stopPressed();
-
-    sendBtReply("STATUS: STOP");
-
-    logUsb("TX: STATUS: STOP");
-
-    logUsb("MOTOR: STOP (GPIO26=HIGH, GPIO27=HIGH, GPIO14=LOW)");
 
     return;
 
@@ -930,13 +1508,15 @@ void setup() {
 
   pinMode(BT_CONNECTED_PIN, OUTPUT);
 
-  pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(MODE_SWITCH_PIN, INPUT_PULLDOWN);
 
   pinMode(TOP_LIMIT_PIN, INPUT_PULLUP);
 
   pinMode(BOT_LIMIT_PIN, INPUT_PULLUP);
 
-  pinMode(ON_HOLD_PIN, INPUT_PULLUP);
+  setupAutoDownInputs();
+
+  setupPanelInputs();
 
   setAllHigh();
 
@@ -958,6 +1538,12 @@ void setup() {
 
   topLimitLastChangeMs = millis();
 
+  if (topLimitActive) {
+
+    digitalWrite(IN1, HIGH);
+
+  }
+
 
 
   botLimitLastReading = readBotLimitRaw();
@@ -966,19 +1552,15 @@ void setup() {
 
   botLimitLastChangeMs = millis();
 
+  if (botLimitActive) {
 
-
-  onHoldLastReading = readOnHoldRaw();
-
-  onHoldActive = onHoldLastReading;
-
-  onHoldLastChangeMs = millis();
-
-  if (onHoldActive) {
-
-    setAllHigh();
+    digitalWrite(IN2, HIGH);
 
   }
+
+
+
+  initPanelButtons();
 
 
 
@@ -1008,17 +1590,19 @@ void setup() {
 
   logUsb(isAutoMode() ? "Mode switch: AUTO" : "Mode switch: MANUAL");
 
-  logUsb("GPIO32 mode — LOW=Manual, HIGH=Auto");
+  logUsb("GPIO32 mode — open/GND=Manual (default), 3.3V=Auto");
 
-  logUsb("GPIO18 top limit, GPIO19 bottom limit — LOW=at limit");
+  logUsb("GPIO18 top limit, GPIO19 bottom limit — LOW/GND=active, open/HIGH=inactive");
 
-  logUsb("GPIO33 ON-HOLD — LOW=hold active");
+  logUsb("GPIO4 AUTO-DOWN — 3.3V=enabled; ON-HOLD inactive 3s triggers DOWN; first start latches DOWN");
+
+  logUsb("GPIO21 LÊN, GPIO22 XUỐNG, GPIO23 DỪNG — LOW to GND=pressed");
 
   if (topLimitActive) logUsb("Top limit active at startup");
 
   if (botLimitActive) logUsb("Bottom limit active at startup");
 
-  if (onHoldActive) logUsb("ON-HOLD active at startup — GPIO14/26/27 HIGH");
+  scheduleAutoDownFirstStart();
 
   logUsb("Waiting for commands...");
 
@@ -1042,7 +1626,15 @@ void loop() {
 
   pollOnHold();
 
-  enforceSafety();
+  pollAutoDownOnHoldInactive();
+
+  pollAutoDownFirstStart();
+
+  maintainAutoDownLatch();
+
+  pollPanelButtons();
+
+  enforceLimitOutputs();
 
 
 
@@ -1055,10 +1647,6 @@ void loop() {
   if (appWasConnected && !appConnected) {
 
     onAppDisconnected();
-
-  } else if (!appConnected) {
-
-    setAllHigh();
 
   }
 

@@ -183,13 +183,13 @@ function updateUi() {
   const downBtn = document.querySelector('.control-btn[data-action="down"]');
 
   if (upBtn) {
-    upBtn.disabled = !connected || state.topLimitActive;
+    upBtn.disabled = !connected;
   }
   if (stopBtn) {
     stopBtn.disabled = !connected;
   }
   if (downBtn) {
-    downBtn.disabled = !connected || state.botLimitActive;
+    downBtn.disabled = !connected;
   }
 
   if (els.desktopHint) {
@@ -340,13 +340,6 @@ function bindKeyboard() {
 
     const command = KEY_COMMANDS[event.key];
     if (!command || keysHeld.has(event.key)) {
-      return;
-    }
-
-    if (command === "UP" && state.topLimitActive) {
-      return;
-    }
-    if (command === "DOWN" && state.botLimitActive) {
       return;
     }
 

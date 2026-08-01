@@ -1,0 +1,26 @@
+<definition width="140" height="220" hotspot_x="10" hotspot_y="110" type="element" version="0.8">
+    <names>
+        <name lang="en">ESP32 Dev Module</name>
+        <name lang="vi">ESP32 Dev Module</name>
+    </names>
+    <description>
+        <rect x="0" y="0" width="140" height="220" style="line-style:normal;line-weight:normal;filling:white;color:black"/>
+        <text x="10" y="18" size="10" text="ESP32 Dev Module"/>
+        <text x="10" y="32" size="7" text="TB-1E Controller"/>
+        <line x1="140" y1="0" x2="140" y2="220" style="line-style:normal;line-weight:normal;filling:none;color:black"/>
+        <text x="95" y="58" size="6" text="5V"/>
+        <text x="95" y="78" size="6" text="GND"/>
+        <text x="95" y="98" size="6" text="IO26"/>
+        <text x="95" y="118" size="6" text="IO27"/>
+        <text x="95" y="138" size="6" text="IO14"/>
+        <text x="95" y="158" size="6" text="IO25"/>
+        <text x="95" y="178" size="6" text="IO4"/>
+        <terminal x="140" y="55" orientation="e"/>
+        <terminal x="140" y="75" orientation="e"/>
+        <terminal x="140" y="95" orientation="e"/>
+        <terminal x="140" y="115" orientation="e"/>
+        <terminal x="140" y="135" orientation="e"/>
+        <terminal x="140" y="155" orientation="e"/>
+        <terminal x="140" y="175" orientation="e"/>
+    </description>
+</definition>

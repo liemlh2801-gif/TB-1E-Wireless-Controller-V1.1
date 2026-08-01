@@ -183,8 +183,8 @@ private fun MainScreenContent(
     onMenuExpandedChange: (Boolean) -> Unit,
 ) {
     val isAuto = deviceMode == DeviceMode.Auto
-    val upEnabled = isConnected && !topLimitActive
-    val downEnabled = isConnected && !botLimitActive
+    val upEnabled = isConnected
+    val downEnabled = isConnected
     val stopEnabled = isConnected
 
     Scaffold(

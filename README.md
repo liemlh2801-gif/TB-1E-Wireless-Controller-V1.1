@@ -40,51 +40,58 @@ No HC-05 module required — Bluetooth is built into the ESP32.
 
 ### Manual / Auto mode switch (GPIO 32)
 
-Physical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32** with internal pull-up:
+Physical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32** with internal pull-down (Manual is default):
 
 | Switch position | GPIO 32 | Mode | App behavior |
 |-----------------|---------|------|----------------|
-| **Manual** | LOW (pin to GND) | Manual | Momentary — hold LÊN/DỪNG/XUỐNG, release sends `RELEASE` |
-| **Auto** | HIGH (open or 3.3V) | Auto | Latch — press/release LÊN or XUỐNG keeps output until DỪNG, opposite direction, or limit |
+| **Manual** (default) | **Open** or **GND** | Manual | Momentary — hold LÊN/DỪNG/XUỐNG, release sends `RELEASE` |
+| **Auto** | **3.3V only** | Auto | Latch — press/release LÊN or XUỐNG keeps output until DỪNG, opposite direction, or limit |
 
-**Wiring (SPDT or toggle to GND):**
+**Wiring:**
 
-- Common → **GPIO 32**
-- **Manual** position → **GND**
-- **Auto** position → leave open (pull-up) or tie to **3.3V**
+- **Manual:** leave GPIO 32 **open**, or connect to **GND**
+- **Auto:** connect GPIO 32 to **3.3V** only (do not use open/float for Auto)
 
 On mode change or BLE connect, ESP32 notifies the app with `MODE: MANUAL` or `MODE: AUTO`.
 
 ### Limit switches (GPIO 18 / GPIO 19)
 
-Two **normally-open** limit switches at the top and bottom of travel. ESP32 reads them with internal pull-up:
+Two **normally-open** limit switches. ESP32 reads **GPIO 18** (top) and **GPIO 19** (bottom) with internal pull-up:
 
-| Switch | GPIO | Pin level | Meaning |
-|--------|------|-----------|---------|
-| **Top limit** | **18** | **LOW** | At top — **LÊN disabled**, GPIO 14/26/27 → HIGH |
-| **Bottom limit** | **19** | **LOW** | At bottom — **XUỐNG disabled**, GPIO 14/26/27 → HIGH |
-| Either | — | **HIGH** | Not at that limit |
+| Switch | GPIO | Active (limit hit) | Inactive (normal) |
+|--------|------|--------------------|-------------------|
+| **Top limit** | **18** | **LOW** (pin to **GND**) | **Open** or **HIGH** |
+| **Bottom limit** | **19** | **LOW** (pin to **GND**) | **Open** or **HIGH** |
+
+**While top limit active:** GPIO 26 set HIGH, then disabled (cannot go LOW); GPIO 27 and GPIO 14 unchanged.
+
+**While bottom limit active:** GPIO 27 set HIGH, then disabled (cannot go LOW); GPIO 26 and GPIO 14 unchanged.
 
 **Wiring (each limit switch):**
 
-- One terminal → **GPIO 18** or **GPIO 19**
+- One terminal → **GPIO 18** (top) or **GPIO 19** (bottom)
 - Other terminal → **GND**
-- Switch closes to GND when the carriage hits the limit
+- Switch closes to GND when the carriage hits the limit (NO switch)
+
+When top limit clears, GPIO 26 is enabled again; if **GPIO 21** is still connected to **GND**, GPIO 26 is allowed to go **LOW**.
+
+When bottom limit clears, GPIO 27 is enabled again; if **GPIO 22** is still connected to **GND**, GPIO 27 is allowed to go **LOW**.
 
 On limit change or BLE connect, ESP32 sends `LIMIT: TOP`, `LIMIT: TOP OFF`, `LIMIT: BOT`, or `LIMIT: BOT OFF`.
 
 ### ON-HOLD switch (GPIO 33)
 
-Physical hold switch. ESP32 reads **GPIO 33** with internal pull-up:
+ESP32 reads **GPIO 33** with internal pull-up:
 
 | Switch | GPIO 33 | Effect |
 |--------|---------|--------|
-| **ON-HOLD active** | **LOW** (pin to GND) | GPIO 14/26/27 → HIGH **once** on entry; buttons stay enabled |
-| Normal | **HIGH** | No hold |
+| **ON-HOLD active** | **LOW** (pin to **GND**) | **UP input and output stay enabled**; AUTO-DOWN latch cleared |
+| **Inactive** | **Open** or **HIGH** | Normal operation |
+| **ON-HOLD release** (active→inactive) | LOW→open | If ON-HOLD stays **inactive for 3 seconds**: GPIO 26 inactive (HIGH), GPIO 27 **GND** (LOW), GPIO 14 inactive (HIGH) — same as panel XUỐNG press-release once in Auto (if GPIO 4 enabled). Count resets if ON-HOLD goes active again. |
 
 **Wiring:** one terminal → **GPIO 33**, other → **GND** (closes to GND when hold is engaged).
 
-ESP32 sends `HOLD: ON` or `HOLD: OFF` on change and on BLE connect.
+Panel **LÊN** (GPIO 21), app **UP**, and GPIO 26 output are **never disabled** while ON-HOLD is active.
 
 Device advertises as **TB-1E** when powered on.
 
@@ -106,9 +113,6 @@ Mode notifications from ESP32:
 | `MODE: AUTO` | Auto mode — UP/DOWN latch after release |
 | `LIMIT: TOP` / `LIMIT: TOP OFF` | Top limit active / cleared |
 | `LIMIT: BOT` / `LIMIT: BOT OFF` | Bottom limit active / cleared |
-| `HOLD: ON` / `HOLD: OFF` | ON-HOLD entered / cleared (informational) |
-| `ERR: TOP LIMIT` | UP rejected — at top |
-| `ERR: BOT LIMIT` | DOWN rejected — at bottom |
 
 ESP32 replies with `STATUS: UP`, `STATUS: DOWN`, or `STATUS: STOP`.
 
