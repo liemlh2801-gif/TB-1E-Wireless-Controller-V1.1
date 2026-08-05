@@ -157,7 +157,6 @@ const els = {
   statusText: document.getElementById("status-text"),
   modeText: document.getElementById("mode-text"),
   errorText: document.getElementById("error-text"),
-  bleHint: document.getElementById("ble-hint"),
   menuBtn: document.getElementById("menu-btn"),
   menu: document.getElementById("menu"),
   menuBackdrop: document.getElementById("menu-backdrop"),
@@ -267,10 +266,6 @@ function updateUi() {
 
   if (els.desktopHint) {
     els.desktopHint.hidden = !isDesktopPointer() || !connected;
-  }
-
-  if (els.bleHint) {
-    els.bleHint.hidden = !connected;
   }
 
   if (els.unsupported?.classList.contains("info")) {

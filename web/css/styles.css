@@ -145,18 +145,6 @@ header .version {
   cursor: not-allowed;
 }
 
-.ble-hint {
-  font-size: 11px;
-  line-height: 1.35;
-  color: #333;
-  text-align: right;
-  max-width: 100%;
-  padding: 6px 8px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fffde7;
-}
-
 #status-row {
   display: flex;
   align-items: center;
@@ -184,6 +172,10 @@ header .version {
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
+}
+
+#device-status[hidden] {
+  display: none !important;
 }
 
 .on-hold-row {
