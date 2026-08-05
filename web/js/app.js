@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.1";
+const APP_VERSION = "1.7.2";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -77,9 +77,7 @@ function updateOnHoldUi() {
   const processing = connected && state.onHoldActive;
   if (els.deviceStatus) {
     els.deviceStatus.hidden = !connected;
-  }
-  if (els.onHoldRow) {
-    els.onHoldRow.classList.toggle("processing", processing);
+    els.deviceStatus.classList.toggle("processing", processing);
   }
   if (els.onHoldText) {
     els.onHoldText.textContent = processing ? "ON-HOLD processing" : "ON-HOLD";
@@ -167,7 +165,6 @@ const els = {
   menu: document.getElementById("menu"),
   menuBackdrop: document.getElementById("menu-backdrop"),
   menuMeta: document.getElementById("menu-meta"),
-  onHoldRow: document.getElementById("on-hold-row"),
   onHoldText: document.getElementById("on-hold-text"),
   modeHint: document.getElementById("mode-hint"),
   deviceStatus: document.getElementById("device-status"),
@@ -333,10 +330,10 @@ function fitDeviceStatusText() {
     }
   };
 
-  const onHoldTextWidth = containerWidth - 24;
-  shrinkToFit(els.onHoldText, onHoldTextWidth, 15);
-  shrinkToFit(els.modeText, containerWidth, 10);
-  shrinkToFit(els.modeHint, containerWidth, 9);
+  const textColumnWidth = containerWidth - 26;
+  shrinkToFit(els.onHoldText, textColumnWidth, 17);
+  shrinkToFit(els.modeText, textColumnWidth, 12);
+  shrinkToFit(els.modeHint, textColumnWidth, 11);
 }
 
 function updateMenuMeta() {

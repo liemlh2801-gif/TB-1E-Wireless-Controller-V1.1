@@ -663,87 +663,76 @@ private fun DeviceStatusPanel(
     onHoldActive: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp),
-    ) {
-        OnHoldIndicator(
-            isConnected = isConnected,
-            onHoldActive = onHoldActive,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        deviceMode?.let { mode ->
-            val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
-            SingleLineFitText(
-                text = when (mode) {
-                    DeviceMode.Manual -> stringResource(R.string.mode_manual)
-                    DeviceMode.Auto -> stringResource(R.string.mode_auto)
-                },
-                color = modeColor,
-                fontWeight = FontWeight.Medium,
-                maxFontSize = 10.sp,
-            )
-
-            SingleLineFitText(
-                text = when (mode) {
-                    DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
-                    DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
-                },
-                color = modeColor,
-                fontWeight = FontWeight.Medium,
-                maxFontSize = 9.sp,
-                minFontSize = 5.sp,
-            )
-        }
-    }
-}
-
-@Composable
-private fun OnHoldIndicator(
-    isConnected: Boolean,
-    onHoldActive: Boolean,
-    modifier: Modifier = Modifier,
-) {
     val processing = isConnected && onHoldActive
-    val label = if (processing) {
+    val onHoldLabel = if (processing) {
         stringResource(R.string.on_hold_processing)
     } else {
         stringResource(R.string.on_hold_label)
     }
-    val textColor = if (processing) OnHoldRed else OnHoldGreen
+    val onHoldColor = if (processing) OnHoldRed else OnHoldGreen
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 20.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
     ) {
         if (processing) {
             Box(
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(18.dp)
                     .background(OnHoldRed, CircleShape),
             )
         } else {
             Box(
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(18.dp)
                     .border(2.5.dp, OnHoldGreenRing, CircleShape)
                     .background(Color.White, CircleShape),
             )
         }
+
         Spacer(modifier = Modifier.width(8.dp))
-        SingleLineFitText(
-            text = label,
+
+        Column(
             modifier = Modifier.weight(1f, fill = false),
-            color = textColor,
-            fontWeight = FontWeight.Bold,
-            maxFontSize = 15.sp,
-            minFontSize = 8.sp,
-        )
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            SingleLineFitText(
+                text = onHoldLabel,
+                color = onHoldColor,
+                fontWeight = FontWeight.Bold,
+                maxFontSize = 17.sp,
+                minFontSize = 10.sp,
+                textAlign = TextAlign.Start,
+            )
+
+            deviceMode?.let { mode ->
+                val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
+                SingleLineFitText(
+                    text = when (mode) {
+                        DeviceMode.Manual -> stringResource(R.string.mode_manual)
+                        DeviceMode.Auto -> stringResource(R.string.mode_auto)
+                    },
+                    color = modeColor,
+                    fontWeight = FontWeight.Medium,
+                    maxFontSize = 12.sp,
+                    textAlign = TextAlign.Start,
+                )
+
+                SingleLineFitText(
+                    text = when (mode) {
+                        DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
+                        DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
+                    },
+                    color = modeColor,
+                    fontWeight = FontWeight.Medium,
+                    maxFontSize = 11.sp,
+                    minFontSize = 6.sp,
+                    textAlign = TextAlign.Start,
+                )
+            }
+        }
     }
 }
 

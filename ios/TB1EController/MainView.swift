@@ -252,19 +252,44 @@ struct MainView: View {
         bluetooth.isConnected && bluetooth.onHoldActive
     }
 
-    private var onHoldRow: some View {
-        HStack(spacing: 8) {
+    private var deviceStatusPanel: some View {
+        HStack(alignment: .center, spacing: 8) {
             onHoldDot
-            panelStatusLine(
-                onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
-                size: 15,
-                weight: .bold,
-                color: onHoldProcessing
-                    ? Color(red: 0.776, green: 0.157, blue: 0.157)
-                    : Color(red: 0.180, green: 0.490, blue: 0.196)
-            )
+
+            VStack(alignment: .leading, spacing: 2) {
+                panelStatusLine(
+                    onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
+                    size: 17,
+                    weight: .bold,
+                    color: onHoldProcessing
+                        ? Color(red: 0.776, green: 0.157, blue: 0.157)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                )
+
+                if let mode = bluetooth.deviceMode {
+                    panelStatusLine(
+                        mode == .manual ? "Mode: Manual" : "Mode: Auto",
+                        size: 12,
+                        weight: .medium,
+                        color: mode == .auto
+                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196)
+                    )
+
+                    panelStatusLine(
+                        mode == .manual
+                            ? "Manual — release stops direction"
+                            : "Auto — release keeps direction until STOP or limit",
+                        size: 11,
+                        weight: .medium,
+                        color: mode == .auto
+                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196)
+                    )
+                }
+            }
         }
-        .frame(maxWidth: .infinity, minHeight: 20, alignment: .center)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
             AudioServicesPlaySystemSound(1052)
@@ -283,45 +308,16 @@ struct MainView: View {
         if onHoldProcessing {
             Circle()
                 .fill(Color(red: 0.776, green: 0.157, blue: 0.157))
-                .frame(width: 16, height: 16)
+                .frame(width: 18, height: 18)
         } else {
             Circle()
                 .fill(Color.white)
-                .frame(width: 16, height: 16)
+                .frame(width: 18, height: 18)
                 .overlay {
                     Circle()
                         .stroke(Color(red: 0.259, green: 0.627, blue: 0.278), lineWidth: 2.5)
                 }
         }
-    }
-
-    private var deviceStatusPanel: some View {
-        VStack(alignment: .center, spacing: 3) {
-            onHoldRow
-
-            if let mode = bluetooth.deviceMode {
-                panelStatusLine(
-                    mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                    size: 10,
-                    weight: .medium,
-                    color: mode == .auto
-                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196)
-                )
-
-                panelStatusLine(
-                    mode == .manual
-                        ? "Manual — release stops direction"
-                        : "Auto — release keeps direction until STOP or limit",
-                    size: 9,
-                    weight: .medium,
-                    color: mode == .auto
-                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196)
-                )
-            }
-        }
-        .frame(maxWidth: .infinity)
     }
 
     private func panelStatusLine(
@@ -334,9 +330,9 @@ struct MainView: View {
             .font(.system(size: size, weight: weight))
             .foregroundStyle(color)
             .lineLimit(1)
-            .minimumScaleFactor(0.45)
+            .minimumScaleFactor(0.5)
             .allowsTightening(true)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func machinePanelStatusOverlay(machineWidth: CGFloat, height: CGFloat) -> some View {
