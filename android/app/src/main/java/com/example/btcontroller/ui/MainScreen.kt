@@ -63,6 +63,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.btcontroller.R
@@ -626,6 +627,36 @@ private fun PanelButton(
 }
 
 @Composable
+private fun SingleLineFitText(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color,
+    fontWeight: FontWeight,
+    maxFontSize: TextUnit,
+    minFontSize: TextUnit = 6.sp,
+    textAlign: TextAlign = TextAlign.Center,
+) {
+    var fontSize by remember(text, maxFontSize) { mutableStateOf(maxFontSize) }
+
+    Text(
+        text = text,
+        color = color,
+        fontWeight = fontWeight,
+        fontSize = fontSize,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Clip,
+        textAlign = textAlign,
+        modifier = modifier.fillMaxWidth(),
+        onTextLayout = { result ->
+            if (result.hasVisualOverflow && fontSize > minFontSize) {
+                fontSize = (fontSize.value * 0.9f).coerceAtLeast(minFontSize.value).sp
+            }
+        },
+    )
+}
+
+@Composable
 private fun DeviceStatusPanel(
     deviceMode: DeviceMode?,
     isConnected: Boolean,
@@ -644,29 +675,26 @@ private fun DeviceStatusPanel(
         )
 
         deviceMode?.let { mode ->
-            Text(
+            val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
+            SingleLineFitText(
                 text = when (mode) {
                     DeviceMode.Manual -> stringResource(R.string.mode_manual)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto)
                 },
-                fontSize = 10.sp,
+                color = modeColor,
                 fontWeight = FontWeight.Medium,
-                color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                maxFontSize = 10.sp,
             )
 
-            Text(
+            SingleLineFitText(
                 text = when (mode) {
                     DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
                 },
-                color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
-                fontSize = 9.sp,
+                color = modeColor,
                 fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center,
-                lineHeight = 12.sp,
-                modifier = Modifier.fillMaxWidth(),
+                maxFontSize = 9.sp,
+                minFontSize = 5.sp,
             )
         }
     }
@@ -687,7 +715,9 @@ private fun OnHoldIndicator(
     val textColor = if (processing) OnHoldRed else OnHoldGreen
 
     Row(
-        modifier = modifier.defaultMinSize(minHeight = 20.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -706,12 +736,13 @@ private fun OnHoldIndicator(
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
+        SingleLineFitText(
             text = label,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f, fill = false),
             color = textColor,
-            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            maxFontSize = 15.sp,
+            minFontSize = 8.sp,
         )
     }
 }
