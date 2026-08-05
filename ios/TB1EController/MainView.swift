@@ -258,11 +258,12 @@ struct MainView: View {
                 onHoldDot
                 panelStatusLine(
                     onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
-                    size: 32,
+                    size: 20,
                     weight: .bold,
                     color: onHoldProcessing
                         ? Color(red: 0.776, green: 0.157, blue: 0.157)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196),
+                    allowShrink: false
                 )
             }
 
@@ -270,7 +271,7 @@ struct MainView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     panelStatusLine(
                         mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                        size: 24,
+                        size: 16,
                         weight: .medium,
                         color: mode == .auto
                             ? Color(red: 0.082, green: 0.396, blue: 0.753)

@@ -706,8 +706,8 @@ private fun DeviceStatusPanel(
                 modifier = Modifier.weight(1f, fill = false),
                 color = onHoldColor,
                 fontWeight = FontWeight.Bold,
-                maxFontSize = 32.sp,
-                minFontSize = 16.sp,
+                maxFontSize = 20.sp,
+                minFontSize = 20.sp,
                 textAlign = TextAlign.Start,
             )
         }
@@ -728,8 +728,8 @@ private fun DeviceStatusPanel(
                     },
                     color = modeColor,
                     fontWeight = FontWeight.Medium,
-                    maxFontSize = 24.sp,
-                    minFontSize = 24.sp,
+                    maxFontSize = 16.sp,
+                    minFontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
 

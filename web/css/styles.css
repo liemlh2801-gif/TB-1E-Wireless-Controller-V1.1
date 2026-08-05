@@ -131,7 +131,7 @@ header .version {
 }
 
 #on-hold-text {
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 700;
   white-space: nowrap;
   line-height: 1;
@@ -246,7 +246,7 @@ header .version {
 
 .mode-text {
   width: 100%;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
   text-align: left;
   line-height: 1;
