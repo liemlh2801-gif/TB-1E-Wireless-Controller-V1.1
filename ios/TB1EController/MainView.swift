@@ -127,6 +127,13 @@ struct MainView: View {
                     Spacer(minLength: 0)
                 }
 
+                if bluetooth.isConnected {
+                    machinePanelStatusOverlay(
+                        machineWidth: machineWidth,
+                        height: geo.size.height
+                    )
+                }
+
                 LeaderLinesOverlay(
                     machineWidth: machineWidth,
                     controlEnd: controlEnd,
@@ -150,11 +157,6 @@ struct MainView: View {
                 }
                 .padding(.top, geo.size.height * PanelLayout.connectTop)
                 .padding(.trailing, connectEnd)
-
-                deviceStatusPanel
-                    .frame(width: connectWidth, alignment: .trailing)
-                    .padding(.trailing, connectEnd)
-                    .offset(y: geo.size.height * PanelLayout.btnDownY + PanelLayout.panelButtonHeight + PanelLayout.deviceStatusGap)
 
                 panelButton(title: "LÊN", enabled: upEnabled) {
                     guard !stopHeld else { return }
@@ -254,10 +256,10 @@ struct MainView: View {
         HStack(spacing: 8) {
             onHoldDot
             Text(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: 15, weight: .bold))
                 .foregroundStyle(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
         }
-        .frame(minHeight: 18, alignment: .trailing)
+        .frame(minHeight: 20, alignment: .center)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
             AudioServicesPlaySystemSound(1052)
@@ -276,11 +278,11 @@ struct MainView: View {
         if onHoldProcessing {
             Circle()
                 .fill(Color(red: 0.776, green: 0.157, blue: 0.157))
-                .frame(width: 14, height: 14)
+                .frame(width: 16, height: 16)
         } else {
             Circle()
                 .fill(Color.white)
-                .frame(width: 14, height: 14)
+                .frame(width: 16, height: 16)
                 .overlay {
                     Circle()
                         .stroke(Color(red: 0.259, green: 0.627, blue: 0.278), lineWidth: 2.5)
@@ -289,22 +291,42 @@ struct MainView: View {
     }
 
     private var deviceStatusPanel: some View {
-        VStack(alignment: .trailing, spacing: 4) {
+        VStack(alignment: .center, spacing: 3) {
             onHoldRow
 
             if let mode = bluetooth.deviceMode {
                 Text(mode == .manual ? "Mode: Manual" : "Mode: Auto")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
+                    .multilineTextAlignment(.center)
 
                 Text(mode == .manual
                      ? "Manual — release stops direction"
                      : "Auto — release keeps direction until STOP or limit")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 9, weight: .medium))
                     .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
-                    .multilineTextAlignment(.trailing)
+                    .multilineTextAlignment(.center)
             }
         }
+    }
+
+    private func machinePanelStatusOverlay(machineWidth: CGFloat, height: CGFloat) -> some View {
+        let scale = min(
+            machineWidth / PanelLayout.asset1Width,
+            height / PanelLayout.asset1Height
+        )
+        let displayedWidth = PanelLayout.asset1Width * scale
+        let displayedHeight = PanelLayout.asset1Height * scale
+        let offsetX = (machineWidth - displayedWidth) / 2
+        let offsetY = (height - displayedHeight) / 2
+        let centerX = offsetX + PanelLayout.statusXInImage * displayedWidth
+        let topY = offsetY + PanelLayout.statusYInImage * displayedHeight
+        let overlayWidth = PanelLayout.statusWidthInImage * displayedWidth
+
+        return deviceStatusPanel
+            .frame(width: overlayWidth)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .offset(x: centerX - overlayWidth / 2, y: topY)
     }
 
     private var statusRow: some View {

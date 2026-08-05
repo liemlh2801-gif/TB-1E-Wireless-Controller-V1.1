@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="TB-1E" />
     <title>TB-1E Controller</title>
     <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="css/styles.css?v=1.6" />
+    <link rel="stylesheet" href="css/styles.css?v=1.7" />
   </head>
   <body>
     <div id="app-frame">
@@ -17,7 +17,7 @@
       <header>
         <div>
           <h1>Bluetooth Controller</h1>
-          <div class="version" id="app-version">v1.6</div>
+          <div class="version" id="app-version">v1.7</div>
         </div>
         <button id="menu-btn" class="icon-btn" type="button" aria-label="Menu">⋯</button>
       </header>
@@ -25,6 +25,14 @@
       <main id="panel">
         <div id="machine-wrap">
           <img src="assets/asset1.jpg" alt="Safety belt tester machine panel" />
+          <div id="device-status" aria-live="polite" hidden>
+            <div id="on-hold-row" class="on-hold-row">
+              <span id="on-hold-dot" class="on-hold-dot"></span>
+              <span id="on-hold-text">ON-HOLD</span>
+            </div>
+            <div id="mode-text" class="mode-text"></div>
+            <div id="mode-hint" class="mode-hint"></div>
+          </div>
         </div>
 
         <div id="leader-lines" aria-hidden="true"></div>
@@ -44,15 +52,6 @@
         <button class="control-btn" data-action="up" type="button" disabled>LÊN</button>
         <button class="control-btn" data-action="stop" type="button" disabled>DỪNG</button>
         <button class="control-btn" data-action="down" type="button" disabled>XUỐNG</button>
-
-        <div id="device-status" aria-live="polite" hidden>
-          <div id="on-hold-row" class="on-hold-row">
-            <span id="on-hold-dot" class="on-hold-dot"></span>
-            <span id="on-hold-text">ON-HOLD</span>
-          </div>
-          <div id="mode-text" class="mode-text"></div>
-          <div id="mode-hint" class="mode-hint"></div>
-        </div>
       </main>
 
       <div id="desktop-hint" class="desktop-hint" hidden>
@@ -72,6 +71,6 @@
       <div class="menu-meta" id="menu-meta"></div>
     </nav>
 
-    <script type="module" src="js/app.js?v=1.6"></script>
+    <script type="module" src="js/app.js?v=1.7"></script>
   </body>
 </html>
