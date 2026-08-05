@@ -253,12 +253,12 @@ struct MainView: View {
     }
 
     private var deviceStatusPanel: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack(alignment: .center, spacing: 8) {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(alignment: .center, spacing: 4) {
                 onHoldDot
                 panelStatusLine(
                     onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
-                    size: 30,
+                    size: 32,
                     weight: .bold,
                     color: onHoldProcessing
                         ? Color(red: 0.776, green: 0.157, blue: 0.157)
@@ -269,25 +269,25 @@ struct MainView: View {
             if let mode = bluetooth.deviceMode {
                 panelStatusLine(
                     mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                    size: 24,
+                    size: 26,
                     weight: .medium,
                     color: mode == .auto
                         ? Color(red: 0.082, green: 0.396, blue: 0.753)
                         : Color(red: 0.180, green: 0.490, blue: 0.196)
                 )
-                .padding(.leading, 26)
+                .padding(.leading, 22)
 
                 panelStatusLine(
                     mode == .manual
                         ? "MANUAL: Press - Run - Release - Stop"
                         : "AUTO: Press-Release for one direction",
-                    size: 20,
+                    size: 22,
                     weight: .medium,
                     color: mode == .auto
                         ? Color(red: 0.082, green: 0.396, blue: 0.753)
                         : Color(red: 0.180, green: 0.490, blue: 0.196)
                 )
-                .padding(.leading, 26)
+                .padding(.leading, 22)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -345,14 +345,14 @@ struct MainView: View {
         let displayedHeight = PanelLayout.asset1Height * scale
         let offsetX = (machineWidth - displayedWidth) / 2
         let offsetY = (height - displayedHeight) / 2
-        let centerX = offsetX + PanelLayout.statusXInImage * displayedWidth
-        let topY = offsetY + PanelLayout.statusYInImage * displayedHeight
+        let left = offsetX + PanelLayout.statusLeftInImage * displayedWidth
+        let topY = offsetY + PanelLayout.statusTopInImage * displayedHeight
         let overlayWidth = PanelLayout.statusWidthInImage * displayedWidth
 
         return deviceStatusPanel
-            .frame(width: overlayWidth)
+            .frame(width: overlayWidth, alignment: .leading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .offset(x: centerX - overlayWidth / 2, y: topY)
+            .offset(x: left, y: topY)
     }
 
     private var statusRow: some View {

@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.3";
+const APP_VERSION = "1.7.4";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -13,9 +13,9 @@ const PANEL_LAYOUT = {
   btnUpY: 0.255,
   btnStopY: 0.435,
   btnDownY: 0.615,
-  statusX: 0.44,
-  statusY: 0.782,
-  statusWidth: 0.40,
+  statusLeft: 0.31,
+  statusTop: 0.785,
+  statusWidth: 0.47,
   junctionFraction: 0.35,
   buttonHeight: 50,
 };
@@ -296,11 +296,11 @@ function positionDeviceStatus() {
   const displayedHeight = PANEL_LAYOUT.assetHeight * scale;
   const offsetX = (machineWidth - displayedWidth) / 2;
   const offsetY = (panelRect.height - displayedHeight) / 2;
-  const centerX = offsetX + PANEL_LAYOUT.statusX * displayedWidth;
-  const topY = offsetY + PANEL_LAYOUT.statusY * displayedHeight;
+  const left = offsetX + PANEL_LAYOUT.statusLeft * displayedWidth;
+  const topY = offsetY + PANEL_LAYOUT.statusTop * displayedHeight;
   const overlayWidth = PANEL_LAYOUT.statusWidth * displayedWidth;
 
-  els.deviceStatus.style.left = `${centerX - overlayWidth / 2}px`;
+  els.deviceStatus.style.left = `${left}px`;
   els.deviceStatus.style.top = `${topY}px`;
   els.deviceStatus.style.width = `${overlayWidth}px`;
   fitDeviceStatusText();
@@ -316,7 +316,8 @@ function fitDeviceStatusText() {
     return;
   }
 
-  const minSize = 6;
+  const minSize = 8;
+  const textInset = 22;
 
   const shrinkToFit = (el, maxWidth, maxSize) => {
     if (!el) {
@@ -330,11 +331,10 @@ function fitDeviceStatusText() {
     }
   };
 
-  const onHoldLineWidth = containerWidth;
-  const indentedWidth = containerWidth - 26;
-  shrinkToFit(els.onHoldText, onHoldLineWidth - 26, 30);
-  shrinkToFit(els.modeText, indentedWidth, 24);
-  shrinkToFit(els.modeHint, indentedWidth, 20);
+  const onHoldTextWidth = containerWidth - textInset;
+  shrinkToFit(els.onHoldText, onHoldTextWidth, 32);
+  shrinkToFit(els.modeText, onHoldTextWidth, 26);
+  shrinkToFit(els.modeHint, onHoldTextWidth, 22);
 }
 
 function updateMenuMeta() {
