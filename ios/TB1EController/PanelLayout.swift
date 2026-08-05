@@ -24,4 +24,5 @@ enum PanelLayout {
     static let statusWidthInImage: CGFloat = 0.47
     static let modeLineOffsetX: CGFloat = 25
     static let modeLineOffsetY: CGFloat = 20
+    static let modeHintOffsetY: CGFloat = 5
 }
