@@ -101,7 +101,7 @@ private object PanelLayout {
     const val CIRCLE_DOWN_Y_IN_IMAGE = 0.733f
     const val LINE_JUNCTION_FRACTION = 0.35f
     /** ON-HOLD + mode overlay — left/top/width on asset1.jpg panel face */
-    const val STATUS_LEFT_IN_IMAGE = 0.31f
+    const val STATUS_LEFT_IN_IMAGE = 0.28f
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.47f
 }

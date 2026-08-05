@@ -19,7 +19,7 @@ enum PanelLayout {
     static let circleStopYInImage: CGFloat = 0.695
     static let circleDownYInImage: CGFloat = 0.733
     static let lineJunctionFraction: CGFloat = 0.35
-    static let statusLeftInImage: CGFloat = 0.31
+    static let statusLeftInImage: CGFloat = 0.28
     static let statusTopInImage: CGFloat = 0.785
     static let statusWidthInImage: CGFloat = 0.47
 }
