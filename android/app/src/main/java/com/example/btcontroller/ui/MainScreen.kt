@@ -99,6 +99,10 @@ private object PanelLayout {
     const val CIRCLE_STOP_Y_IN_IMAGE = 0.695f
     const val CIRCLE_DOWN_Y_IN_IMAGE = 0.733f
     const val LINE_JUNCTION_FRACTION = 0.35f
+    /** ON-HOLD + mode overlay on machine panel face (asset1.jpg fractions) */
+    const val STATUS_X_IN_IMAGE = 0.44f
+    const val STATUS_Y_IN_IMAGE = 0.782f
+    const val STATUS_WIDTH_IN_IMAGE = 0.34f
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -301,6 +305,27 @@ private fun MainScreenContent(
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                 )
+
+                if (isConnected) {
+                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                        val density = LocalDensity.current
+                        val overlay = mapMachineOverlayBounds(
+                            machineWidthPx = with(density) { machineWidth.toPx() },
+                            containerHeightPx = with(density) { maxHeight.toPx() },
+                            xFraction = PanelLayout.STATUS_X_IN_IMAGE,
+                            yFraction = PanelLayout.STATUS_Y_IN_IMAGE,
+                            widthFraction = PanelLayout.STATUS_WIDTH_IN_IMAGE,
+                        )
+                        DeviceStatusPanel(
+                            deviceMode = deviceMode,
+                            isConnected = isConnected,
+                            onHoldActive = onHoldActive,
+                            modifier = Modifier
+                                .offset(x = overlay.left, y = overlay.top)
+                                .width(overlay.width),
+                        )
+                    }
+                }
             }
 
             LeaderLinesOverlay(
@@ -379,19 +404,41 @@ private fun MainScreenContent(
                 onRelease = if (isManual) onDownRelease else ({}),
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_DOWN_Y),
             )
-
-            DeviceStatusPanel(
-                deviceMode = deviceMode,
-                isConnected = isConnected,
-                onHoldActive = onHoldActive,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = connectEnd)
-                    .offset(y = maxHeight * PanelLayout.BTN_DOWN_Y + PanelLayout.PANEL_BUTTON_HEIGHT.dp + PanelLayout.DEVICE_STATUS_GAP.dp)
-                    .width(connectWidth),
-            )
         }
     }
+}
+
+private data class MachineOverlayBounds(
+    val left: Dp,
+    val top: Dp,
+    val width: Dp,
+)
+
+@Composable
+private fun mapMachineOverlayBounds(
+    machineWidthPx: Float,
+    containerHeightPx: Float,
+    xFraction: Float,
+    yFraction: Float,
+    widthFraction: Float,
+): MachineOverlayBounds {
+    val density = LocalDensity.current
+    val scale = minOf(
+        machineWidthPx / PanelLayout.ASSET1_WIDTH,
+        containerHeightPx / PanelLayout.ASSET1_HEIGHT,
+    )
+    val displayedWidth = PanelLayout.ASSET1_WIDTH * scale
+    val displayedHeight = PanelLayout.ASSET1_HEIGHT * scale
+    val offsetX = (machineWidthPx - displayedWidth) / 2f
+    val offsetY = (containerHeightPx - displayedHeight) / 2f
+    val centerX = offsetX + xFraction * displayedWidth
+    val topY = offsetY + yFraction * displayedHeight
+    val overlayWidthPx = widthFraction * displayedWidth
+    return MachineOverlayBounds(
+        left = with(density) { (centerX - overlayWidthPx / 2f).toDp() },
+        top = with(density) { topY.toDp() },
+        width = with(density) { overlayWidthPx.toDp() },
+    )
 }
 
 @Composable
@@ -587,8 +634,8 @@ private fun DeviceStatusPanel(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(3.dp),
     ) {
         OnHoldIndicator(
             isConnected = isConnected,
@@ -602,10 +649,10 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto)
                 },
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
                 color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
-                textAlign = TextAlign.End,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -615,9 +662,10 @@ private fun DeviceStatusPanel(
                     DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
                 },
                 color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
-                fontSize = 12.sp,
+                fontSize = 9.sp,
                 fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.End,
+                textAlign = TextAlign.Center,
+                lineHeight = 12.sp,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -639,20 +687,20 @@ private fun OnHoldIndicator(
     val textColor = if (processing) OnHoldRed else OnHoldGreen
 
     Row(
-        modifier = modifier.defaultMinSize(minHeight = 18.dp),
+        modifier = modifier.defaultMinSize(minHeight = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
+        horizontalArrangement = Arrangement.Center,
     ) {
         if (processing) {
             Box(
                 modifier = Modifier
-                    .size(14.dp)
+                    .size(16.dp)
                     .background(OnHoldRed, CircleShape),
             )
         } else {
             Box(
                 modifier = Modifier
-                    .size(14.dp)
+                    .size(16.dp)
                     .border(2.5.dp, OnHoldGreenRing, CircleShape)
                     .background(Color.White, CircleShape),
             )
@@ -660,10 +708,10 @@ private fun OnHoldIndicator(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = label,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
             color = textColor,
-            textAlign = TextAlign.End,
+            textAlign = TextAlign.Center,
         )
     }
 }

@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.6";
+const APP_VERSION = "1.7";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -13,6 +13,9 @@ const PANEL_LAYOUT = {
   btnUpY: 0.255,
   btnStopY: 0.435,
   btnDownY: 0.615,
+  statusX: 0.44,
+  statusY: 0.782,
+  statusWidth: 0.34,
   junctionFraction: 0.35,
   buttonHeight: 50,
 };
@@ -273,6 +276,33 @@ function updateUi() {
   }
 
   updateOnHoldUi();
+  positionDeviceStatus();
+}
+
+function positionDeviceStatus() {
+  const panel = els.panel;
+  const machineWrap = document.getElementById("machine-wrap");
+  if (!panel || !machineWrap || !els.deviceStatus) {
+    return;
+  }
+
+  const panelRect = panel.getBoundingClientRect();
+  const machineWidth = panelRect.width * PANEL_LAYOUT.machineWidthRatio;
+  const scale = Math.min(
+    machineWidth / PANEL_LAYOUT.assetWidth,
+    panelRect.height / PANEL_LAYOUT.assetHeight,
+  );
+  const displayedWidth = PANEL_LAYOUT.assetWidth * scale;
+  const displayedHeight = PANEL_LAYOUT.assetHeight * scale;
+  const offsetX = (machineWidth - displayedWidth) / 2;
+  const offsetY = (panelRect.height - displayedHeight) / 2;
+  const centerX = offsetX + PANEL_LAYOUT.statusX * displayedWidth;
+  const topY = offsetY + PANEL_LAYOUT.statusY * displayedHeight;
+  const overlayWidth = PANEL_LAYOUT.statusWidth * displayedWidth;
+
+  els.deviceStatus.style.left = `${centerX - overlayWidth / 2}px`;
+  els.deviceStatus.style.top = `${topY}px`;
+  els.deviceStatus.style.width = `${overlayWidth}px`;
 }
 
 function updateMenuMeta() {
@@ -550,7 +580,11 @@ function init() {
   updateUi();
   showUnsupportedBanner();
   drawLeaderLines();
-  window.addEventListener("resize", drawLeaderLines);
+  positionDeviceStatus();
+  window.addEventListener("resize", () => {
+    drawLeaderLines();
+    positionDeviceStatus();
+  });
 
   els.connectBtn.addEventListener("click", () => toggleConnect(false));
   els.connectAllBtn?.addEventListener("click", () => toggleConnect(true));

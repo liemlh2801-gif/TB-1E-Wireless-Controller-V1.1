@@ -92,6 +92,42 @@ header .version {
   object-fit: contain;
 }
 
+#device-status {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+  text-align: center;
+}
+
+#device-status[hidden] {
+  display: none !important;
+}
+
+.on-hold-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 20px;
+}
+
+/* Ring-style dot — visually distinct from solid Bluetooth status dot */
+.on-hold-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid #43a047;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
 #leader-lines {
   position: absolute;
   inset: 0;
@@ -169,43 +205,6 @@ header .version {
 .status-dot.connecting { background: var(--warn); }
 .status-dot.connected { background: var(--ok); }
 
-#device-status {
-  position: absolute;
-  top: calc(61.5% + 58px);
-  right: 3%;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-}
-
-#device-status[hidden] {
-  display: none !important;
-}
-
-.on-hold-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  min-height: 18px;
-}
-
-/* Ring-style dot — visually distinct from solid Bluetooth status dot */
-.on-hold-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2.5px solid #43a047;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
-}
-
 .on-hold-row.processing .on-hold-dot {
   background: var(--error);
   border-color: #b71c1c;
@@ -221,10 +220,11 @@ header .version {
 }
 
 .mode-text {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
-  text-align: right;
-  min-height: 1.2em;
+  text-align: center;
+  line-height: 1.25;
+  min-height: 1.1em;
 }
 
 .mode-text.manual {
@@ -240,10 +240,10 @@ header .version {
 }
 
 .mode-hint {
-  font-size: 12px;
+  font-size: 9px;
   font-weight: 500;
-  text-align: right;
-  line-height: 1.3;
+  text-align: center;
+  line-height: 1.25;
 }
 
 .mode-hint.auto {
