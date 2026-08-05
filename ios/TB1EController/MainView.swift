@@ -255,11 +255,16 @@ struct MainView: View {
     private var onHoldRow: some View {
         HStack(spacing: 8) {
             onHoldDot
-            Text(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
-                .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
+            panelStatusLine(
+                onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
+                size: 15,
+                weight: .bold,
+                color: onHoldProcessing
+                    ? Color(red: 0.776, green: 0.157, blue: 0.157)
+                    : Color(red: 0.180, green: 0.490, blue: 0.196)
+            )
         }
-        .frame(minHeight: 20, alignment: .center)
+        .frame(maxWidth: .infinity, minHeight: 20, alignment: .center)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
             AudioServicesPlaySystemSound(1052)
@@ -295,19 +300,43 @@ struct MainView: View {
             onHoldRow
 
             if let mode = bluetooth.deviceMode {
-                Text(mode == .manual ? "Mode: Manual" : "Mode: Auto")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
-                    .multilineTextAlignment(.center)
+                panelStatusLine(
+                    mode == .manual ? "Mode: Manual" : "Mode: Auto",
+                    size: 10,
+                    weight: .medium,
+                    color: mode == .auto
+                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                )
 
-                Text(mode == .manual
-                     ? "Manual — release stops direction"
-                     : "Auto — release keeps direction until STOP or limit")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
-                    .multilineTextAlignment(.center)
+                panelStatusLine(
+                    mode == .manual
+                        ? "Manual — release stops direction"
+                        : "Auto — release keeps direction until STOP or limit",
+                    size: 9,
+                    weight: .medium,
+                    color: mode == .auto
+                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                )
             }
         }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func panelStatusLine(
+        _ text: String,
+        size: CGFloat,
+        weight: Font.Weight,
+        color: Color
+    ) -> some View {
+        Text(text)
+            .font(.system(size: size, weight: weight))
+            .foregroundStyle(color)
+            .lineLimit(1)
+            .minimumScaleFactor(0.45)
+            .allowsTightening(true)
+            .frame(maxWidth: .infinity)
     }
 
     private func machinePanelStatusOverlay(machineWidth: CGFloat, height: CGFloat) -> some View {
