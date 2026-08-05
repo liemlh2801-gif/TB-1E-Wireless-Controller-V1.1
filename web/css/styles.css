@@ -145,6 +145,12 @@ header .version {
   cursor: not-allowed;
 }
 
+/* Legacy hint removed — hide if cached HTML still contains it */
+#ble-hint,
+.ble-hint {
+  display: none !important;
+}
+
 #status-row {
   display: flex;
   align-items: center;
