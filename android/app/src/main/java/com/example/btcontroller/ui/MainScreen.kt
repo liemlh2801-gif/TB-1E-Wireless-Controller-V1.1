@@ -27,7 +27,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -103,7 +107,8 @@ private object PanelLayout {
     /** ON-HOLD + mode overlay — left/top/width on asset1.jpg panel face */
     const val STATUS_LEFT_IN_IMAGE = 0.28f
     const val STATUS_TOP_IN_IMAGE = 0.785f
-    const val STATUS_WIDTH_IN_IMAGE = 0.47f
+    const val STATUS_WIDTH_IN_IMAGE = 0.52f
+    const val STATUS_PANEL_EXTRA_WIDTH_DP = 48
     const val ON_HOLD_OFFSET_X_DP = 15
     const val ON_HOLD_OFFSET_Y_DP = -10
     const val ON_HOLD_TEXT_SP = 18
@@ -314,7 +319,11 @@ private fun MainScreenContent(
                 )
 
                 if (isConnected) {
-                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    BoxWithConstraints(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer { clip = false },
+                    ) {
                         val density = LocalDensity.current
                         val overlay = mapMachineOverlayBounds(
                             machineWidthPx = with(density) { machineWidth.toPx() },
@@ -329,7 +338,9 @@ private fun MainScreenContent(
                             onHoldActive = onHoldActive,
                             modifier = Modifier
                                 .offset(x = overlay.left, y = overlay.top)
-                                .width(overlay.width),
+                                .widthIn(max = overlay.width + PanelLayout.STATUS_PANEL_EXTRA_WIDTH_DP.dp)
+                                .wrapContentWidth(Alignment.Start)
+                                .graphicsLayer { clip = false },
                         )
                     }
                 }
@@ -643,6 +654,7 @@ private fun SingleLineFitText(
     textAlign: TextAlign = TextAlign.Center,
 ) {
     var fontSize by remember(text, maxFontSize) { mutableStateOf(maxFontSize) }
+    val fixedSize = minFontSize == maxFontSize
 
     Text(
         text = text,
@@ -651,11 +663,17 @@ private fun SingleLineFitText(
         fontSize = fontSize,
         maxLines = 1,
         softWrap = false,
-        overflow = TextOverflow.Clip,
+        overflow = if (fixedSize) TextOverflow.Visible else TextOverflow.Clip,
         textAlign = textAlign,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.then(
+            if (fixedSize) {
+                Modifier.wrapContentWidth(align = Alignment.Start)
+            } else {
+                Modifier.fillMaxWidth()
+            },
+        ),
         onTextLayout = { result ->
-            if (result.hasVisualOverflow && fontSize > minFontSize) {
+            if (!fixedSize && result.hasVisualOverflow && fontSize > minFontSize) {
                 fontSize = (fontSize.value * 0.9f).coerceAtLeast(minFontSize.value).sp
             }
         },
@@ -673,11 +691,13 @@ private fun DeviceStatusPanel(
     val onHoldColor = if (processing) OnHoldRed else OnHoldGreen
 
     Column(
-        modifier = modifier,
+        modifier = modifier.graphicsLayer { clip = false },
         horizontalAlignment = Alignment.Start,
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .wrapContentSize(Alignment.TopStart)
+                .graphicsLayer { clip = false },
         ) {
             Row(
                 modifier = Modifier
@@ -712,6 +732,8 @@ private fun DeviceStatusPanel(
                     fontWeight = FontWeight.Bold,
                     fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Visible,
                 )
             }
 
@@ -722,6 +744,8 @@ private fun DeviceStatusPanel(
                     fontWeight = FontWeight.Bold,
                     fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Visible,
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .offset(
