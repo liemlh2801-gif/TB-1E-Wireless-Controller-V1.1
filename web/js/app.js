@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.5";
+const APP_VERSION = "1.6";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -546,6 +546,7 @@ function showUnsupportedBanner() {
 }
 
 function init() {
+  document.getElementById("ble-hint")?.remove();
   updateUi();
   showUnsupportedBanner();
   drawLeaderLines();
