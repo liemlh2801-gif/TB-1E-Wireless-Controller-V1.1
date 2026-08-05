@@ -161,6 +161,7 @@ const els = {
   menuMeta: document.getElementById("menu-meta"),
   onHoldRow: document.getElementById("on-hold-row"),
   onHoldText: document.getElementById("on-hold-text"),
+  modeHint: document.getElementById("mode-hint"),
   leaderLines: document.getElementById("leader-lines"),
   panel: document.getElementById("panel"),
   controlButtons: Array.from(document.querySelectorAll(".control-btn")),
@@ -199,7 +200,7 @@ function modeLabel(mode) {
     case "manual":
       return "Mode: Manual";
     case "auto":
-      return "Mode: Auto — latch UP/DOWN";
+      return "Mode: Auto";
     default:
       return "";
   }
@@ -217,10 +218,11 @@ function updateUi() {
   els.statusText.textContent = statusLabel(state.connection);
   els.statusDot.className = `status-dot ${state.connection}`;
   if (els.modeText) {
-    const hint = statusHint();
-    const mode = modeLabel(state.deviceMode);
-    els.modeText.textContent = hint || mode;
+    els.modeText.textContent = modeLabel(state.deviceMode);
     els.modeText.className = `mode-text ${state.deviceMode || ""}`;
+  }
+  if (els.modeHint) {
+    els.modeHint.textContent = statusHint();
   }
   els.connectBtn.textContent = connectLabel(state.connection);
   els.connectBtn.disabled = state.connection === "connecting";

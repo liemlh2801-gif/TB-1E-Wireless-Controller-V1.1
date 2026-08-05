@@ -140,9 +140,6 @@ struct MainView: View {
 
                     statusRow
 
-                    onHoldRow
-                        .frame(width: connectWidth, alignment: .trailing)
-
                     if let error = bluetooth.lastError {
                         Text(error)
                             .font(.caption.weight(.medium))
@@ -153,6 +150,11 @@ struct MainView: View {
                 }
                 .padding(.top, geo.size.height * PanelLayout.connectTop)
                 .padding(.trailing, connectEnd)
+
+                deviceStatusPanel
+                    .frame(width: connectWidth, alignment: .trailing)
+                    .padding(.trailing, connectEnd)
+                    .offset(y: geo.size.height * PanelLayout.btnDownY + PanelLayout.panelButtonHeight + PanelLayout.deviceStatusGap)
 
                 panelButton(title: "LÊN", enabled: upEnabled) {
                     guard !stopHeld else { return }
@@ -250,34 +252,59 @@ struct MainView: View {
 
     private var onHoldRow: some View {
         HStack(spacing: 8) {
-            if onHoldProcessing {
-                Circle()
-                    .fill(Color(red: 0.776, green: 0.157, blue: 0.157))
-                    .frame(width: 14, height: 14)
-            } else {
-                Circle()
-                    .strokeBorder(Color(red: 0.259, green: 0.627, blue: 0.278), lineWidth: 2.5)
-                    .background(Circle().fill(Color.white))
-                    .frame(width: 14, height: 14)
-            }
+            onHoldDot
             Text(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
         }
+        .frame(minHeight: 18, alignment: .trailing)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
+            AudioServicesPlaySystemSound(1052)
             while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: BluetoothManager.onHoldBeepNanos)
+                guard !Task.isCancelled else { return }
                 AudioServicesPlaySystemSound(1052)
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
             }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
+    }
+
+    @ViewBuilder
+    private var onHoldDot: some View {
+        if onHoldProcessing {
+            Circle()
+                .fill(Color(red: 0.776, green: 0.157, blue: 0.157))
+                .frame(width: 14, height: 14)
+        } else {
+            Circle()
+                .fill(Color.white)
+                .frame(width: 14, height: 14)
+                .overlay {
+                    Circle()
+                        .stroke(Color(red: 0.259, green: 0.627, blue: 0.278), lineWidth: 2.5)
+                }
         }
     }
 
-    private var statusHint: String? {
-        if bluetooth.deviceMode == .auto {
-            return "Auto — release keeps direction until STOP or limit"
+    private var deviceStatusPanel: some View {
+        VStack(alignment: .trailing, spacing: 4) {
+            if let mode = bluetooth.deviceMode {
+                Text(mode == .manual ? "Mode: Manual" : "Mode: Auto")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
+            }
+
+            onHoldRow
+
+            if bluetooth.deviceMode == .auto {
+                Text("Auto — release keeps direction until STOP or limit")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color(red: 0.082, green: 0.396, blue: 0.753))
+                    .multilineTextAlignment(.trailing)
+            }
         }
-        return nil
     }
 
     private var statusRow: some View {
@@ -285,20 +312,9 @@ struct MainView: View {
             Circle()
                 .fill(statusColor)
                 .frame(width: 12, height: 12)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(statusLabel)
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(.black)
-                if let hint = statusHint {
-                    Text(hint)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color(red: 0.082, green: 0.396, blue: 0.753))
-                } else if let mode = bluetooth.deviceMode {
-                    Text(mode == .manual ? "Mode: Manual" : "Mode: Auto — latch UP/DOWN")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
-                }
-            }
+            Text(statusLabel)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.black)
         }
     }
 

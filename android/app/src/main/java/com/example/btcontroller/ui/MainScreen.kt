@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,6 +70,10 @@ import com.example.btcontroller.bluetooth.ConnectionState
 import com.example.btcontroller.bluetooth.DeviceMode
 
 private val GoldBar = Color(0xFFD4AF37)
+private val OnHoldGreen = Color(0xFF2E7D32)
+private val OnHoldGreenRing = Color(0xFF43A047)
+private val OnHoldRed = Color(0xFFC62828)
+private const val ON_HOLD_BEEP_MS = 2000L
 private val PanelButtonFill = Color(0xFFE0E0E0)
 private val ConnectButtonFill = Color(0xFFB3E5FC)
 private val BorderBlack = Color.Black
@@ -84,6 +89,7 @@ private object PanelLayout {
     const val BTN_UP_Y = 0.255f
     const val BTN_STOP_Y = 0.435f
     const val BTN_DOWN_Y = 0.615f
+    const val DEVICE_STATUS_GAP = 8f
     const val PANEL_BUTTON_HEIGHT = 50f
     const val ASSET1_WIDTH = 590f
     const val ASSET1_HEIGHT = 2425f
@@ -204,11 +210,15 @@ private fun MainScreenContent(
         if (!isConnected || !onHoldActive) {
             return@LaunchedEffect
         }
-        val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 70)
+        val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80)
         try {
-            while (isConnected && onHoldActive) {
+            tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
+            while (true) {
+                delay(ON_HOLD_BEEP_MS)
+                if (!isConnected || !onHoldActive) {
+                    break
+                }
                 tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
-                delay(2000)
             }
         } finally {
             tone.release()
@@ -248,6 +258,10 @@ private fun MainScreenContent(
                         selectedDevice = selectedDevice,
                         lastSent = lastSent,
                         lastReceived = lastReceived,
+                        deviceMode = deviceMode,
+                        topLimitActive = topLimitActive,
+                        botLimitActive = botLimitActive,
+                        onHoldActive = onHoldActive,
                         lastError = lastError,
                         deviceLabel = deviceLabel,
                         onDeviceSelected = onDeviceSelected,
@@ -318,31 +332,7 @@ private fun MainScreenContent(
 
                 StatusRow(
                     connectionState = connectionState,
-                    deviceMode = deviceMode,
-                    topLimitActive = topLimitActive,
-                    botLimitActive = botLimitActive,
-                    onHoldActive = onHoldActive,
                 )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OnHoldIndicator(
-                    isConnected = isConnected,
-                    onHoldActive = onHoldActive,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                if (isAuto) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(R.string.mode_auto_latch),
-                        color = Color(0xFF1565C0),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
 
                 lastError?.let { error ->
                     Spacer(modifier = Modifier.height(4.dp))
@@ -388,6 +378,18 @@ private fun MainScreenContent(
                 onPress = { if (!stopHeld) onDownPress() },
                 onRelease = if (isManual) onDownRelease else ({}),
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_DOWN_Y),
+            )
+
+            DeviceStatusPanel(
+                deviceMode = deviceMode,
+                isConnected = isConnected,
+                onHoldActive = onHoldActive,
+                isAuto = isAuto,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = connectEnd)
+                    .offset(y = maxHeight * PanelLayout.BTN_DOWN_Y + PanelLayout.PANEL_BUTTON_HEIGHT.dp + PanelLayout.DEVICE_STATUS_GAP.dp)
+                    .width(connectWidth),
             )
         }
     }
@@ -578,6 +580,52 @@ private fun PanelButton(
 }
 
 @Composable
+private fun DeviceStatusPanel(
+    deviceMode: DeviceMode?,
+    isConnected: Boolean,
+    onHoldActive: Boolean,
+    isAuto: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        deviceMode?.let { mode ->
+            Text(
+                text = when (mode) {
+                    DeviceMode.Manual -> stringResource(R.string.mode_manual)
+                    DeviceMode.Auto -> stringResource(R.string.mode_auto)
+                },
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
+        OnHoldIndicator(
+            isConnected = isConnected,
+            onHoldActive = onHoldActive,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        if (isAuto) {
+            Text(
+                text = stringResource(R.string.mode_auto_latch),
+                color = Color(0xFF1565C0),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
 private fun OnHoldIndicator(
     isConnected: Boolean,
     onHoldActive: Boolean,
@@ -589,10 +637,10 @@ private fun OnHoldIndicator(
     } else {
         stringResource(R.string.on_hold_label)
     }
-    val textColor = if (processing) Color(0xFFC62828) else Color(0xFF2E7D32)
+    val textColor = if (processing) OnHoldRed else OnHoldGreen
 
     Row(
-        modifier = modifier,
+        modifier = modifier.defaultMinSize(minHeight = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
@@ -600,13 +648,13 @@ private fun OnHoldIndicator(
             Box(
                 modifier = Modifier
                     .size(14.dp)
-                    .background(Color(0xFFC62828), CircleShape),
+                    .background(OnHoldRed, CircleShape),
             )
         } else {
             Box(
                 modifier = Modifier
                     .size(14.dp)
-                    .border(2.5.dp, Color(0xFF43A047), CircleShape)
+                    .border(2.5.dp, OnHoldGreenRing, CircleShape)
                     .background(Color.White, CircleShape),
             )
         }
@@ -624,10 +672,6 @@ private fun OnHoldIndicator(
 @Composable
 private fun StatusRow(
     connectionState: ConnectionState,
-    deviceMode: DeviceMode?,
-    topLimitActive: Boolean,
-    botLimitActive: Boolean,
-    onHoldActive: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -637,25 +681,12 @@ private fun StatusRow(
     ) {
         StatusDot(connectionState)
         Spacer(modifier = Modifier.width(8.dp))
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = statusLabel(connectionState),
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = BorderBlack,
-            )
-            deviceMode?.let { mode ->
-                Text(
-                    text = when (mode) {
-                        DeviceMode.Manual -> stringResource(R.string.mode_manual)
-                        DeviceMode.Auto -> stringResource(R.string.mode_auto)
-                    },
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
-                )
-            }
-        }
+        Text(
+            text = statusLabel(connectionState),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = BorderBlack,
+        )
     }
 }
 
