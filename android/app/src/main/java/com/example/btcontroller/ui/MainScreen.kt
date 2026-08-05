@@ -716,7 +716,6 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto)
                 },
-                modifier = Modifier.padding(start = 22.dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
                 maxFontSize = 26.sp,
@@ -729,7 +728,6 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
                 },
-                modifier = Modifier.padding(start = 22.dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
                 maxFontSize = 22.sp,
