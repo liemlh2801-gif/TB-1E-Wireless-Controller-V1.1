@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.12";
+const APP_VERSION = "1.7.13";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -82,7 +82,10 @@ function updateOnHoldUi() {
     els.deviceStatus.classList.toggle("processing", processing);
   }
   if (els.onHoldText) {
-    els.onHoldText.textContent = processing ? "ON-HOLD processing" : "ON-HOLD";
+    els.onHoldText.textContent = "ON-HOLD";
+  }
+  if (els.onHoldProcessing) {
+    els.onHoldProcessing.hidden = !processing;
   }
   updateOnHoldBeep();
   if (connected) {
@@ -168,6 +171,7 @@ const els = {
   menuBackdrop: document.getElementById("menu-backdrop"),
   menuMeta: document.getElementById("menu-meta"),
   onHoldText: document.getElementById("on-hold-text"),
+  onHoldProcessing: document.getElementById("on-hold-processing"),
   modeHint: document.getElementById("mode-hint"),
   deviceStatus: document.getElementById("device-status"),
   leaderLines: document.getElementById("leader-lines"),
@@ -334,6 +338,9 @@ function fitDeviceStatusText() {
 
   if (els.onHoldText) {
     els.onHoldText.style.fontSize = "20px";
+  }
+  if (els.onHoldProcessing && !els.onHoldProcessing.hidden) {
+    els.onHoldProcessing.style.fontSize = "20px";
   }
   if (els.modeText) {
     els.modeText.style.fontSize = "16px";

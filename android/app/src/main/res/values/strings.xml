@@ -23,6 +23,6 @@
     <string name="mode_manual_latch">MANUAL: Press - Run - Release - Stop</string>
     <string name="mode_auto_latch">AUTO: Press-Release for one direction</string>
     <string name="on_hold_label">ON-HOLD</string>
-    <string name="on_hold_processing">ON-HOLD processing</string>
+    <string name="on_hold_processing">processing...</string>
     <string name="hold_active">ON-HOLD active</string>
 </resources>

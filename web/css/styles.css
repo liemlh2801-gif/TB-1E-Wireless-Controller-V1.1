@@ -144,6 +144,19 @@ header .version {
   color: var(--error);
 }
 
+.on-hold-processing {
+  padding-left: 22px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--error);
+}
+
+.on-hold-processing[hidden] {
+  display: none !important;
+}
+
 .on-hold-dot {
   width: 18px;
   height: 18px;

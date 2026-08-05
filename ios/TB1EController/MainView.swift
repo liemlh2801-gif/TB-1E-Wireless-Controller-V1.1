@@ -254,17 +254,29 @@ struct MainView: View {
 
     private var deviceStatusPanel: some View {
         VStack(alignment: .leading, spacing: 3) {
-            HStack(alignment: .center, spacing: 4) {
+            HStack(alignment: .top, spacing: 4) {
                 onHoldDot
-                panelStatusLine(
-                    onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
-                    size: 20,
-                    weight: .bold,
-                    color: onHoldProcessing
-                        ? Color(red: 0.776, green: 0.157, blue: 0.157)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196),
-                    allowShrink: false
-                )
+                VStack(alignment: .leading, spacing: 2) {
+                    panelStatusLine(
+                        "ON-HOLD",
+                        size: 20,
+                        weight: .bold,
+                        color: onHoldProcessing
+                            ? Color(red: 0.776, green: 0.157, blue: 0.157)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196),
+                        allowShrink: false
+                    )
+
+                    if onHoldProcessing {
+                        panelStatusLine(
+                            "processing...",
+                            size: 20,
+                            weight: .bold,
+                            color: Color(red: 0.776, green: 0.157, blue: 0.157),
+                            allowShrink: false
+                        )
+                    }
+                }
             }
 
             if let mode = bluetooth.deviceMode {
@@ -308,7 +320,7 @@ struct MainView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
+        .accessibilityLabel(onHoldProcessing ? "ON-HOLD processing..." : "ON-HOLD")
     }
 
     @ViewBuilder

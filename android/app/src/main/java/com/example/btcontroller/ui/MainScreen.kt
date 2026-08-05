@@ -667,11 +667,6 @@ private fun DeviceStatusPanel(
     modifier: Modifier = Modifier,
 ) {
     val processing = isConnected && onHoldActive
-    val onHoldLabel = if (processing) {
-        stringResource(R.string.on_hold_processing)
-    } else {
-        stringResource(R.string.on_hold_label)
-    }
     val onHoldColor = if (processing) OnHoldRed else OnHoldGreen
 
     Column(
@@ -681,7 +676,7 @@ private fun DeviceStatusPanel(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Start,
         ) {
             if (processing) {
@@ -701,15 +696,27 @@ private fun DeviceStatusPanel(
 
             Spacer(modifier = Modifier.width(4.dp))
 
-            SingleLineFitText(
-                text = onHoldLabel,
-                modifier = Modifier.weight(1f, fill = false),
-                color = onHoldColor,
-                fontWeight = FontWeight.Bold,
-                maxFontSize = 20.sp,
-                minFontSize = 20.sp,
-                textAlign = TextAlign.Start,
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.on_hold_label),
+                    color = onHoldColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    maxLines = 1,
+                )
+
+                if (processing) {
+                    Text(
+                        text = stringResource(R.string.on_hold_processing),
+                        color = OnHoldRed,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        maxLines = 1,
+                    )
+                }
+            }
         }
 
         deviceMode?.let { mode ->
