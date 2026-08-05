@@ -109,9 +109,11 @@ private object PanelLayout {
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.52f
     const val STATUS_PANEL_EXTRA_WIDTH_DP = 48
-    const val ON_HOLD_OFFSET_X_DP = 15
+    const val ON_HOLD_OFFSET_X_DP = 20
     const val ON_HOLD_OFFSET_Y_DP = -10
-    const val ON_HOLD_TEXT_SP = 18
+    const val ON_HOLD_TEXT_SP = 16
+    const val MODE_TEXT_SP = 12
+    const val MODE_HINT_TEXT_SP = 10
     const val MODE_LINE_OFFSET_X_DP = 25
     const val MODE_BLOCK_TOP_DP = 41
     const val MODE_HINT_OFFSET_Y_DP = 5
@@ -773,8 +775,8 @@ private fun DeviceStatusPanel(
                         },
                         color = modeColor,
                         fontWeight = FontWeight.Medium,
-                        maxFontSize = 16.sp,
-                        minFontSize = 16.sp,
+                        maxFontSize = PanelLayout.MODE_TEXT_SP.sp,
+                        minFontSize = PanelLayout.MODE_TEXT_SP.sp,
                         textAlign = TextAlign.Start,
                     )
 
@@ -786,8 +788,8 @@ private fun DeviceStatusPanel(
                         modifier = Modifier.padding(top = PanelLayout.MODE_HINT_OFFSET_Y_DP.dp),
                         color = modeColor,
                         fontWeight = FontWeight.Medium,
-                        maxFontSize = 22.sp,
-                        minFontSize = 12.sp,
+                        maxFontSize = PanelLayout.MODE_HINT_TEXT_SP.sp,
+                        minFontSize = PanelLayout.MODE_HINT_TEXT_SP.sp,
                         textAlign = TextAlign.Start,
                     )
                 }
