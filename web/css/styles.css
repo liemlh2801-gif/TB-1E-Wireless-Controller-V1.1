@@ -104,26 +104,33 @@ header .version {
   display: none !important;
 }
 
-#device-status-body {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 100%;
-}
-
 #device-status-lines {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
   min-width: 0;
+  max-width: 100%;
+}
+
+.on-hold-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.status-indent {
+  padding-left: 26px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #on-hold-text {
-  font-size: 17px;
+  font-size: 30px;
   font-weight: 700;
   white-space: nowrap;
-  line-height: 1.1;
+  line-height: 1;
   color: #2e7d32;
 }
 
@@ -227,10 +234,10 @@ header .version {
 
 .mode-text {
   width: 100%;
-  font-size: 12px;
+  font-size: 24px;
   font-weight: 600;
   text-align: left;
-  line-height: 1.1;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -249,10 +256,10 @@ header .version {
 
 .mode-hint {
   width: 100%;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: 500;
   text-align: left;
-  line-height: 1.1;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
 }

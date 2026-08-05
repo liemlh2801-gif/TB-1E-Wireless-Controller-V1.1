@@ -253,40 +253,41 @@ struct MainView: View {
     }
 
     private var deviceStatusPanel: some View {
-        HStack(alignment: .center, spacing: 8) {
-            onHoldDot
-
-            VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(alignment: .center, spacing: 8) {
+                onHoldDot
                 panelStatusLine(
                     onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD",
-                    size: 17,
+                    size: 30,
                     weight: .bold,
                     color: onHoldProcessing
                         ? Color(red: 0.776, green: 0.157, blue: 0.157)
                         : Color(red: 0.180, green: 0.490, blue: 0.196)
                 )
+            }
 
-                if let mode = bluetooth.deviceMode {
-                    panelStatusLine(
-                        mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                        size: 12,
-                        weight: .medium,
-                        color: mode == .auto
-                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                            : Color(red: 0.180, green: 0.490, blue: 0.196)
-                    )
+            if let mode = bluetooth.deviceMode {
+                panelStatusLine(
+                    mode == .manual ? "Mode: Manual" : "Mode: Auto",
+                    size: 24,
+                    weight: .medium,
+                    color: mode == .auto
+                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                )
+                .padding(.leading, 26)
 
-                    panelStatusLine(
-                        mode == .manual
-                            ? "Manual — release stops direction"
-                            : "Auto — release keeps direction until STOP or limit",
-                        size: 11,
-                        weight: .medium,
-                        color: mode == .auto
-                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                            : Color(red: 0.180, green: 0.490, blue: 0.196)
-                    )
-                }
+                panelStatusLine(
+                    mode == .manual
+                        ? "MANUAL: Press - Run - Release - Stop"
+                        : "AUTO: Press-Release for one direction",
+                    size: 20,
+                    weight: .medium,
+                    color: mode == .auto
+                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                )
+                .padding(.leading, 26)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

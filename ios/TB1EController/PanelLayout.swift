@@ -21,5 +21,5 @@ enum PanelLayout {
     static let lineJunctionFraction: CGFloat = 0.35
     static let statusXInImage: CGFloat = 0.44
     static let statusYInImage: CGFloat = 0.782
-    static let statusWidthInImage: CGFloat = 0.34
+    static let statusWidthInImage: CGFloat = 0.40
 }
