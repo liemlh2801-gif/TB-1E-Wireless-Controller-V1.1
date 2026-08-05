@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.2";
+const APP_VERSION = "1.7.3";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -15,7 +15,7 @@ const PANEL_LAYOUT = {
   btnDownY: 0.615,
   statusX: 0.44,
   statusY: 0.782,
-  statusWidth: 0.34,
+  statusWidth: 0.40,
   junctionFraction: 0.35,
   buttonHeight: 50,
 };
@@ -215,9 +215,9 @@ function modeLabel(mode) {
 function modeHint(mode) {
   switch (mode) {
     case "auto":
-      return "Auto — release keeps direction until STOP or limit";
+      return "AUTO: Press-Release for one direction";
     case "manual":
-      return "Manual — release stops direction";
+      return "MANUAL: Press - Run - Release - Stop";
     default:
       return "";
   }
@@ -330,10 +330,11 @@ function fitDeviceStatusText() {
     }
   };
 
-  const textColumnWidth = containerWidth - 26;
-  shrinkToFit(els.onHoldText, textColumnWidth, 17);
-  shrinkToFit(els.modeText, textColumnWidth, 12);
-  shrinkToFit(els.modeHint, textColumnWidth, 11);
+  const onHoldLineWidth = containerWidth;
+  const indentedWidth = containerWidth - 26;
+  shrinkToFit(els.onHoldText, onHoldLineWidth - 26, 30);
+  shrinkToFit(els.modeText, indentedWidth, 24);
+  shrinkToFit(els.modeHint, indentedWidth, 20);
 }
 
 function updateMenuMeta() {

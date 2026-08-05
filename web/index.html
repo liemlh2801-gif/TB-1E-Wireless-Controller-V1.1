@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="TB-1E" />
     <title>TB-1E Controller</title>
     <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="css/styles.css?v=1.7.2" />
+    <link rel="stylesheet" href="css/styles.css?v=1.7.3" />
   </head>
   <body>
     <div id="app-frame">
@@ -17,7 +17,7 @@
       <header>
         <div>
           <h1>Bluetooth Controller</h1>
-          <div class="version" id="app-version">v1.7.2</div>
+          <div class="version" id="app-version">v1.7.3</div>
         </div>
         <button id="menu-btn" class="icon-btn" type="button" aria-label="Menu">⋯</button>
       </header>
@@ -26,13 +26,13 @@
         <div id="machine-wrap">
           <img src="assets/asset1.jpg" alt="Safety belt tester machine panel" />
           <div id="device-status" aria-live="polite" hidden>
-            <div id="device-status-body">
-              <span id="on-hold-dot" class="on-hold-dot"></span>
-              <div id="device-status-lines">
+            <div id="device-status-lines">
+              <div class="on-hold-line">
+                <span id="on-hold-dot" class="on-hold-dot"></span>
                 <div id="on-hold-text">ON-HOLD</div>
-                <div id="mode-text" class="mode-text"></div>
-                <div id="mode-hint" class="mode-hint"></div>
               </div>
+              <div id="mode-text" class="mode-text status-indent"></div>
+              <div id="mode-hint" class="mode-hint status-indent"></div>
             </div>
           </div>
         </div>
@@ -73,6 +73,6 @@
       <div class="menu-meta" id="menu-meta"></div>
     </nav>
 
-    <script type="module" src="js/app.js?v=1.7.2"></script>
+    <script type="module" src="js/app.js?v=1.7.3"></script>
   </body>
 </html>
