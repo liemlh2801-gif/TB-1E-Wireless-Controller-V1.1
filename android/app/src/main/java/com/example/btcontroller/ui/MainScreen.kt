@@ -105,9 +105,10 @@ private object PanelLayout {
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.47f
     const val ON_HOLD_OFFSET_X_DP = 15
+    const val ON_HOLD_OFFSET_Y_DP = -10
     const val ON_HOLD_TEXT_SP = 18
     const val MODE_LINE_OFFSET_X_DP = 25
-    const val MODE_LINE_OFFSET_Y_DP = 20
+    const val MODE_BLOCK_TOP_DP = 41
     const val MODE_HINT_OFFSET_Y_DP = 5
 }
 
@@ -674,35 +675,37 @@ private fun DeviceStatusPanel(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(x = (-PanelLayout.ON_HOLD_OFFSET_X_DP).dp),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.Start,
+        Box(
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            if (processing) {
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .background(OnHoldRed, CircleShape),
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .border(2.5.dp, OnHoldGreenRing, CircleShape)
-                        .background(Color.White, CircleShape),
-                )
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .offset(
+                        x = (-PanelLayout.ON_HOLD_OFFSET_X_DP).dp,
+                        y = PanelLayout.ON_HOLD_OFFSET_Y_DP.dp,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
             ) {
+                if (processing) {
+                    Box(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .background(OnHoldRed, CircleShape),
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .border(2.5.dp, OnHoldGreenRing, CircleShape)
+                            .background(Color.White, CircleShape),
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
                     text = stringResource(R.string.on_hold_label),
                     color = onHoldColor,
@@ -710,52 +713,60 @@ private fun DeviceStatusPanel(
                     fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
                     maxLines = 1,
                 )
+            }
 
-                if (processing) {
-                    Text(
-                        text = stringResource(R.string.on_hold_processing),
-                        color = OnHoldRed,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
-                        maxLines = 1,
+            if (processing) {
+                Text(
+                    text = stringResource(R.string.on_hold_processing),
+                    color = OnHoldRed,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
+                    maxLines = 1,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .offset(
+                            x = (22 - PanelLayout.ON_HOLD_OFFSET_X_DP).dp,
+                            y = (PanelLayout.ON_HOLD_OFFSET_Y_DP + PanelLayout.ON_HOLD_TEXT_SP + 2).dp,
+                        ),
+                )
+            }
+
+            deviceMode?.let { mode ->
+                val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .offset(
+                            x = (-PanelLayout.MODE_LINE_OFFSET_X_DP).dp,
+                            y = PanelLayout.MODE_BLOCK_TOP_DP.dp,
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    SingleLineFitText(
+                        text = when (mode) {
+                            DeviceMode.Manual -> stringResource(R.string.mode_manual)
+                            DeviceMode.Auto -> stringResource(R.string.mode_auto)
+                        },
+                        color = modeColor,
+                        fontWeight = FontWeight.Medium,
+                        maxFontSize = 16.sp,
+                        minFontSize = 16.sp,
+                        textAlign = TextAlign.Start,
+                    )
+
+                    SingleLineFitText(
+                        text = when (mode) {
+                            DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
+                            DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
+                        },
+                        modifier = Modifier.padding(top = PanelLayout.MODE_HINT_OFFSET_Y_DP.dp),
+                        color = modeColor,
+                        fontWeight = FontWeight.Medium,
+                        maxFontSize = 22.sp,
+                        minFontSize = 12.sp,
+                        textAlign = TextAlign.Start,
                     )
                 }
-            }
-        }
-
-        deviceMode?.let { mode ->
-            val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
-            Column(
-                modifier = Modifier.offset(
-                    x = (-PanelLayout.MODE_LINE_OFFSET_X_DP).dp,
-                    y = PanelLayout.MODE_LINE_OFFSET_Y_DP.dp,
-                ),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                SingleLineFitText(
-                    text = when (mode) {
-                        DeviceMode.Manual -> stringResource(R.string.mode_manual)
-                        DeviceMode.Auto -> stringResource(R.string.mode_auto)
-                    },
-                    color = modeColor,
-                    fontWeight = FontWeight.Medium,
-                    maxFontSize = 16.sp,
-                    minFontSize = 16.sp,
-                    textAlign = TextAlign.Start,
-                )
-
-                SingleLineFitText(
-                    text = when (mode) {
-                        DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
-                        DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
-                    },
-                    modifier = Modifier.padding(top = PanelLayout.MODE_HINT_OFFSET_Y_DP.dp),
-                    color = modeColor,
-                    fontWeight = FontWeight.Medium,
-                    maxFontSize = 22.sp,
-                    minFontSize = 12.sp,
-                    textAlign = TextAlign.Start,
-                )
             }
         }
     }

@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.14";
+const APP_VERSION = "1.7.15";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -18,6 +18,8 @@ const PANEL_LAYOUT = {
   statusWidth: 0.47,
   modeLineOffsetXPx: 25,
   modeLineOffsetYPx: 20,
+  modeBlockTopPx: 41,
+  onHoldOffsetYPx: -10,
   junctionFraction: 0.35,
   buttonHeight: 50,
 };

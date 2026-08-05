@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.btcontroller"
         minSdk = 26
         targetSdk = 35
-        versionCode = 17
-        versionName = "1.7.14"
+        versionCode = 18
+        versionName = "1.7.15"
     }
 
     buildTypes {

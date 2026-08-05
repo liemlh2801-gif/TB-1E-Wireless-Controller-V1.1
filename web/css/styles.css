@@ -107,6 +107,7 @@ header .version {
 }
 
 #device-status-lines {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -116,8 +117,11 @@ header .version {
 }
 
 .on-hold-block {
+  position: relative;
+  top: -10px;
   width: calc(100% + 15px);
   margin-left: -15px;
+  height: 18px;
 }
 
 .on-hold-line {
@@ -150,6 +154,9 @@ header .version {
 }
 
 .on-hold-processing {
+  position: absolute;
+  top: 20px;
+  left: 0;
   padding-left: 22px;
   font-size: 18px;
   font-weight: 700;
@@ -260,6 +267,7 @@ header .version {
   width: calc(100% + 25px);
   margin-left: -25px;
   margin-top: 20px;
+  flex-shrink: 0;
 }
 
 .mode-text {

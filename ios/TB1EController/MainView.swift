@@ -253,32 +253,37 @@ struct MainView: View {
     }
 
     private var deviceStatusPanel: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            HStack(alignment: .top, spacing: 4) {
+        ZStack(alignment: .topLeading) {
+            HStack(alignment: .center, spacing: 4) {
                 onHoldDot
-                VStack(alignment: .leading, spacing: 2) {
-                    panelStatusLine(
-                        "ON-HOLD",
-                        size: PanelLayout.onHoldTextSize,
-                        weight: .bold,
-                        color: onHoldProcessing
-                            ? Color(red: 0.776, green: 0.157, blue: 0.157)
-                            : Color(red: 0.180, green: 0.490, blue: 0.196),
-                        allowShrink: false
-                    )
-
-                    if onHoldProcessing {
-                        panelStatusLine(
-                            "processing...",
-                            size: PanelLayout.onHoldTextSize,
-                            weight: .bold,
-                            color: Color(red: 0.776, green: 0.157, blue: 0.157),
-                            allowShrink: false
-                        )
-                    }
-                }
+                panelStatusLine(
+                    "ON-HOLD",
+                    size: PanelLayout.onHoldTextSize,
+                    weight: .bold,
+                    color: onHoldProcessing
+                        ? Color(red: 0.776, green: 0.157, blue: 0.157)
+                        : Color(red: 0.180, green: 0.490, blue: 0.196),
+                    allowShrink: false
+                )
             }
-            .offset(x: -PanelLayout.onHoldOffsetX)
+            .offset(
+                x: -PanelLayout.onHoldOffsetX,
+                y: PanelLayout.onHoldOffsetY
+            )
+
+            if onHoldProcessing {
+                panelStatusLine(
+                    "processing...",
+                    size: PanelLayout.onHoldTextSize,
+                    weight: .bold,
+                    color: Color(red: 0.776, green: 0.157, blue: 0.157),
+                    allowShrink: false
+                )
+                .offset(
+                    x: 22 - PanelLayout.onHoldOffsetX,
+                    y: PanelLayout.onHoldOffsetY + PanelLayout.onHoldTextSize + 2
+                )
+            }
 
             if let mode = bluetooth.deviceMode {
                 VStack(alignment: .leading, spacing: 3) {
@@ -306,11 +311,11 @@ struct MainView: View {
                 }
                 .offset(
                     x: -PanelLayout.modeLineOffsetX,
-                    y: PanelLayout.modeLineOffsetY
+                    y: PanelLayout.modeBlockTop
                 )
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: PanelLayout.modeBlockTop + 40, alignment: .topLeading)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
             AudioServicesPlaySystemSound(1052)
