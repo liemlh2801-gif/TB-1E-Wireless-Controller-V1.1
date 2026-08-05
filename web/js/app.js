@@ -70,9 +70,12 @@ function updateOnHoldBeep() {
 }
 
 function updateOnHoldUi() {
-  const processing = state.connection === "connected" && state.onHoldActive;
+  const connected = state.connection === "connected";
+  const processing = connected && state.onHoldActive;
+  if (els.deviceStatus) {
+    els.deviceStatus.hidden = !connected;
+  }
   if (els.onHoldRow) {
-    els.onHoldRow.hidden = false;
     els.onHoldRow.classList.toggle("processing", processing);
   }
   if (els.onHoldText) {
@@ -162,6 +165,7 @@ const els = {
   onHoldRow: document.getElementById("on-hold-row"),
   onHoldText: document.getElementById("on-hold-text"),
   modeHint: document.getElementById("mode-hint"),
+  deviceStatus: document.getElementById("device-status"),
   leaderLines: document.getElementById("leader-lines"),
   panel: document.getElementById("panel"),
   controlButtons: Array.from(document.querySelectorAll(".control-btn")),
@@ -218,16 +222,27 @@ function modeHint(mode) {
 }
 
 function updateUi() {
+  const connected = state.connection === "connected";
   els.version.textContent = `v${APP_VERSION}`;
   els.statusText.textContent = statusLabel(state.connection);
   els.statusDot.className = `status-dot ${state.connection}`;
   if (els.modeText) {
-    els.modeText.textContent = modeLabel(state.deviceMode);
-    els.modeText.className = `mode-text ${state.deviceMode || ""}`;
+    if (connected) {
+      els.modeText.textContent = modeLabel(state.deviceMode);
+      els.modeText.className = `mode-text ${state.deviceMode || ""}`;
+    } else {
+      els.modeText.textContent = "";
+      els.modeText.className = "mode-text";
+    }
   }
   if (els.modeHint) {
-    els.modeHint.textContent = modeHint(state.deviceMode);
-    els.modeHint.className = `mode-hint ${state.deviceMode || ""}`;
+    if (connected) {
+      els.modeHint.textContent = modeHint(state.deviceMode);
+      els.modeHint.className = `mode-hint ${state.deviceMode || ""}`;
+    } else {
+      els.modeHint.textContent = "";
+      els.modeHint.className = "mode-hint";
+    }
   }
   els.connectBtn.textContent = connectLabel(state.connection);
   els.connectBtn.disabled = state.connection === "connecting";
@@ -236,7 +251,6 @@ function updateUi() {
   }
   els.errorText.textContent = state.lastError || "";
 
-  const connected = state.connection === "connected";
   const upBtn = document.querySelector('.control-btn[data-action="up"]');
   const stopBtn = document.querySelector('.control-btn[data-action="stop"]');
   const downBtn = document.querySelector('.control-btn[data-action="down"]');
@@ -252,11 +266,11 @@ function updateUi() {
   }
 
   if (els.desktopHint) {
-    els.desktopHint.hidden = !isDesktopPointer();
+    els.desktopHint.hidden = !isDesktopPointer() || !connected;
   }
 
   if (els.bleHint) {
-    els.bleHint.hidden = !isDesktopPointer() || state.connection === "connected";
+    els.bleHint.hidden = !isDesktopPointer() || connected;
   }
 
   updateOnHoldUi();
