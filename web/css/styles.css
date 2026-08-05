@@ -239,7 +239,8 @@ header .version {
 .status-dot.connected { background: var(--ok); }
 
 .mode-text {
-  width: 100%;
+  width: calc(100% + 30px);
+  margin-left: -30px;
   font-size: 26px;
   font-weight: 600;
   text-align: left;
@@ -260,7 +261,8 @@ header .version {
 }
 
 .mode-hint {
-  width: 100%;
+  width: calc(100% + 30px);
+  margin-left: -30px;
   font-size: 22px;
   font-weight: 500;
   text-align: left;

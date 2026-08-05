@@ -104,6 +104,7 @@ private object PanelLayout {
     const val STATUS_LEFT_IN_IMAGE = 0.28f
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.47f
+    const val MODE_LINE_OFFSET_DP = 30
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -716,6 +717,7 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto)
                 },
+                modifier = Modifier.offset(x = (-PanelLayout.MODE_LINE_OFFSET_DP).dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
                 maxFontSize = 26.sp,
@@ -728,6 +730,7 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
                 },
+                modifier = Modifier.offset(x = (-PanelLayout.MODE_LINE_OFFSET_DP).dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
                 maxFontSize = 22.sp,

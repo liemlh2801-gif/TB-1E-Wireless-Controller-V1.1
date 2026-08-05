@@ -275,6 +275,7 @@ struct MainView: View {
                         ? Color(red: 0.082, green: 0.396, blue: 0.753)
                         : Color(red: 0.180, green: 0.490, blue: 0.196)
                 )
+                .offset(x: -PanelLayout.modeLineOffset)
 
                 panelStatusLine(
                     mode == .manual
@@ -286,6 +287,7 @@ struct MainView: View {
                         ? Color(red: 0.082, green: 0.396, blue: 0.753)
                         : Color(red: 0.180, green: 0.490, blue: 0.196)
                 )
+                .offset(x: -PanelLayout.modeLineOffset)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
