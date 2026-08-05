@@ -10,6 +10,7 @@ enum PanelLayout {
     static let btnUpY: CGFloat = 0.255
     static let btnStopY: CGFloat = 0.435
     static let btnDownY: CGFloat = 0.615
+    static let deviceStatusGap: CGFloat = 8
     static let panelButtonHeight: CGFloat = 50
     static let asset1Width: CGFloat = 590
     static let asset1Height: CGFloat = 2425
