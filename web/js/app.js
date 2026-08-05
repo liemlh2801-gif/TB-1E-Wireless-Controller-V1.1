@@ -270,7 +270,11 @@ function updateUi() {
   }
 
   if (els.bleHint) {
-    els.bleHint.hidden = !isDesktopPointer() || connected;
+    els.bleHint.hidden = !connected;
+  }
+
+  if (els.unsupported?.classList.contains("info")) {
+    els.unsupported.classList.remove("show");
   }
 
   updateOnHoldUi();
@@ -531,7 +535,6 @@ function drawLeaderLines() {
 function showUnsupportedBanner() {
   const secure = window.isSecureContext;
   const supported = isWebBluetoothSupported();
-  const desktop = isDesktopPointer();
 
   if (!secure) {
     els.unsupported.classList.add("show");
@@ -544,14 +547,6 @@ function showUnsupportedBanner() {
     els.unsupported.classList.add("show");
     els.unsupported.textContent =
       "Trình duyệt không hỗ trợ Web Bluetooth. Dùng Chrome hoặc Edge trên PC, hoặc app Android/iOS.";
-    return;
-  }
-
-  if (desktop) {
-    els.unsupported.classList.add("show");
-    els.unsupported.classList.add("info");
-    els.unsupported.textContent =
-      "PC: bấm Quét tất cả thiết bị BLE nếu không thấy TB-1E. Chọn TB-1E hoặc Thiết bị không xác định (ESP32). Phím ↑ ↓ Space.";
   }
 }
 
