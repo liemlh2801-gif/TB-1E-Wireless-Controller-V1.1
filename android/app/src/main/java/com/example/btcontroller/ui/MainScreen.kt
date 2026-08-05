@@ -41,6 +41,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import android.media.AudioManager
+import android.media.ToneGenerator
+import androidx.compose.foundation.shape.CircleShape
+import kotlinx.coroutines.delay
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -183,9 +188,32 @@ private fun MainScreenContent(
     onMenuExpandedChange: (Boolean) -> Unit,
 ) {
     val isAuto = deviceMode == DeviceMode.Auto
+    val isManual = deviceMode == DeviceMode.Manual
     val upEnabled = isConnected
     val downEnabled = isConnected
     val stopEnabled = isConnected
+    var stopHeld by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isConnected) {
+        if (!isConnected) {
+            stopHeld = false
+        }
+    }
+
+    LaunchedEffect(isConnected, onHoldActive) {
+        if (!isConnected || !onHoldActive) {
+            return@LaunchedEffect
+        }
+        val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 70)
+        try {
+            while (isConnected && onHoldActive) {
+                tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
+                delay(1500)
+            }
+        } finally {
+            tone.release()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -288,9 +316,23 @@ private fun MainScreenContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                StatusRow(connectionState = connectionState, deviceMode = deviceMode)
+                StatusRow(
+                    connectionState = connectionState,
+                    deviceMode = deviceMode,
+                    topLimitActive = topLimitActive,
+                    botLimitActive = botLimitActive,
+                    onHoldActive = onHoldActive,
+                )
 
-                } else if (isAuto) {
+                Spacer(modifier = Modifier.height(4.dp))
+
+                OnHoldIndicator(
+                    isConnected = isConnected,
+                    onHoldActive = onHoldActive,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                if (isAuto) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = stringResource(R.string.mode_auto_latch),
@@ -323,22 +365,28 @@ private fun MainScreenContent(
             PanelButton(
                 text = stringResource(R.string.btn_up),
                 enabled = upEnabled,
-                onPress = onUpPress,
-                onRelease = if (isAuto) ({}) else onUpRelease,
+                onPress = { if (!stopHeld) onUpPress() },
+                onRelease = if (isManual) onUpRelease else ({}),
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_UP_Y),
             )
             PanelButton(
                 text = stringResource(R.string.btn_stop),
                 enabled = stopEnabled,
-                onPress = onStopPress,
-                onRelease = onStopRelease,
+                onPress = {
+                    stopHeld = true
+                    onStopPress()
+                },
+                onRelease = {
+                    stopHeld = false
+                    onStopRelease()
+                },
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_STOP_Y),
             )
             PanelButton(
                 text = stringResource(R.string.btn_down),
                 enabled = downEnabled,
-                onPress = onDownPress,
-                onRelease = if (isAuto) ({}) else onDownRelease,
+                onPress = { if (!stopHeld) onDownPress() },
+                onRelease = if (isManual) onDownRelease else ({}),
                 modifier = controlButtonModifier.offset(y = maxHeight * PanelLayout.BTN_DOWN_Y),
             )
         }
@@ -525,6 +573,41 @@ private fun PanelButton(
             fontWeight = FontWeight.Bold,
             fontSize = 17.sp,
             color = contentColor,
+        )
+    }
+}
+
+@Composable
+private fun OnHoldIndicator(
+    isConnected: Boolean,
+    onHoldActive: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val processing = isConnected && onHoldActive
+    val dotColor = if (processing) Color(0xFFC62828) else Color(0xFF2E7D32)
+    val label = if (processing) {
+        stringResource(R.string.on_hold_processing)
+    } else {
+        stringResource(R.string.on_hold_label)
+    }
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(12.dp)
+                .background(dotColor, CircleShape),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = dotColor,
+            textAlign = TextAlign.End,
         )
     }
 }

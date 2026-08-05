@@ -175,6 +175,36 @@ header .version {
 .status-dot.connecting { background: var(--warn); }
 .status-dot.connected { background: var(--ok); }
 
+.on-hold-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.on-hold-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ok);
+  flex-shrink: 0;
+}
+
+.on-hold-row.processing .on-hold-dot {
+  background: var(--error);
+}
+
+.on-hold-row.processing #on-hold-text {
+  color: var(--error);
+}
+
+.on-hold-row:not(.processing) #on-hold-text {
+  color: var(--ok);
+}
+
 .mode-text {
   font-size: 12px;
   font-weight: 600;

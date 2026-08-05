@@ -124,6 +124,12 @@ PanelButtonState panelDown = {false, false, 0};
 
 PanelButtonState panelStop = {false, false, 0};
 
+bool appUpHeld = false;
+
+bool appDownHeld = false;
+
+bool appStopHeld = false;
+
 
 
 void logUsb(const char* line);
@@ -159,6 +165,8 @@ bool isBotLimitActive();
 void sendModeStatus();
 
 void sendLimitStatus();
+
+void sendHoldStatus();
 
 void pollModeSwitch();
 
@@ -197,6 +205,14 @@ void initPanelButtons();
 PanelEdge pollPanelEdge(PanelButtonState& btn, int pin);
 
 void pollPanelButtons();
+
+void clearAppButtonState();
+
+bool isPanelActive();
+
+void applyAppPanelOutputs();
+
+void maintainAppPanelButtons();
 
 void enforceLimitOutputs();
 
@@ -289,6 +305,8 @@ class BleServerCallbacks : public BLEServerCallbacks {
     sendModeStatus();
 
     sendLimitStatus();
+
+    sendHoldStatus();
 
   }
 
@@ -516,6 +534,8 @@ void setBtConnectedOutput(bool connected) {
 
 void onAppDisconnected() {
 
+  clearAppButtonState();
+
   clearAutoDownLatch();
 
   setAllHigh();
@@ -704,6 +724,14 @@ void sendLimitStatus() {
 
 
 
+void sendHoldStatus() {
+
+  sendBtReply(readOnHoldPressed() ? "HOLD: ON" : "HOLD: OFF");
+
+}
+
+
+
 void clearAutoDownLatch() {
 
   if (autoDownLatched) {
@@ -834,6 +862,8 @@ void armAutoDownOnHoldInactiveTimer() {
 
   if (!isAutoMode()) {
 
+    logUsb("AUTO-DOWN ON-HOLD release ignored — not Auto mode (GPIO32)");
+
     return;
 
   }
@@ -950,21 +980,26 @@ void pollAutoDownFirstStart() {
 
 void pollOnHold() {
 
-  // ON-HOLD: LOW to GND = active; open (pull-up HIGH) = inactive
+  // ON-HOLD: LOW/GND = active; open/HIGH = inactive
+  // pollPanelEdge: RISE = pressed (active), FALL = released (inactive)
 
   const PanelEdge holdEdge = pollPanelEdge(onHoldInput, ON_HOLD_PIN);
 
 
 
-  if (holdEdge == PANEL_EDGE_FALL) {
+  if (holdEdge == PANEL_EDGE_RISE) {
 
     resetAutoDownOnHoldInactiveTimer();
 
     clearAutoDownLatch();
 
+    sendBtReply("HOLD: ON");
+
     logUsb("ON-HOLD active (GPIO33 to GND) — UP input/output enabled");
 
-  } else if (holdEdge == PANEL_EDGE_RISE) {
+  } else if (holdEdge == PANEL_EDGE_FALL) {
+
+    sendBtReply("HOLD: OFF");
 
     armAutoDownOnHoldInactiveTimer();
 
@@ -1268,6 +1303,88 @@ PanelEdge pollPanelEdge(PanelButtonState& btn, int pin) {
 
 
 
+void clearAppButtonState() {
+
+  appUpHeld = false;
+
+  appDownHeld = false;
+
+  appStopHeld = false;
+
+}
+
+
+
+bool isPanelActive() {
+
+  return panelUp.stable || panelDown.stable || panelStop.stable;
+
+}
+
+
+
+void applyAppPanelOutputs() {
+
+  if (!isAppConnected() || isPanelActive()) {
+
+    return;
+
+  }
+
+
+
+  if (!isAutoMode()) {
+
+    if (appStopHeld) {
+
+      clearAutoDownLatch();
+
+      stopPressed();
+
+    } else if (appUpHeld) {
+
+      clearAutoDownLatch();
+
+      moveUp();
+
+    } else if (appDownHeld) {
+
+      clearAutoDownLatch();
+
+      moveDown();
+
+    } else if (!autoDownLatched) {
+
+      stopReleased();
+
+    }
+
+    return;
+
+  }
+
+
+
+  if (appStopHeld) {
+
+    clearAutoDownLatch();
+
+    stopPressed();
+
+  }
+
+}
+
+
+
+void maintainAppPanelButtons() {
+
+  applyAppPanelOutputs();
+
+}
+
+
+
 void pollPanelButtons() {
 
   if (!isAutoMode()) {
@@ -1382,6 +1499,34 @@ void handleCommand(const String& cmd) {
 
     if (cmd == "RELEASE") {
 
+      if (isAutoMode()) {
+
+        if (appStopHeld) {
+
+          appStopHeld = false;
+
+          clearAutoDownLatch();
+
+          stopReleased();
+
+          if (isAppConnected()) {
+
+            sendBtReply("STATUS: RELEASED");
+
+            logUsb("TX: STATUS: RELEASED");
+
+            logUsb("MOTOR: STOP released (GPIO26/27/14=HIGH)");
+
+          }
+
+        }
+
+        return;
+
+      }
+
+      clearAppButtonState();
+
       clearAutoDownLatch();
 
       stopReleased();
@@ -1401,6 +1546,12 @@ void handleCommand(const String& cmd) {
     }
 
     clearAutoDownLatch();
+
+    appStopHeld = true;
+
+    appUpHeld = false;
+
+    appDownHeld = false;
 
     stopPressed();
 
@@ -1444,13 +1595,37 @@ void handleCommand(const String& cmd) {
 
     clearAutoDownLatch();
 
-    if (isTopLimitActive() || readTopLimitRaw()) {
+    appStopHeld = false;
 
-      logUsb("UP at top limit — GPIO26 disabled, GPIO27 still active");
+
+
+    if (isAutoMode()) {
+
+      if (isTopLimitActive() || readTopLimitRaw()) {
+
+        logUsb("UP at top limit — GPIO26 disabled, GPIO27 still active");
+
+      }
+
+      moveUp();
+
+      sendBtReply("STATUS: UP");
+
+      logUsb("TX: STATUS: UP");
+
+      logUsb("MOTOR: UP (GPIO26=LOW, GPIO27=HIGH, GPIO14=HIGH)");
+
+      return;
 
     }
 
-    moveUp();
+
+
+    appUpHeld = true;
+
+    appDownHeld = false;
+
+    applyAppPanelOutputs();
 
     sendBtReply("STATUS: UP");
 
@@ -1468,13 +1643,37 @@ void handleCommand(const String& cmd) {
 
     clearAutoDownLatch();
 
-    if (isBotLimitActive() || readBotLimitRaw()) {
+    appStopHeld = false;
 
-      logUsb("DOWN at bottom limit — GPIO27 disabled, GPIO26 still active");
+
+
+    if (isAutoMode()) {
+
+      if (isBotLimitActive() || readBotLimitRaw()) {
+
+        logUsb("DOWN at bottom limit — GPIO27 disabled, GPIO26 still active");
+
+      }
+
+      moveDown();
+
+      sendBtReply("STATUS: DOWN");
+
+      logUsb("TX: STATUS: DOWN");
+
+      logUsb("MOTOR: DOWN (GPIO26=HIGH, GPIO27=LOW, GPIO14=HIGH)");
+
+      return;
 
     }
 
-    moveDown();
+
+
+    appDownHeld = true;
+
+    appUpHeld = false;
+
+    applyAppPanelOutputs();
 
     sendBtReply("STATUS: DOWN");
 
@@ -1633,6 +1832,8 @@ void loop() {
   maintainAutoDownLatch();
 
   pollPanelButtons();
+
+  maintainAppPanelButtons();
 
   enforceLimitOutputs();
 

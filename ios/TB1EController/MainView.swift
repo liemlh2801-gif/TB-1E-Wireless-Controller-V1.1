@@ -1,3 +1,4 @@
+import AudioToolbox
 import SwiftUI
 
 private let goldBar = Color(red: 0.831, green: 0.686, blue: 0.216)
@@ -8,6 +9,7 @@ private let appAspectRatio: CGFloat = 9.0 / 19.5
 struct MainView: View {
     @EnvironmentObject private var bluetooth: BluetoothManager
     @Environment(\.scenePhase) private var scenePhase
+    @State private var stopHeld = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -42,8 +44,13 @@ struct MainView: View {
             bluetooth.disconnect(sendRelease: true)
         }
         .onChange(of: scenePhase) { phase in
-            if phase != .active, bluetooth.isConnected {
+            if phase != .active, bluetooth.isConnected, bluetooth.deviceMode == .manual {
                 bluetooth.sendCommand("RELEASE")
+            }
+        }
+        .onChange(of: bluetooth.isConnected) { connected in
+            if !connected {
+                stopHeld = false
             }
         }
     }
@@ -133,6 +140,9 @@ struct MainView: View {
 
                     statusRow
 
+                    onHoldRow
+                        .frame(width: connectWidth, alignment: .trailing)
+
                     if let error = bluetooth.lastError {
                         Text(error)
                             .font(.caption.weight(.medium))
@@ -145,9 +155,10 @@ struct MainView: View {
                 .padding(.trailing, connectEnd)
 
                 panelButton(title: "LÊN", enabled: upEnabled) {
+                    guard !stopHeld else { return }
                     bluetooth.sendCommand("UP")
                 } onRelease: {
-                    if bluetooth.deviceMode != .auto {
+                    if bluetooth.deviceMode == .manual {
                         bluetooth.sendCommand("RELEASE")
                     }
                 }
@@ -156,8 +167,10 @@ struct MainView: View {
                 .offset(y: geo.size.height * PanelLayout.btnUpY)
 
                 panelButton(title: "DỪNG", enabled: stopEnabled) {
+                    stopHeld = true
                     bluetooth.sendCommand("STOP")
                 } onRelease: {
+                    stopHeld = false
                     bluetooth.sendCommand("RELEASE")
                 }
                 .frame(width: controlWidth)
@@ -165,9 +178,10 @@ struct MainView: View {
                 .offset(y: geo.size.height * PanelLayout.btnStopY)
 
                 panelButton(title: "XUỐNG", enabled: downEnabled) {
+                    guard !stopHeld else { return }
                     bluetooth.sendCommand("DOWN")
                 } onRelease: {
-                    if bluetooth.deviceMode != .auto {
+                    if bluetooth.deviceMode == .manual {
                         bluetooth.sendCommand("RELEASE")
                     }
                 }
@@ -228,6 +242,28 @@ struct MainView: View {
 
     private var stopEnabled: Bool {
         bluetooth.isConnected
+    }
+
+    private var onHoldProcessing: Bool {
+        bluetooth.isConnected && bluetooth.onHoldActive
+    }
+
+    private var onHoldRow: some View {
+        HStack(spacing: 8) {
+            Circle()
+                .fill(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
+                .frame(width: 12, height: 12)
+            Text(onHoldProcessing ? "ON-HOLD processing ..." : "ON-HOLD")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
+        }
+        .task(id: onHoldProcessing) {
+            guard onHoldProcessing else { return }
+            while !Task.isCancelled {
+                AudioServicesPlaySystemSound(1052)
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+            }
+        }
     }
 
     private var statusHint: String? {

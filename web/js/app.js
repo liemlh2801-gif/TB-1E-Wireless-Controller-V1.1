@@ -35,6 +35,52 @@ const state = {
 
 const keysHeld = new Set();
 
+let onHoldBeepTimer = null;
+let onHoldAudioCtx = null;
+
+function playOnHoldBeep() {
+  try {
+    if (!onHoldAudioCtx) {
+      onHoldAudioCtx = new AudioContext();
+    }
+    const osc = onHoldAudioCtx.createOscillator();
+    const gain = onHoldAudioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 880;
+    gain.gain.value = 0.12;
+    osc.connect(gain);
+    gain.connect(onHoldAudioCtx.destination);
+    osc.start();
+    osc.stop(onHoldAudioCtx.currentTime + 0.12);
+  } catch {
+    // Audio may be blocked until user gesture.
+  }
+}
+
+function updateOnHoldBeep() {
+  if (onHoldBeepTimer) {
+    clearInterval(onHoldBeepTimer);
+    onHoldBeepTimer = null;
+  }
+  if (state.connection === "connected" && state.onHoldActive) {
+    playOnHoldBeep();
+    onHoldBeepTimer = setInterval(playOnHoldBeep, 1500);
+  }
+}
+
+function updateOnHoldUi() {
+  const processing = state.connection === "connected" && state.onHoldActive;
+  if (els.onHoldRow) {
+    els.onHoldRow.classList.toggle("processing", processing);
+  }
+  if (els.onHoldText) {
+    els.onHoldText.textContent = processing
+      ? "ON-HOLD processing ..."
+      : "ON-HOLD";
+  }
+  updateOnHoldBeep();
+}
+
 const bt = new TB1EBluetooth({
   onStatus: (status) => {
     state.connection = status;
@@ -74,6 +120,7 @@ const bt = new TB1EBluetooth({
         break;
     }
     updateUi();
+    updateOnHoldUi();
     updateMenuMeta();
   },
   onError: (message) => {
@@ -84,13 +131,16 @@ const bt = new TB1EBluetooth({
     state.botLimitActive = false;
     state.onHoldActive = false;
     updateUi();
+    updateOnHoldUi();
   },
   onDisconnect: () => {
     state.deviceMode = null;
     state.topLimitActive = false;
     state.botLimitActive = false;
     state.onHoldActive = false;
+    panelTouch.stop = false;
     releaseAllKeys();
+    updateOnHoldUi();
   },
 });
 
@@ -109,6 +159,8 @@ const els = {
   menu: document.getElementById("menu"),
   menuBackdrop: document.getElementById("menu-backdrop"),
   menuMeta: document.getElementById("menu-meta"),
+  onHoldRow: document.getElementById("on-hold-row"),
+  onHoldText: document.getElementById("on-hold-text"),
   leaderLines: document.getElementById("leader-lines"),
   panel: document.getElementById("panel"),
   controlButtons: Array.from(document.querySelectorAll(".control-btn")),
@@ -199,6 +251,8 @@ function updateUi() {
   if (els.bleHint) {
     els.bleHint.hidden = !isDesktopPointer() || state.connection === "connected";
   }
+
+  updateOnHoldUi();
 }
 
 function updateMenuMeta() {
@@ -266,47 +320,44 @@ async function sendCommand(command) {
   }
 }
 
-function bindMomentaryButton(button, pressCommand, releaseOnUp = true) {
-  let pressed = false;
-
-  const onPress = async () => {
-    if (button.disabled || pressed) return;
-    pressed = true;
-    await sendCommand(pressCommand);
-  };
-
-  const onRelease = async () => {
-    if (!pressed) return;
-    pressed = false;
-    if (releaseOnUp) {
-      await sendCommand("RELEASE");
-    }
-  };
-
-  button.addEventListener("pointerdown", (event) => {
-    event.preventDefault();
-    button.setPointerCapture(event.pointerId);
-    onPress();
-  });
-
-  button.addEventListener("pointerup", onRelease);
-  button.addEventListener("pointercancel", onRelease);
-  button.addEventListener("lostpointercapture", onRelease);
+function isAutoMode() {
+  return state.deviceMode === "auto";
 }
 
-function bindDirectionButton(button, pressCommand) {
+function isManualMode() {
+  return state.deviceMode === "manual";
+}
+
+const panelTouch = { stop: false };
+
+function bindPanelButton(button, command, { isStop = false } = {}) {
   let pressed = false;
 
   const onPress = async () => {
     if (button.disabled || pressed) return;
     pressed = true;
-    await sendCommand(pressCommand);
+
+    if (isStop) {
+      panelTouch.stop = true;
+      await sendCommand("STOP");
+      return;
+    }
+
+    if (panelTouch.stop) return;
+    await sendCommand(command);
   };
 
   const onRelease = async () => {
     if (!pressed) return;
     pressed = false;
-    if (state.deviceMode !== "auto") {
+
+    if (isStop) {
+      panelTouch.stop = false;
+      await sendCommand("RELEASE");
+      return;
+    }
+
+    if (isManualMode()) {
       await sendCommand("RELEASE");
     }
   };
@@ -323,11 +374,12 @@ function bindDirectionButton(button, pressCommand) {
 }
 
 function releaseAllKeys() {
-  if (keysHeld.size === 0) {
+  if (keysHeld.size === 0 && !panelTouch.stop) {
     return;
   }
   keysHeld.clear();
-  if (state.connection === "connected") {
+  panelTouch.stop = false;
+  if (state.connection === "connected" && isManualMode()) {
     sendCommand("RELEASE");
   }
 }
@@ -345,6 +397,17 @@ function bindKeyboard() {
 
     event.preventDefault();
     keysHeld.add(event.key);
+
+    if (command === "STOP") {
+      panelTouch.stop = true;
+      sendCommand("STOP");
+      return;
+    }
+
+    if (panelTouch.stop || keysHeld.has(" ")) {
+      return;
+    }
+
     sendCommand(command);
   });
 
@@ -357,10 +420,19 @@ function bindKeyboard() {
     keysHeld.delete(event.key);
 
     const command = KEY_COMMANDS[event.key];
-    if (state.deviceMode === "auto" && command !== "STOP") {
+    if (command === "STOP") {
+      panelTouch.stop = false;
+      sendCommand("RELEASE");
       return;
     }
-    sendCommand("RELEASE");
+
+    if (isAutoMode()) {
+      return;
+    }
+
+    if (isManualMode() && !keysHeld.has("ArrowUp") && !keysHeld.has("ArrowDown")) {
+      sendCommand("RELEASE");
+    }
   });
 
   window.addEventListener("blur", releaseAllKeys);
@@ -477,16 +549,16 @@ function init() {
   els.menuBtn.addEventListener("click", openMenu);
   els.menuBackdrop.addEventListener("click", closeMenu);
 
-  bindDirectionButton(
+  bindPanelButton(
     document.querySelector('.control-btn[data-action="up"]'),
     "UP",
   );
-  bindMomentaryButton(
+  bindPanelButton(
     document.querySelector('.control-btn[data-action="stop"]'),
     "STOP",
-    true,
+    { isStop: true },
   );
-  bindDirectionButton(
+  bindPanelButton(
     document.querySelector('.control-btn[data-action="down"]'),
     "DOWN",
   );
@@ -496,7 +568,9 @@ function init() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible" && state.connection === "connected") {
       releaseAllKeys();
-      bt.send("RELEASE");
+      if (isManualMode()) {
+        bt.send("RELEASE");
+      }
     }
   });
 }

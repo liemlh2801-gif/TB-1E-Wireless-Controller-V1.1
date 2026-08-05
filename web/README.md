@@ -2,7 +2,7 @@
 
 Browser version of the TB-1E controller. Same UI and protocol as the Android app.
 
-Works over **Web Bluetooth (BLE)** — connect to ESP32 **TB-1E**, hold **LÊN / DỪNG / XUỐNG**, release to send `RELEASE`.
+Works over **Web Bluetooth (BLE)** — connect to ESP32 **TB-1E**. Button behavior matches the physical panel (Manual / Auto).
 
 ## Browser support
 
@@ -90,14 +90,19 @@ cp ../android/app/src/main/res/drawable/asset1.jpg web/assets/asset1.jpg
 
 ## Protocol
 
-| Action | Command |
-|--------|---------|
-| LÊN pressed | `UP` |
-| XUỐNG pressed | `DOWN` |
-| DỪNG pressed | `STOP` |
-| Release | `RELEASE` |
+App / web buttons match the physical panel in **Manual** and **Auto** mode (including DỪNG priority over LÊN / XUỐNG).
 
-ESP32 also sends `MODE: MANUAL` or `MODE: AUTO` when connected or when the physical mode switch changes. In **Auto** mode, LÊN / DỪNG / XUỐNG are disabled in the app.
+**Manual:** `UP` / `DOWN` / `STOP` on press, `RELEASE` on release.
+
+**Auto:**
+
+| Button | Press | Release |
+|--------|-------|---------|
+| LÊN | `UP` — GPIO 26 LOW | No command |
+| DỪNG | `STOP` — GPIO 14 LOW | `RELEASE` — all HIGH |
+| XUỐNG | `DOWN` — GPIO 27 LOW | No command |
+
+ESP32 sends `MODE: MANUAL` or `MODE: AUTO` on connect and when the physical mode switch changes.
 
 BLE service: Nordic UART `6E400001-B5A3-F393-E0A9-E50E24DCCA9E`
 

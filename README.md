@@ -54,6 +54,30 @@ Physical **Manual / Auto** selector on the machine panel. ESP32 reads **GPIO 32*
 
 On mode change or BLE connect, ESP32 notifies the app with `MODE: MANUAL` or `MODE: AUTO`.
 
+### App buttons (web / Android / iOS)
+
+App / web buttons match the physical panel (GPIO 21 / 22 / 23). The ESP32 applies the same rules to BLE commands via `maintainAppPanelButtons()` (Manual: hold to run; Auto: latch on press; DỪNG priority). Physical panel inputs take priority if pressed at the same time.
+
+**Manual** (GPIO 32 open or GND):
+
+| Button | Press | Release |
+|--------|-------|---------|
+| **LÊN** | `UP` — GPIO 26 LOW, GPIO 27/14 HIGH | `RELEASE` — all HIGH |
+| **DỪNG** | `STOP` — GPIO 14 LOW | `RELEASE` — all HIGH |
+| **XUỐNG** | `DOWN` — GPIO 27 LOW, GPIO 26/14 HIGH | `RELEASE` — all HIGH |
+
+Priority while held: **DỪNG** > **LÊN** > **XUỐNG** (same as panel).
+
+**Auto** (GPIO 32 on 3.3V):
+
+| Button | Press | Release |
+|--------|-------|---------|
+| **LÊN** | `UP` — GPIO 26 LOW, GPIO 27/14 HIGH | No change — latched |
+| **DỪNG** | `STOP` — GPIO 14 LOW | `RELEASE` — all HIGH |
+| **XUỐNG** | `DOWN` — GPIO 27 LOW, GPIO 26/14 HIGH | No change — latched |
+
+While **DỪNG** is held, **LÊN** / **XUỐNG** are ignored (same as panel).
+
 ### Limit switches (GPIO 18 / GPIO 19)
 
 Two **normally-open** limit switches. ESP32 reads **GPIO 18** (top) and **GPIO 19** (bottom) with internal pull-up:

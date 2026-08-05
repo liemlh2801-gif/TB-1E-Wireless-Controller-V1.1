@@ -144,7 +144,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (connectionState == ConnectionState.Connected) {
+        if (connectionState == ConnectionState.Connected && deviceMode == DeviceMode.Manual) {
             bluetoothController.sendCommand("RELEASE")
         }
     }
