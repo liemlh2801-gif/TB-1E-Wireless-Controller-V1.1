@@ -115,7 +115,7 @@ private object PanelLayout {
     const val ON_HOLD_OFFSET_Y_DP = -10
     const val ON_HOLD_TEXT_SP = 16
     const val MODE_TEXT_SP = 12
-    const val MODE_HINT_TEXT_SP = 10
+    const val MODE_HINT_TEXT_SP = 6
     const val MODE_LINE_OFFSET_X_DP = 25
     const val MODE_BLOCK_TOP_DP = 41
     const val MODE_HINT_OFFSET_Y_DP = 5
