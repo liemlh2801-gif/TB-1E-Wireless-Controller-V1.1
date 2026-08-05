@@ -270,7 +270,7 @@ struct MainView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     panelStatusLine(
                         mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                        size: 26,
+                        size: 24,
                         weight: .medium,
                         color: mode == .auto
                             ? Color(red: 0.082, green: 0.396, blue: 0.753)
