@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.15";
+const APP_VERSION = "1.7.18";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -55,7 +55,7 @@ function playOnHoldBeep() {
     const gain = onHoldAudioCtx.createGain();
     osc.type = "sine";
     osc.frequency.value = 880;
-    gain.gain.value = 0.12;
+    gain.gain.value = 0.38;
     osc.connect(gain);
     gain.connect(onHoldAudioCtx.destination);
     osc.start();

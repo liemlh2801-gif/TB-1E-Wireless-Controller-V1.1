@@ -318,11 +318,11 @@ struct MainView: View {
         .frame(maxWidth: .infinity, minHeight: PanelLayout.modeBlockTop + 40, alignment: .topLeading)
         .task(id: onHoldProcessing) {
             guard onHoldProcessing else { return }
-            AudioServicesPlaySystemSound(1052)
+            AudioServicesPlayAlertSound(1052)
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: BluetoothManager.onHoldBeepNanos)
                 guard !Task.isCancelled else { return }
-                AudioServicesPlaySystemSound(1052)
+                AudioServicesPlayAlertSound(1052)
             }
         }
         .accessibilityElement(children: .combine)

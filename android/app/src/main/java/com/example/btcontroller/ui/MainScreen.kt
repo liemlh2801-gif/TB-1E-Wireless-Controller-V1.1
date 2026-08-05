@@ -79,6 +79,8 @@ private val OnHoldGreen = Color(0xFF2E7D32)
 private val OnHoldGreenRing = Color(0xFF43A047)
 private val OnHoldRed = Color(0xFFC62828)
 private const val ON_HOLD_BEEP_MS = 2000L
+private const val ON_HOLD_BEEP_VOLUME = 100
+private const val ON_HOLD_BEEP_DURATION_MS = 180
 private val PanelButtonFill = Color(0xFFE0E0E0)
 private val ConnectButtonFill = Color(0xFFB3E5FC)
 private val BorderBlack = Color.Black
@@ -228,15 +230,15 @@ private fun MainScreenContent(
         if (!isConnected || !onHoldActive) {
             return@LaunchedEffect
         }
-        val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80)
+        val tone = ToneGenerator(AudioManager.STREAM_ALARM, ON_HOLD_BEEP_VOLUME)
         try {
-            tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
+            tone.startTone(ToneGenerator.TONE_PROP_BEEP, ON_HOLD_BEEP_DURATION_MS)
             while (true) {
                 delay(ON_HOLD_BEEP_MS)
                 if (!isConnected || !onHoldActive) {
                     break
                 }
-                tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
+                tone.startTone(ToneGenerator.TONE_PROP_BEEP, ON_HOLD_BEEP_DURATION_MS)
             }
         } finally {
             tone.release()
