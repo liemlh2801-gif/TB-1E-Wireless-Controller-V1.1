@@ -1,8 +1,8 @@
 package com.example.btcontroller.ui
 
 import android.bluetooth.BluetoothDevice
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -208,7 +208,7 @@ private fun MainScreenContent(
         try {
             while (isConnected && onHoldActive) {
                 tone.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
-                delay(1500)
+                delay(2000)
             }
         } finally {
             tone.release()
@@ -584,29 +584,38 @@ private fun OnHoldIndicator(
     modifier: Modifier = Modifier,
 ) {
     val processing = isConnected && onHoldActive
-    val dotColor = if (processing) Color(0xFFC62828) else Color(0xFF2E7D32)
     val label = if (processing) {
         stringResource(R.string.on_hold_processing)
     } else {
         stringResource(R.string.on_hold_label)
     }
+    val textColor = if (processing) Color(0xFFC62828) else Color(0xFF2E7D32)
 
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
-        Box(
-            modifier = Modifier
-                .size(12.dp)
-                .background(dotColor, CircleShape),
-        )
+        if (processing) {
+            Box(
+                modifier = Modifier
+                    .size(14.dp)
+                    .background(Color(0xFFC62828), CircleShape),
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(14.dp)
+                    .border(2.5.dp, Color(0xFF43A047), CircleShape)
+                    .background(Color.White, CircleShape),
+            )
+        }
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = label,
             fontSize = 12.sp,
             fontWeight = FontWeight.SemiBold,
-            color = dotColor,
+            color = textColor,
             textAlign = TextAlign.End,
         )
     }

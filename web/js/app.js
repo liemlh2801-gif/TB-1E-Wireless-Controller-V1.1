@@ -1,6 +1,7 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.4";
+const APP_VERSION = "1.5";
+const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
   assetWidth: 590,
@@ -64,19 +65,18 @@ function updateOnHoldBeep() {
   }
   if (state.connection === "connected" && state.onHoldActive) {
     playOnHoldBeep();
-    onHoldBeepTimer = setInterval(playOnHoldBeep, 1500);
+    onHoldBeepTimer = setInterval(playOnHoldBeep, ON_HOLD_BEEP_MS);
   }
 }
 
 function updateOnHoldUi() {
   const processing = state.connection === "connected" && state.onHoldActive;
   if (els.onHoldRow) {
+    els.onHoldRow.hidden = false;
     els.onHoldRow.classList.toggle("processing", processing);
   }
   if (els.onHoldText) {
-    els.onHoldText.textContent = processing
-      ? "ON-HOLD processing ..."
-      : "ON-HOLD";
+    els.onHoldText.textContent = processing ? "ON-HOLD processing" : "ON-HOLD";
   }
   updateOnHoldBeep();
 }

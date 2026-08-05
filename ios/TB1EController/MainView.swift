@@ -250,10 +250,17 @@ struct MainView: View {
 
     private var onHoldRow: some View {
         HStack(spacing: 8) {
-            Circle()
-                .fill(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
-                .frame(width: 12, height: 12)
-            Text(onHoldProcessing ? "ON-HOLD processing ..." : "ON-HOLD")
+            if onHoldProcessing {
+                Circle()
+                    .fill(Color(red: 0.776, green: 0.157, blue: 0.157))
+                    .frame(width: 14, height: 14)
+            } else {
+                Circle()
+                    .strokeBorder(Color(red: 0.259, green: 0.627, blue: 0.278), lineWidth: 2.5)
+                    .background(Circle().fill(Color.white))
+                    .frame(width: 14, height: 14)
+            }
+            Text(onHoldProcessing ? "ON-HOLD processing" : "ON-HOLD")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(onHoldProcessing ? Color(red: 0.776, green: 0.157, blue: 0.157) : Color(red: 0.180, green: 0.490, blue: 0.196))
         }
@@ -261,7 +268,7 @@ struct MainView: View {
             guard onHoldProcessing else { return }
             while !Task.isCancelled {
                 AudioServicesPlaySystemSound(1052)
-                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
             }
         }
     }
