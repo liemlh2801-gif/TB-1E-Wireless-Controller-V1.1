@@ -259,7 +259,7 @@ struct MainView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     panelStatusLine(
                         "ON-HOLD",
-                        size: 20,
+                        size: PanelLayout.onHoldTextSize,
                         weight: .bold,
                         color: onHoldProcessing
                             ? Color(red: 0.776, green: 0.157, blue: 0.157)
@@ -270,7 +270,7 @@ struct MainView: View {
                     if onHoldProcessing {
                         panelStatusLine(
                             "processing...",
-                            size: 20,
+                            size: PanelLayout.onHoldTextSize,
                             weight: .bold,
                             color: Color(red: 0.776, green: 0.157, blue: 0.157),
                             allowShrink: false
@@ -278,6 +278,7 @@ struct MainView: View {
                     }
                 }
             }
+            .offset(x: -PanelLayout.onHoldOffsetX)
 
             if let mode = bluetooth.deviceMode {
                 VStack(alignment: .leading, spacing: 3) {

@@ -22,6 +22,8 @@ enum PanelLayout {
     static let statusLeftInImage: CGFloat = 0.28
     static let statusTopInImage: CGFloat = 0.785
     static let statusWidthInImage: CGFloat = 0.47
+    static let onHoldOffsetX: CGFloat = 15
+    static let onHoldTextSize: CGFloat = 18
     static let modeLineOffsetX: CGFloat = 25
     static let modeLineOffsetY: CGFloat = 20
     static let modeHintOffsetY: CGFloat = 5

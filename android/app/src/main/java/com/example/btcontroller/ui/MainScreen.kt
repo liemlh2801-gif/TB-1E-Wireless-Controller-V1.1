@@ -104,6 +104,8 @@ private object PanelLayout {
     const val STATUS_LEFT_IN_IMAGE = 0.28f
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.47f
+    const val ON_HOLD_OFFSET_X_DP = 15
+    const val ON_HOLD_TEXT_SP = 18
     const val MODE_LINE_OFFSET_X_DP = 25
     const val MODE_LINE_OFFSET_Y_DP = 20
     const val MODE_HINT_OFFSET_Y_DP = 5
@@ -675,7 +677,9 @@ private fun DeviceStatusPanel(
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(x = (-PanelLayout.ON_HOLD_OFFSET_X_DP).dp),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Start,
         ) {
@@ -703,7 +707,7 @@ private fun DeviceStatusPanel(
                     text = stringResource(R.string.on_hold_label),
                     color = onHoldColor,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
+                    fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
                     maxLines = 1,
                 )
 
@@ -712,7 +716,7 @@ private fun DeviceStatusPanel(
                         text = stringResource(R.string.on_hold_processing),
                         color = OnHoldRed,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
+                        fontSize = PanelLayout.ON_HOLD_TEXT_SP.sp,
                         maxLines = 1,
                     )
                 }
