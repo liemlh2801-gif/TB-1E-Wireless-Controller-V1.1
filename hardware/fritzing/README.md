@@ -37,7 +37,11 @@ This sketch uses the **ESP32 DevKitc V4** part from your **Mine** parts bin (not
    ```
    Or in Fritzing: **File → Open** → `C:\TB1E_Fritzing\TB-1E_ESP32_CW022_Wiring.fzz`
 
-   **Important:** Fritzing 0.9.3 on Windows cannot open `.fzz` files from paths with Vietnamese/Unicode characters (`Gia công`, `bản vẽ`, …). You will see `zip.open(): %d`. Always use the batch file or the copy under `C:\TB1E_Fritzing\`.
+   **Important:** Fritzing 0.9.3 on Windows cannot open `.fzz` files from paths with Vietnamese/Unicode characters. Keep the project under ASCII-only folders:
+
+   `D:\01 Lam viec\Gia-cong\drawings\safety-belt-tester\APP\arduino-bt-controller`
+
+   Or use the batch file / copy under `C:\TB1E_Fritzing\`.
 
 3. Switch to **Breadboard** view for the physical wiring layout.
 

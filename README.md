@@ -4,6 +4,10 @@ Android app + **iOS app** + **web app** + ESP32 firmware for controlling a motor
 
 No HC-05 module required — Bluetooth is built into the ESP32.
 
+**Recommended project path (ASCII only, for Gradle/Fritzing on Windows):**
+
+`D:\01 Lam viec\Gia-cong\drawings\safety-belt-tester\APP\arduino-bt-controller`
+
 ## Hardware
 
 ### Which ESP32 board?
