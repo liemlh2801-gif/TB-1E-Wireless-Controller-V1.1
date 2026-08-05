@@ -206,11 +206,15 @@ function modeLabel(mode) {
   }
 }
 
-function statusHint() {
-  if (state.deviceMode === "auto") {
-    return "Auto — release keeps direction until STOP or limit";
+function modeHint(mode) {
+  switch (mode) {
+    case "auto":
+      return "Auto — release keeps direction until STOP or limit";
+    case "manual":
+      return "Manual — release stops direction";
+    default:
+      return "";
   }
-  return "";
 }
 
 function updateUi() {
@@ -222,7 +226,8 @@ function updateUi() {
     els.modeText.className = `mode-text ${state.deviceMode || ""}`;
   }
   if (els.modeHint) {
-    els.modeHint.textContent = statusHint();
+    els.modeHint.textContent = modeHint(state.deviceMode);
+    els.modeHint.className = `mode-hint ${state.deviceMode || ""}`;
   }
   els.connectBtn.textContent = connectLabel(state.connection);
   els.connectBtn.disabled = state.connection === "connecting";

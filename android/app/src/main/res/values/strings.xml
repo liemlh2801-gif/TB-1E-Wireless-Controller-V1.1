@@ -20,6 +20,7 @@
     <string name="last_received">Last received: %1$s</string>
     <string name="mode_manual">Mode: Manual</string>
     <string name="mode_auto">Mode: Auto</string>
+    <string name="mode_manual_latch">Manual — release stops direction</string>
     <string name="mode_auto_latch">Auto — release keeps direction until STOP or limit</string>
     <string name="on_hold_label">ON-HOLD</string>
     <string name="on_hold_processing">ON-HOLD processing</string>
