@@ -267,27 +267,31 @@ struct MainView: View {
             }
 
             if let mode = bluetooth.deviceMode {
-                panelStatusLine(
-                    mode == .manual ? "Mode: Manual" : "Mode: Auto",
-                    size: 26,
-                    weight: .medium,
-                    color: mode == .auto
-                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196)
-                )
-                .offset(x: -PanelLayout.modeLineOffset)
+                VStack(alignment: .leading, spacing: 3) {
+                    panelStatusLine(
+                        mode == .manual ? "Mode: Manual" : "Mode: Auto",
+                        size: 26,
+                        weight: .medium,
+                        color: mode == .auto
+                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196)
+                    )
 
-                panelStatusLine(
-                    mode == .manual
-                        ? "MANUAL: Press - Run - Release - Stop"
-                        : "AUTO: Press-Release for one direction",
-                    size: 22,
-                    weight: .medium,
-                    color: mode == .auto
-                        ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                        : Color(red: 0.180, green: 0.490, blue: 0.196)
+                    panelStatusLine(
+                        mode == .manual
+                            ? "MANUAL: Press - Run - Release - Stop"
+                            : "AUTO: Press-Release for one direction",
+                        size: 22,
+                        weight: .medium,
+                        color: mode == .auto
+                            ? Color(red: 0.082, green: 0.396, blue: 0.753)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196)
+                    )
+                }
+                .offset(
+                    x: -PanelLayout.modeLineOffsetX,
+                    y: PanelLayout.modeLineOffsetY
                 )
-                .offset(x: -PanelLayout.modeLineOffset)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

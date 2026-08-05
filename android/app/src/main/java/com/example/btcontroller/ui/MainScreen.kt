@@ -104,7 +104,8 @@ private object PanelLayout {
     const val STATUS_LEFT_IN_IMAGE = 0.28f
     const val STATUS_TOP_IN_IMAGE = 0.785f
     const val STATUS_WIDTH_IN_IMAGE = 0.47f
-    const val MODE_LINE_OFFSET_DP = 30
+    const val MODE_LINE_OFFSET_X_DP = 25
+    const val MODE_LINE_OFFSET_Y_DP = 20
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -712,31 +713,37 @@ private fun DeviceStatusPanel(
 
         deviceMode?.let { mode ->
             val modeColor = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32)
-            SingleLineFitText(
-                text = when (mode) {
-                    DeviceMode.Manual -> stringResource(R.string.mode_manual)
-                    DeviceMode.Auto -> stringResource(R.string.mode_auto)
-                },
-                modifier = Modifier.offset(x = (-PanelLayout.MODE_LINE_OFFSET_DP).dp),
-                color = modeColor,
-                fontWeight = FontWeight.Medium,
-                maxFontSize = 26.sp,
-                minFontSize = 14.sp,
-                textAlign = TextAlign.Start,
-            )
+            Column(
+                modifier = Modifier.offset(
+                    x = (-PanelLayout.MODE_LINE_OFFSET_X_DP).dp,
+                    y = PanelLayout.MODE_LINE_OFFSET_Y_DP.dp,
+                ),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                SingleLineFitText(
+                    text = when (mode) {
+                        DeviceMode.Manual -> stringResource(R.string.mode_manual)
+                        DeviceMode.Auto -> stringResource(R.string.mode_auto)
+                    },
+                    color = modeColor,
+                    fontWeight = FontWeight.Medium,
+                    maxFontSize = 26.sp,
+                    minFontSize = 14.sp,
+                    textAlign = TextAlign.Start,
+                )
 
-            SingleLineFitText(
-                text = when (mode) {
-                    DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
-                    DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
-                },
-                modifier = Modifier.offset(x = (-PanelLayout.MODE_LINE_OFFSET_DP).dp),
-                color = modeColor,
-                fontWeight = FontWeight.Medium,
-                maxFontSize = 22.sp,
-                minFontSize = 12.sp,
-                textAlign = TextAlign.Start,
-            )
+                SingleLineFitText(
+                    text = when (mode) {
+                        DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
+                        DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
+                    },
+                    color = modeColor,
+                    fontWeight = FontWeight.Medium,
+                    maxFontSize = 22.sp,
+                    minFontSize = 12.sp,
+                    textAlign = TextAlign.Start,
+                )
+            }
         }
     }
 }
