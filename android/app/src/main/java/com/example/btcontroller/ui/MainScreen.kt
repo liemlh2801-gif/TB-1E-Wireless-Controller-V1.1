@@ -384,7 +384,6 @@ private fun MainScreenContent(
                 deviceMode = deviceMode,
                 isConnected = isConnected,
                 onHoldActive = onHoldActive,
-                isAuto = isAuto,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = connectEnd)
@@ -584,7 +583,6 @@ private fun DeviceStatusPanel(
     deviceMode: DeviceMode?,
     isConnected: Boolean,
     onHoldActive: Boolean,
-    isAuto: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -592,6 +590,12 @@ private fun DeviceStatusPanel(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        OnHoldIndicator(
+            isConnected = isConnected,
+            onHoldActive = onHoldActive,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
         deviceMode?.let { mode ->
             Text(
                 text = when (mode) {
@@ -604,18 +608,13 @@ private fun DeviceStatusPanel(
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth(),
             )
-        }
 
-        OnHoldIndicator(
-            isConnected = isConnected,
-            onHoldActive = onHoldActive,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        if (isAuto) {
             Text(
-                text = stringResource(R.string.mode_auto_latch),
-                color = Color(0xFF1565C0),
+                text = when (mode) {
+                    DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
+                    DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
+                },
+                color = if (mode == DeviceMode.Auto) Color(0xFF1565C0) else Color(0xFF2E7D32),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.End,

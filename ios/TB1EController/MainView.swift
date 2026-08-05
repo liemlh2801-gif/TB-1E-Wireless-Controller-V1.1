@@ -290,18 +290,18 @@ struct MainView: View {
 
     private var deviceStatusPanel: some View {
         VStack(alignment: .trailing, spacing: 4) {
+            onHoldRow
+
             if let mode = bluetooth.deviceMode {
                 Text(mode == .manual ? "Mode: Manual" : "Mode: Auto")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
-            }
 
-            onHoldRow
-
-            if bluetooth.deviceMode == .auto {
-                Text("Auto — release keeps direction until STOP or limit")
+                Text(mode == .manual
+                     ? "Manual — release stops direction"
+                     : "Auto — release keeps direction until STOP or limit")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color(red: 0.082, green: 0.396, blue: 0.753))
+                    .foregroundStyle(mode == .auto ? Color(red: 0.082, green: 0.396, blue: 0.753) : Color(red: 0.180, green: 0.490, blue: 0.196))
                     .multilineTextAlignment(.trailing)
             }
         }
