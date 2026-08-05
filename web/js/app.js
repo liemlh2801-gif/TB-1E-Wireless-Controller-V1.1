@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.3";
+const APP_VERSION = "1.4";
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
   assetWidth: 590,
