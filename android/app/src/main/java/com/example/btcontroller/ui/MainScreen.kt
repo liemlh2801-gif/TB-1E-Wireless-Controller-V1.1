@@ -729,7 +729,7 @@ private fun DeviceStatusPanel(
                     color = modeColor,
                     fontWeight = FontWeight.Medium,
                     maxFontSize = 24.sp,
-                    minFontSize = 14.sp,
+                    minFontSize = 24.sp,
                     textAlign = TextAlign.Start,
                 )
 

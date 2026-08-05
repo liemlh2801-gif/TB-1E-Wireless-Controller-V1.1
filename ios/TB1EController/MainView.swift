@@ -274,7 +274,8 @@ struct MainView: View {
                         weight: .medium,
                         color: mode == .auto
                             ? Color(red: 0.082, green: 0.396, blue: 0.753)
-                            : Color(red: 0.180, green: 0.490, blue: 0.196)
+                            : Color(red: 0.180, green: 0.490, blue: 0.196),
+                        allowShrink: false
                     )
 
                     panelStatusLine(
@@ -330,14 +331,15 @@ struct MainView: View {
         _ text: String,
         size: CGFloat,
         weight: Font.Weight,
-        color: Color
+        color: Color,
+        allowShrink: Bool = true
     ) -> some View {
         Text(text)
             .font(.system(size: size, weight: weight))
             .foregroundStyle(color)
             .lineLimit(1)
-            .minimumScaleFactor(0.5)
-            .allowsTightening(true)
+            .minimumScaleFactor(allowShrink ? 0.5 : 1)
+            .allowsTightening(allowShrink)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 

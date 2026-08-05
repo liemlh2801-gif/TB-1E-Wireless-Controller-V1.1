@@ -1,6 +1,6 @@
 import { TB1EBluetooth, isWebBluetoothSupported } from "./bluetooth.js";
 
-const APP_VERSION = "1.7.10";
+const APP_VERSION = "1.7.11";
 const ON_HOLD_BEEP_MS = 2000;
 const PANEL_LAYOUT = {
   machineWidthRatio: 0.58,
@@ -335,8 +335,10 @@ function fitDeviceStatusText() {
 
   const onHoldTextWidth = containerWidth - textInset;
   shrinkToFit(els.onHoldText, onHoldTextWidth, 32);
+  if (els.modeText) {
+    els.modeText.style.fontSize = "24px";
+  }
   const modeLineWidth = containerWidth + PANEL_LAYOUT.modeLineOffsetXPx;
-  shrinkToFit(els.modeText, modeLineWidth, 24);
   shrinkToFit(els.modeHint, modeLineWidth, 22);
 }
 
