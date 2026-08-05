@@ -100,10 +100,10 @@ private object PanelLayout {
     const val CIRCLE_STOP_Y_IN_IMAGE = 0.695f
     const val CIRCLE_DOWN_Y_IN_IMAGE = 0.733f
     const val LINE_JUNCTION_FRACTION = 0.35f
-    /** ON-HOLD + mode overlay on machine panel face (asset1.jpg fractions) */
-    const val STATUS_X_IN_IMAGE = 0.44f
-    const val STATUS_Y_IN_IMAGE = 0.782f
-    const val STATUS_WIDTH_IN_IMAGE = 0.40f
+    /** ON-HOLD + mode overlay — left/top/width on asset1.jpg panel face */
+    const val STATUS_LEFT_IN_IMAGE = 0.31f
+    const val STATUS_TOP_IN_IMAGE = 0.785f
+    const val STATUS_WIDTH_IN_IMAGE = 0.47f
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -313,8 +313,8 @@ private fun MainScreenContent(
                         val overlay = mapMachineOverlayBounds(
                             machineWidthPx = with(density) { machineWidth.toPx() },
                             containerHeightPx = with(density) { maxHeight.toPx() },
-                            xFraction = PanelLayout.STATUS_X_IN_IMAGE,
-                            yFraction = PanelLayout.STATUS_Y_IN_IMAGE,
+                            leftFraction = PanelLayout.STATUS_LEFT_IN_IMAGE,
+                            topFraction = PanelLayout.STATUS_TOP_IN_IMAGE,
                             widthFraction = PanelLayout.STATUS_WIDTH_IN_IMAGE,
                         )
                         DeviceStatusPanel(
@@ -419,8 +419,8 @@ private data class MachineOverlayBounds(
 private fun mapMachineOverlayBounds(
     machineWidthPx: Float,
     containerHeightPx: Float,
-    xFraction: Float,
-    yFraction: Float,
+    leftFraction: Float,
+    topFraction: Float,
     widthFraction: Float,
 ): MachineOverlayBounds {
     val density = LocalDensity.current
@@ -432,11 +432,11 @@ private fun mapMachineOverlayBounds(
     val displayedHeight = PanelLayout.ASSET1_HEIGHT * scale
     val offsetX = (machineWidthPx - displayedWidth) / 2f
     val offsetY = (containerHeightPx - displayedHeight) / 2f
-    val centerX = offsetX + xFraction * displayedWidth
-    val topY = offsetY + yFraction * displayedHeight
+    val left = offsetX + leftFraction * displayedWidth
+    val topY = offsetY + topFraction * displayedHeight
     val overlayWidthPx = widthFraction * displayedWidth
     return MachineOverlayBounds(
-        left = with(density) { (centerX - overlayWidthPx / 2f).toDp() },
+        left = with(density) { left.toDp() },
         top = with(density) { topY.toDp() },
         width = with(density) { overlayWidthPx.toDp() },
     )
@@ -696,15 +696,15 @@ private fun DeviceStatusPanel(
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
 
             SingleLineFitText(
                 text = onHoldLabel,
                 modifier = Modifier.weight(1f, fill = false),
                 color = onHoldColor,
                 fontWeight = FontWeight.Bold,
-                maxFontSize = 30.sp,
-                minFontSize = 14.sp,
+                maxFontSize = 32.sp,
+                minFontSize = 16.sp,
                 textAlign = TextAlign.Start,
             )
         }
@@ -716,11 +716,11 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto)
                 },
-                modifier = Modifier.padding(start = 26.dp),
+                modifier = Modifier.padding(start = 22.dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
-                maxFontSize = 24.sp,
-                minFontSize = 12.sp,
+                maxFontSize = 26.sp,
+                minFontSize = 14.sp,
                 textAlign = TextAlign.Start,
             )
 
@@ -729,11 +729,11 @@ private fun DeviceStatusPanel(
                     DeviceMode.Manual -> stringResource(R.string.mode_manual_latch)
                     DeviceMode.Auto -> stringResource(R.string.mode_auto_latch)
                 },
-                modifier = Modifier.padding(start = 26.dp),
+                modifier = Modifier.padding(start = 22.dp),
                 color = modeColor,
                 fontWeight = FontWeight.Medium,
-                maxFontSize = 20.sp,
-                minFontSize = 10.sp,
+                maxFontSize = 22.sp,
+                minFontSize = 12.sp,
                 textAlign = TextAlign.Start,
             )
         }
